@@ -1,6 +1,13 @@
 {
-  "extends": "expo/tsconfig.base",
-  "compilerOptions": {
-    "strict": true
-  }
+	"extends": "expo/tsconfig.base",
+	"compilerOptions": {
+		"strict": true,
+		"forceConsistentCasingInFileNames": true,
+		"pretty": true,
+		"baseUrl": ".",
+		// ! added to create alias for all components imports.  Avoids needing relative path
+		"paths": {
+			"@components": ["./components/"]
+		}
+	}
 }
