@@ -1,13 +1,9 @@
 import React from "react"
-import {
-	AirDataState_I,
-	configureStore,
-	LocationState_I,
-} from "@reduxjs/toolkit"
+import { configureStore } from "@reduxjs/toolkit"
 import { Provider } from "react-redux"
 // import reducers / hooks
-import { locationSlice } from "./slices/locationSlice"
-import { airDataSlice } from "./slices/airDataSlice"
+import { reduxLocationSlice } from "./slices/reduxLocationSlice"
+import { reduxAirDataSlice } from "./slices/reduxAirDataSlice"
 // import types
 import { Provider_I } from "../@types"
 
@@ -18,8 +14,8 @@ import { Provider_I } from "../@types"
 // TODO: need to figure out how to preload state from query
 export const store = configureStore({
 	reducer: {
-		location: locationSlice.reducer as LocationState_I,
-		airData: airDataSlice.reducer as AirDataState_I,
+		location: reduxLocationSlice.reducer,
+		airData: reduxAirDataSlice.reducer,
 	},
 })
 

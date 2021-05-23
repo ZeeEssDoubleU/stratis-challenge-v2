@@ -1,37 +1,30 @@
 import React, { useEffect } from "react"
-import styled from "styled-components/native"
-// import components
-import { View } from "react-native"
-import { Layout } from "@ui-kitten/components"
-import { AirDataCard, AirDataHero, Loading } from "@components"
-// import hooks / redux / types
-import { useLocation } from "../hooks"
-import { fetchAQI } from "../utils"
-import { useAirDataSlice } from "../redux"
+import { View, Text } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
+import styled from "styled-components/native"
+import { Layout } from "@ui-kitten/components"
+// import { AirDataCard, AirDataHero, Loading } from "@components"
+import { useGetLocation } from "../hooks"
+import { useReduxAirDataSlice } from "../redux"
 
 // ************
 // screen
 // ************
 
-export default function CurrentLocationScreen() {
-	const { location } = useLocation()
-	const { setData, current, forecast } = useAirDataSlice()
+export function CurrentLocationScreen() {
+	// get current gps location
+	useGetLocation()
+	const { setReduxAirData, current, forecast } = useReduxAirDataSlice()
 
-	// get AQI data
-	useEffect(() => {
-		if (location) {
-			const data = await fetchAQI(location)
-			setData(data)
-		}
-	}, [location])
-
-	// show spinner if data still loading
-	if (!current || !forecast) return <Loading />
+	// // show spinner if data still loading
+	// if (!current || !forecast) return <Loading />
 
 	return (
 		<Container>
-			<Current>
+			<View>
+				<Text>Hello</Text>
+			</View>
+			{/* <Current>
 				<AirDataHero airData={current} />
 			</Current>
 			<Forecast
@@ -43,7 +36,7 @@ export default function CurrentLocationScreen() {
 				<AirDataCard {...{ current, forecast: forecast.yesterday }} />
 				<AirDataCard {...{ current, forecast: forecast.today }} />
 				<AirDataCard {...{ current, forecast: forecast.tomorrow }} />
-			</Forecast>
+			</Forecast> */}
 		</Container>
 	)
 }

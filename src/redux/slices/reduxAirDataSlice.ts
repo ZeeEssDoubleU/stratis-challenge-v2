@@ -59,11 +59,11 @@ const initialState: AirDataState_I = {
 // slice
 // ************
 
-export const airDataSlice = createSlice({
+export const reduxAirDataSlice = createSlice({
 	name: "airData",
 	initialState,
 	reducers: {
-		setData: (state, action: PayloadAction<AirData_I>) => {
+		setAirData: (state, action: PayloadAction<AirData_I>) => {
 			const { status, data } = action.payload
 			const { aqi, city, forecast, iaqi, idx, time, dominentpol } = data
 
@@ -76,10 +76,10 @@ export const airDataSlice = createSlice({
 				state: city.name.split(",")[2].trim(),
 			}
 			state.current = {
-				// time: time.iso && formatCurrentDate(time.iso).formatted_time,
-				// date: time.iso && formatCurrentDate(time.iso).formatted,
+				time: time.iso && formatCurrentDate(time.iso).formatted_time,
+				date: time.iso && formatCurrentDate(time.iso).formatted,
 				aqi,
-				// dominentpol,
+				dominentpol,
 				iaqi,
 			}
 			state.forecast = {
@@ -91,5 +91,3 @@ export const airDataSlice = createSlice({
 		},
 	},
 })
-
-const reducer = airDataSlice.reducer

@@ -3,7 +3,7 @@ import {
 	AirDataForecast_I,
 	formatForecastDate,
 } from "../../utils"
-import { DailyMeasurementsWithDate_I } from "../slices/airDataSlice"
+import { DailyMeasurementsWithDate_I } from "../slices/reduxAirDataSlice"
 import { capitalize } from "lodash"
 
 // ************

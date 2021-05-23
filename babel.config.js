@@ -3,7 +3,8 @@ module.exports = function (api) {
 	return {
 		presets: ["babel-preset-expo"],
 		plugins: [
-			"react-native-reanimated/plugin",
+			// TODO: reactivate when needed
+			// "react-native-reanimated/plugin",
 			// https://www.npmjs.com/package/react-native-dotenv
 			[
 				"module:react-native-dotenv",
@@ -15,9 +16,9 @@ module.exports = function (api) {
 				// ! added to create alias for all components imports.  Avoids needing relative path
 				"module-resolver",
 				{
-					root: ["./"],
+					root: ["."],
 					alias: {
-						"@components": ".src/components/",
+						"@components": "./src/components",
 					},
 				},
 			],

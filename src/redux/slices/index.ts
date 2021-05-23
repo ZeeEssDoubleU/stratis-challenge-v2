@@ -1,2 +1,2 @@
-export * from "./airDataSlice"
-export * from "./locationSlice"
+export * from "./reduxAirDataSlice"
+export * from "./reduxLocationSlice"

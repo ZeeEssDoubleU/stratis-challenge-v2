@@ -1,2 +1,3 @@
 export * from "./useCachedResources"
-export * from "./useLocation"
+export * from "./useColorScheme"
+export * from "./useGetLocation"

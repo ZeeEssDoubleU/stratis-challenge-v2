@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { UseLocation_I } from "hooks"
+import { FormatLocation_I } from "../../hooks"
 
 // ************
 // types
@@ -7,7 +7,8 @@ import { UseLocation_I } from "hooks"
 
 export interface LocationState_I {
 	city: string | null
-	current: UseLocation_I | null
+	current: FormatLocation_I | null
+	error: string | null
 }
 
 // ************
@@ -17,18 +18,22 @@ export interface LocationState_I {
 const initialState: LocationState_I = {
 	city: null,
 	current: null,
+	error: null,
 }
 
 // ************
 // slice
 // ************
 
-export const locationSlice = createSlice({
+export const reduxLocationSlice = createSlice({
 	name: "location",
 	initialState,
 	reducers: {
-		setLocation: (state, action: PayloadAction<UseLocation_I>) => {
+		setLocation: (state, action: PayloadAction<FormatLocation_I>) => {
 			state.current = action.payload
+		},
+		setError: (state, action: PayloadAction<string>) => {
+			state.error = action.payload
 		},
 	},
 })

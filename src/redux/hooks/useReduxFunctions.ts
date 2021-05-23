@@ -14,5 +14,6 @@ export type RootState_Type = ReturnType<typeof store.getState>
 
 // use these instead of default useDispatch and useSelector
 // adds on declared types
-export const useAppDispatch = () => useDispatch<Dispatch_Type>()
-export const useAppSelector: TypedUseSelectorHook<RootState_Type> = useSelector
+export const useReduxDispatch = () => useDispatch<Dispatch_Type>()
+export const useReduxSelector: TypedUseSelectorHook<RootState_Type> =
+	useSelector
