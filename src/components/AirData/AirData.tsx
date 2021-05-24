@@ -2,7 +2,6 @@ import React, { useState } from "react"
 import styled from "styled-components"
 import { View } from "react-native"
 import { AirDataCard_I, Header, AppText, Tile } from "@components"
-import { AirDataDailyForecasts_I } from "@utils"
 
 // ************
 // component
@@ -13,31 +12,33 @@ export function AirData({ current, forecast }: AirDataCard_I) {
 
 	if (!forecast) return null
 
-	const displayData = Object.entries(forecast)
-		.filter(([key]) => key === selected)
-		.map(([key, object]: [string, AirDataDailyForecasts_I]) => {
+	const targetDayForecastByParam = Object.entries(forecast["forecast"])
+
+	const displayData = targetDayForecastByParam
+		.filter(([param]) => param === selected)
+		.map(([param, paramForecast]) => {
+			const measurements = Object.entries(paramForecast)
+
 			return (
 				<Tile
-					key={key}
+					key={param}
 					// TODO: show correct status here
 					// status="success"
 					header={(props) => (
 						<Header
 							align="center"
-							title={key}
+							title={param} // ie pm25
 							titleCategory="s1"
 							{...props}
 						/>
 					)}
 				>
-					{/* loop through selected forecast entries and display in tile */}
-					{Object.entries(object)
-						.filter(([key]) => key !== "day")
-						// TODO: will follow these types, unsure how to assert
-						.map(([key, value]: [string, number]) => {
+					{measurements
+						.filter(([measurement]) => measurement !== "day")
+						.map(([measurement, value]) => {
 							return (
-								<Row key={key}>
-									<AppText>{`${key}:`}</AppText>
+								<Row key={measurement}>
+									<AppText>{`${measurement}:`}</AppText>
 									<AppText align="right">{value}</AppText>
 								</Row>
 							)

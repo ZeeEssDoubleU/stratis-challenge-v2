@@ -1,20 +1,21 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { isEmpty } from "lodash"
 // import type
 import {
-	FetchAirData_I,
 	AirDataCurrent_I,
 	AirDataLocation_I,
 	AirDataForcasts_I,
-} from "../../utils"
+	FetchAirData_I,
+	formatDate,
+	FormatDate_I,
+} from "@utils"
 // import utils
-import { formatDate, FormatDate_I } from "../../utils"
-import { filterForcastByDay } from "../helpers"
+import { filterForcastByDay } from "@redux"
 
 // ************
 // types
 // ************
 
-export type EmptyObj = Record<string, never>
 export type DailyMeasurementsWithDate_I = {
 	date: string
 	relativeDay: string
@@ -72,10 +73,6 @@ export const reduxAirDataSlice = createSlice({
 			const { status, data } = action.payload
 			const { aqi, city, forecast, iaqi, idx, time, dominentpol } = data
 
-			const today = filterForcastByDay(forecast, "today")
-			const yesterday = filterForcastByDay(forecast, "yesterday")
-			const tomorrow = filterForcastByDay(forecast, "tomorrow")
-
 			state.status = status
 			// this state is displayed in the air quality hero
 			state.location = {
@@ -85,17 +82,17 @@ export const reduxAirDataSlice = createSlice({
 				state: city.name.split(",")[2].trim(),
 			}
 			state.current = {
-				time: time.iso && formatDate(time.iso).formatted_time,
-				date: time.iso && formatDate(time.iso).formatted,
+				time: time?.iso ? formatDate(time.iso).formatted_time : null,
+				date: time?.iso ? formatDate(time.iso).formatted : null,
 				aqi,
 				dominentpol,
 				iaqi,
 			}
 			state.forecast = {
 				// each function returns all measurement forecast given for the desired day
-				today: today,
-				yesterday: yesterday,
-				tomorrow: tomorrow,
+				today: filterForcastByDay(forecast, "today"),
+				yesterday: filterForcastByDay(forecast, "yesterday"),
+				tomorrow: filterForcastByDay(forecast, "tomorrow"),
 			}
 		},
 	},

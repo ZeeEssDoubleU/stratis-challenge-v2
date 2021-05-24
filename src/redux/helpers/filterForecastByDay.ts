@@ -1,5 +1,5 @@
 import { AirDataForcasts_I, formatDate, getRelativeDay } from "../../utils"
-import { capitalize } from "lodash"
+import { capitalize, isEmpty } from "lodash"
 
 // ************
 // helper
@@ -42,11 +42,18 @@ export function filterForcastByDay(
 					...filteredForecast,
 					date: formatDate(date).formatted,
 					relativeDay: capitalize(relativeDay),
-					[param]: forecast,
+					forecast: {
+						...filteredForecast.forecast,
+						[param]: forecast,
+					},
 				}
 			}
 		})
 	})
 
-	return filteredForecast
+	if (isEmpty(filteredForecast)) {
+		return null
+	} else {
+		return filteredForecast
+	}
 }

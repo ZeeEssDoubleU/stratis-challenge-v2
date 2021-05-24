@@ -5,7 +5,7 @@ import styled from "styled-components/native"
 import { Layout } from "@ui-kitten/components"
 import { useGetLocation } from "@hooks"
 import { useReduxAirDataSlice } from "@redux"
-import { AirDataHero, Loading } from "@components"
+import { AirDataCard, AirDataHero, Loading } from "@components"
 
 // ************
 // screen
@@ -24,7 +24,7 @@ export function CurrentLocationScreen() {
 			<Current>
 				<AirDataHero airData={current} />
 			</Current>
-			{/* <Forecast
+			<Forecast
 				horizontal
 				contentOffset={{ x: 200 - 20 - 20, y: 0 }}
 				showsVerticalScrollIndicator={false}
@@ -33,7 +33,7 @@ export function CurrentLocationScreen() {
 				<AirDataCard {...{ current, forecast: forecast.yesterday }} />
 				<AirDataCard {...{ current, forecast: forecast.today }} />
 				<AirDataCard {...{ current, forecast: forecast.tomorrow }} />
-			</Forecast> */}
+			</Forecast>
 		</Container>
 	)
 }
