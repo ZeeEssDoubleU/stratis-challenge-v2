@@ -1,8 +1,8 @@
 import { useReduxDispatch, useReduxSelector } from "./useReduxFunctions"
 // slices
-import { reduxAirDataSlice } from "../slices/reduxAirDataSlice"
+import { reduxAirDataSlice } from "@redux"
 // types
-import { FetchAirData_I } from "../../utils"
+import { FetchAirData_I } from "@utils"
 
 // ************
 // hook

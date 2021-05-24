@@ -2,8 +2,7 @@ import React from "react"
 import { configureStore } from "@reduxjs/toolkit"
 import { Provider } from "react-redux"
 // import reducers / hooks
-import { reduxLocationSlice } from "./slices/reduxLocationSlice"
-import { reduxAirDataSlice } from "./slices/reduxAirDataSlice"
+import { reduxLocationSlice, reduxAirDataSlice } from "@redux"
 import { Provider_I } from "globalTypes"
 // import types
 

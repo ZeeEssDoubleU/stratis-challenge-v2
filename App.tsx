@@ -10,7 +10,7 @@ import { useCachedResources, useColorScheme } from "@hooks"
 import { SCProvider } from "@styles"
 import { ReduxProvider } from "@redux"
 
-import { CurrentLocationScreen } from "./src/screens/CurrentLocationScreen"
+import { Navigation } from "@navigation"
 
 // ************
 // component
@@ -30,7 +30,7 @@ export default function App() {
 				<SCProvider>
 					<ApplicationProvider {...eva} theme={eva[colorScheme]}>
 						<SafeAreaProvider>
-							<CurrentLocationScreen />
+							<Navigation />
 							<StatusBar />
 						</SafeAreaProvider>
 					</ApplicationProvider>

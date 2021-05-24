@@ -1,6 +1,5 @@
 import React from "react"
 import { View } from "react-native"
-import styled from "styled-components/native"
 import { TextProps } from "@ui-kitten/components"
 import { AppText, TextAlign } from "@components"
 

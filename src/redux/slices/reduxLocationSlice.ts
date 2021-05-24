@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { FormatLocation_I } from "../../hooks"
+import { FormatLocation_I } from "@hooks"
 
 // ************
 // types

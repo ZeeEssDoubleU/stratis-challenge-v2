@@ -1,8 +1,7 @@
 import React, { useState } from "react"
 import styled from "styled-components"
 import { View } from "react-native"
-import { AirDataCard_I, Header, AppText } from "@components"
-import { AirDataTile } from "./AirDataTile"
+import { AirDataCard_I, Header, AppText, AirDataTile } from "@components"
 
 // ************
 // component

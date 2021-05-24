@@ -1,4 +1,4 @@
-import { AirDataForcasts_I, formatDate, getRelativeDay } from "../../utils"
+import { AirDataForcasts_I, formatDate, getRelativeDay } from "@utils"
 import { capitalize } from "lodash"
 
 // ************
