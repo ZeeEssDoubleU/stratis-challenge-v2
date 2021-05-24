@@ -9,20 +9,22 @@ import { data } from "../mock-data/fakeAirData"
 // types
 // ************
 
-export type AirDataDailyForecasts_I = {
+export interface AirDataForecastByDay_I {
 	avg: number
 	day: string
 	max: number
 	min: number
-}[]
-export interface AirDataDailyMeasurements_I {
-	pm25: AirDataDailyForecasts_I
-	pm10: AirDataDailyForecasts_I
-	o3: AirDataDailyForecasts_I
-	uvi: AirDataDailyForecasts_I
 }
-export interface AirDataForecast_I {
-	daily: AirDataDailyMeasurements_I
+export type AirDataForecastsByParam_I = AirDataForecastByDay_I[]
+export interface AirDataForcasts_I {
+	forecast: {
+		daily: {
+			pm25: AirDataForecastsByParam_I
+			pm10: AirDataForecastsByParam_I
+			o3: AirDataForecastsByParam_I
+			uvi: AirDataForecastsByParam_I
+		}
+	}
 }
 export interface AirDataLocation_I {
 	idx: number
@@ -55,12 +57,9 @@ export interface AirDataCurrent_I {
 	}
 }
 // ! unfortunately aqicn API is not well documented.  This api response is based on the given "city/station feed" API example
-export interface AirData_I {
+export interface FetchAirData_I {
 	status: string
-	data: AirDataLocation_I &
-		AirDataCurrent_I & {
-			forecast: AirDataForecast_I
-		}
+	data: AirDataLocation_I & AirDataCurrent_I & AirDataForcasts_I
 }
 
 // ************
@@ -69,7 +68,7 @@ export interface AirData_I {
 
 export async function fetchAQI({ latitude, longitude }: FormatLocation_I) {
 	// TODO: reimplement real data when complete
-	// const { data }: AirData_I | null = await axios({
+	// const { data }: FetchAirData_I | null = await axios({
 	// 	method: `GET`,
 	// 	url: `https://api.waqi.info/feed/geo:${latitude};${longitude}/?token=${token}`,
 	// })
@@ -77,5 +76,5 @@ export async function fetchAQI({ latitude, longitude }: FormatLocation_I) {
 	// console.log("data:", data) // ? debug
 	// function to sort data by distance, not listed as a method in AQI api
 	// TODO: remove as when ready
-	return data as AirData_I
+	return data as FetchAirData_I
 }

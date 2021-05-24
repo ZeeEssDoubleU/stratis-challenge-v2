@@ -1,9 +1,4 @@
-import {
-	AirDataDailyForecasts_I,
-	AirDataForecast_I,
-	formatForecastDate,
-} from "../../utils"
-import { DailyMeasurementsWithDate_I } from "../slices/reduxAirDataSlice"
+import { AirDataForcasts_I, formatDate, getRelativeDay } from "../../utils"
 import { capitalize } from "lodash"
 
 // ************
@@ -22,44 +17,36 @@ export function whichDay(day: "yesterday" | "today" | "tomorrow") {
 // ************
 
 export function filterForcastByDay(
-	forecast: AirDataForecast_I,
+	forecasts: AirDataForcasts_I["forecast"],
 	relativeDay: "yesterday" | "today" | "tomorrow",
-): DailyMeasurementsWithDate_I {
-	// function determines which date method to use from formatForecastDate function below
+) {
+	let filteredForecast = {}
+	const allForecasts = forecasts.daily
+	const allForecastsEntries = Object.entries(allForecasts)
+	// get forecasts split by params (measurements)
+	allForecastsEntries.forEach(([param, forecastsByDay]) => {
+		forecastsByDay.filter((forecast) => {
+			const { day: date } = forecast
 
-	// get key value pairs of each forecast day
-	return Object.entries(forecast.daily).reduce(
-		// create single day forecast object (ie yesterday, today, tomorrow)
-		(
-			filteredObject,
-			[key, dailyForecasts]: [string, AirDataDailyForecasts_I],
-		) => {
-			// filter only selected days measurements into object
-			dailyForecasts.filter((dailyRecord) => {
-				const { day: date } = dailyRecord
+			// parsed to ISO string
+			const parsedDate = formatDate(date).parsed
+			// determine method used in getRelativeDay(parsedDate)
+			const selectedDay = whichDay(relativeDay)
+			// see what day matches selected method
+			const forecastMatchesSelected =
+				selectedDay && getRelativeDay(parsedDate)[selectedDay]
+			// if day passes method, add to filteredForecast object
 
-				// ! type guarded to prevent false index error below at else if
-				if (whichDay(relativeDay) === false) {
-					return filteredObject
-				} else if (
-					// whichDay function picks index that chooses which day to filter on
-					formatForecastDate(date)[
-						whichDay(relativeDay) as
-							| "_isToday"
-							| "_isYesterday"
-							| "_isTomorrow"
-					]
-				) {
-					filteredObject = {
-						["date"]: formatForecastDate(date).formatted,
-						["relativeDay"]: capitalize(relativeDay),
-						[key]: dailyRecord,
-					}
+			if (forecastMatchesSelected) {
+				filteredForecast = {
+					...filteredForecast,
+					date: formatDate(date).formatted,
+					relativeDay: capitalize(relativeDay),
+					[param]: forecast,
 				}
-			})
+			}
+		})
+	})
 
-			return filteredObject
-		},
-		{}, // create empty filteredObject
-	)
+	return filteredForecast
 }

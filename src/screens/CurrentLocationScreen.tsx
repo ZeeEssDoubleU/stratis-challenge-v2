@@ -14,7 +14,7 @@ import { useReduxAirDataSlice } from "../redux"
 export function CurrentLocationScreen() {
 	// get current gps location
 	useGetLocation()
-	const { setReduxAirData, current, forecast } = useReduxAirDataSlice()
+	const { current, forecast } = useReduxAirDataSlice()
 
 	// // show spinner if data still loading
 	// if (!current || !forecast) return <Loading />
