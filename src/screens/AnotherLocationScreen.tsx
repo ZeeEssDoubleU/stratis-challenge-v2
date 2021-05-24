@@ -1,5 +1,5 @@
 import React from "react"
-import { Button, Text, View } from "react-native"
+import { View } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 import styled from "styled-components/native"
 import { Layout } from "@ui-kitten/components"
@@ -12,7 +12,7 @@ import { isEmpty } from "lodash"
 // screen
 // ************
 
-export function CurrentLocationScreen({ navigation }) {
+export function AnotherLocationScreen({ navigation }) {
 	// get current gps location
 	useGetLocation()
 	const { current, forecast } = useReduxAirDataSlice()

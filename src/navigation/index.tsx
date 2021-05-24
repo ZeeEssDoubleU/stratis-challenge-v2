@@ -1,14 +1,12 @@
 import * as React from "react"
-import { NavigationContainer } from "@react-navigation/native"
+import { NavigationContainer, useNavigation } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
+
+import { Button, Text, View } from "react-native"
 
 import { CurrentLocationScreen } from "@screens"
-
-// ************
-// stack
-// ************
-
-const Stack = createStackNavigator()
+import { AnotherLocationScreen } from "@screens"
 
 // ************
 // navigation
@@ -17,22 +15,93 @@ const Stack = createStackNavigator()
 export function Navigation() {
 	return (
 		<NavigationContainer>
-			<RootNavigator />
+			<RootStackScreen />
 		</NavigationContainer>
 	)
 }
 
 // ************
-// root navigator
+// modal
 // ************
 
-export function RootNavigator() {
+const RootStack = createStackNavigator()
+
+function RootStackScreen() {
 	return (
-		<Stack.Navigator>
-			<Stack.Screen
-				name="Current Location"
-				component={CurrentLocationScreen}
+		<RootStack.Navigator>
+			<RootStack.Screen
+				name="Current"
+				component={MainStackScreen}
+				options={{ headerShown: false }}
 			/>
-		</Stack.Navigator>
+		</RootStack.Navigator>
+	)
+}
+
+function LocationsModal({ navigation }) {
+	return (
+		<View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+			<Text style={{ fontSize: 30 }}>This is a modal!</Text>
+			<Button onPress={() => navigation.goBack()} title="Dismiss" />
+		</View>
+	)
+}
+function SearchModal({ navigation }) {
+	return (
+		<View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+			<Text style={{ fontSize: 30 }}>Search here!</Text>
+			<Button onPress={() => navigation.goBack()} title="Dismiss" />
+		</View>
+	)
+}
+
+// ************
+// stack
+// ************
+
+const MainStack = createStackNavigator()
+
+export function MainStackScreen() {
+	const navigation = useNavigation()
+
+	return (
+		<MainStack.Navigator mode="modal">
+			<MainStack.Screen
+				name="CurrentLocation"
+				component={CurrentLocationScreen}
+				options={{
+					headerRight: () => (
+						<Button
+							onPress={() => navigation.navigate("AddModal")}
+							title="Add"
+						/>
+					),
+				}}
+			/>
+			<RootStack.Screen
+				name="AddModal"
+				component={LocationsModal}
+				options={{
+					headerRight: () => (
+						<Button
+							onPress={() => navigation.navigate("SearchModal")}
+							title="Search"
+						/>
+					),
+				}}
+			/>
+			<RootStack.Screen
+				name="SearchModal"
+				component={SearchModal}
+				options={{
+					headerRight: () => (
+						<Button
+							onPress={() => navigation.goBack("")}
+							title="Cancel"
+						/>
+					),
+				}}
+			/>
+		</MainStack.Navigator>
 	)
 }
