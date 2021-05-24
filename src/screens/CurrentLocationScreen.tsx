@@ -12,7 +12,7 @@ import { isEmpty } from "lodash"
 // screen
 // ************
 
-export function CurrentLocationScreen({ navigation }) {
+export function CurrentLocationScreen() {
 	// get current gps location
 	useGetLocation()
 	const { current, forecast } = useReduxAirDataSlice()
