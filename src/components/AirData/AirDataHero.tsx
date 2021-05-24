@@ -6,7 +6,9 @@ import {
 	useReduxAirDataSlice,
 	useReduxLocationSlice,
 } from "../../redux"
-import { AppText, Header, AirDataTile } from "@components"
+import { Header } from "../Header"
+import { AppText } from "../AppText"
+import { AirDataTile } from "./AirDataTile"
 
 // ************
 // types

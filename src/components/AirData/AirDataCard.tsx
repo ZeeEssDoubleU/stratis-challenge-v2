@@ -1,7 +1,9 @@
 import React from "react"
 import { ViewProps } from "react-native"
 import { RenderProp } from "@ui-kitten/components/devsupport"
-import { AppCard, AirData, Header } from "@components"
+import { AppCard } from "../AppCard"
+import { AirData } from "./AirData"
+import { Header } from "../Header"
 import { AirDataStateCurrent_I, DailyMeasurementsWithDate_I } from "@redux"
 
 // ************

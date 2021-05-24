@@ -9,7 +9,7 @@ import {
 	FormatDate_I,
 } from "@utils"
 // import utils
-import { filterForcastByDay } from "@redux"
+import { filterForcastByDay } from "../helpers"
 
 // ************
 // types

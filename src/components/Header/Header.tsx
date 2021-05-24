@@ -1,7 +1,7 @@
 import React from "react"
 import { View } from "react-native"
 import { TextProps } from "@ui-kitten/components"
-import { AppText, TextAlign } from "@components"
+import { AppText, TextAlign } from "../AppText"
 
 // ************
 // types

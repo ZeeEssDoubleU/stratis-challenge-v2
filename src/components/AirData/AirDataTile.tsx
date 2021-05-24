@@ -4,7 +4,7 @@ import styled from "styled-components/native"
 import { RenderProp } from "@ui-kitten/components/devsupport"
 import { AirDataStateCurrent_I } from "@redux"
 import { showCondition } from "@utils"
-import { Tile } from "@components"
+import { Tile } from "../Tile"
 
 // ************
 // types
