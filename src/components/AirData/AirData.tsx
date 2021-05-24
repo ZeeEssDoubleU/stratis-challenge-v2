@@ -19,6 +19,20 @@ export function AirData({ current, forecast }: AirDataCard_I) {
 		.map(([param, paramForecast]) => {
 			const measurements = Object.entries(paramForecast)
 
+			const displayMeasurements = measurements
+				.filter(([measurement]) => measurement !== "day")
+				.map(([measurement, value]) => {
+					return (
+						<Row key={measurement}>
+							<AppText>{`${measurement}:`}</AppText>
+							<AppText align="right">
+								{/* // ! for some reason value keeps defaulting to DailyForecastByParam.  All interfaces have been checked... */}
+								{value as unknown as number}
+							</AppText>
+						</Row>
+					)
+				})
+
 			return (
 				<Tile
 					key={param}
@@ -33,16 +47,8 @@ export function AirData({ current, forecast }: AirDataCard_I) {
 						/>
 					)}
 				>
-					{measurements
-						.filter(([measurement]) => measurement !== "day")
-						.map(([measurement, value]) => {
-							return (
-								<Row key={measurement}>
-									<AppText>{`${measurement}:`}</AppText>
-									<AppText align="right">{value}</AppText>
-								</Row>
-							)
-						})}
+					{/* // ! called above in displayData map */}
+					{displayMeasurements}
 				</Tile>
 			)
 		})

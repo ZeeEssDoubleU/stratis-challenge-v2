@@ -24,7 +24,8 @@ export interface AirDataHero_I {
 export function AirDataHero({ airData }: AirDataHero_I) {
 	const { location: gpsLocation } = useReduxLocationSlice()
 	const { location: stationLocation } = useReduxAirDataSlice()
-	if (!stationLocation) return null
+
+	if (!stationLocation || !gpsLocation) return null
 
 	return (
 		<Container>

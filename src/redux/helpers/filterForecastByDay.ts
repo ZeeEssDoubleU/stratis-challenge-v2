@@ -1,5 +1,5 @@
 import { AirDataForcasts_I, formatDate, getRelativeDay } from "../../utils"
-import { capitalize, isEmpty } from "lodash"
+import { capitalize } from "lodash"
 
 // ************
 // helper
@@ -20,7 +20,11 @@ export function filterForcastByDay(
 	forecasts: AirDataForcasts_I["forecast"],
 	relativeDay: "yesterday" | "today" | "tomorrow",
 ) {
-	let filteredForecast = {}
+	let filteredForecast = {} as {
+		date: string
+		relativeDay: string
+		forecast: AirDataForcasts_I["forecast"]["daily"]
+	}
 	const allForecasts = forecasts.daily
 	const allForecastsEntries = Object.entries(allForecasts)
 	// get forecasts split by params (measurements)
@@ -39,11 +43,10 @@ export function filterForcastByDay(
 
 			if (forecastMatchesSelected) {
 				filteredForecast = {
-					...filteredForecast,
 					date: formatDate(date).formatted,
 					relativeDay: capitalize(relativeDay),
 					forecast: {
-						...filteredForecast.forecast,
+						...(filteredForecast.forecast as AirDataForcasts_I["forecast"]["daily"]),
 						[param]: forecast,
 					},
 				}
@@ -51,9 +54,5 @@ export function filterForcastByDay(
 		})
 	})
 
-	if (isEmpty(filteredForecast)) {
-		return null
-	} else {
-		return filteredForecast
-	}
+	return filteredForecast
 }

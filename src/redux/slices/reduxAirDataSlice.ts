@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { isEmpty } from "lodash"
 // import type
 import {
 	AirDataCurrent_I,
@@ -20,7 +19,7 @@ export type DailyMeasurementsWithDate_I = {
 	date: string
 	relativeDay: string
 	forecast: AirDataForcasts_I["forecast"]["daily"]
-} | null
+}
 export interface AirDataStateLocation_I {
 	station: string
 	stationId: AirDataLocation_I["idx"]
@@ -40,9 +39,9 @@ export type AirDataStateForecast_I = {
 	tomorrow: DailyMeasurementsWithDate_I
 }
 export interface AirDataState_I {
-	status: string | null
-	location: AirDataStateLocation_I | null
-	current: AirDataStateCurrent_I | null
+	status: string
+	location: AirDataStateLocation_I
+	current: AirDataStateCurrent_I
 	forecast: AirDataStateForecast_I
 }
 
@@ -50,16 +49,12 @@ export interface AirDataState_I {
 // init state
 // ************
 
-const initialState: AirDataState_I = {
-	status: null,
-	location: null,
-	current: null,
-	forecast: {
-		today: null,
-		yesterday: null,
-		tomorrow: null,
-	},
-}
+const initialState = {
+	status: "",
+	location: {},
+	current: {},
+	forecast: {},
+} as AirDataState_I
 
 // ************
 // slice
@@ -73,6 +68,10 @@ export const reduxAirDataSlice = createSlice({
 			const { status, data } = action.payload
 			const { aqi, city, forecast, iaqi, idx, time, dominentpol } = data
 
+			const today = filterForcastByDay(forecast, "today")
+			const yesterday = filterForcastByDay(forecast, "yesterday")
+			const tomorrow = filterForcastByDay(forecast, "tomorrow")
+
 			state.status = status
 			// this state is displayed in the air quality hero
 			state.location = {
@@ -82,17 +81,17 @@ export const reduxAirDataSlice = createSlice({
 				state: city.name.split(",")[2].trim(),
 			}
 			state.current = {
-				time: time?.iso ? formatDate(time.iso).formatted_time : null,
-				date: time?.iso ? formatDate(time.iso).formatted : null,
+				time: time?.iso && formatDate(time.iso).formatted_time,
+				date: time?.iso && formatDate(time.iso).formatted,
 				aqi,
 				dominentpol,
 				iaqi,
 			}
 			state.forecast = {
 				// each function returns all measurement forecast given for the desired day
-				today: filterForcastByDay(forecast, "today"),
-				yesterday: filterForcastByDay(forecast, "yesterday"),
-				tomorrow: filterForcastByDay(forecast, "tomorrow"),
+				today: today,
+				yesterday: yesterday,
+				tomorrow: tomorrow,
 			}
 		},
 	},

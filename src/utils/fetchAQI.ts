@@ -9,7 +9,7 @@ import { data } from "../mock-data/fakeAirData"
 // types
 // ************
 
-export interface DailyForcastByParam {
+export interface DailyForecastByParam {
 	avg: number
 	day: string
 	max: number
@@ -19,10 +19,10 @@ export interface DailyForcastByParam {
 export interface AirDataForcasts_I {
 	forecast: {
 		daily: {
-			pm25: DailyForcastByParam[]
-			pm10: DailyForcastByParam[]
-			o3: DailyForcastByParam[]
-			uvi: DailyForcastByParam[]
+			pm25: DailyForecastByParam[]
+			pm10: DailyForecastByParam[]
+			o3: DailyForecastByParam[]
+			uvi: DailyForecastByParam[]
 		}
 	}
 }
