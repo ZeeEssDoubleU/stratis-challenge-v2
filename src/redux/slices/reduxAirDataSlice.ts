@@ -39,6 +39,7 @@ export type AirDataStateForecast_I = {
 	tomorrow: DailyMeasurementsWithDate_I
 }
 export interface AirDataState_I {
+	loading: boolean
 	status: string
 	location: AirDataStateLocation_I
 	current: AirDataStateCurrent_I
@@ -50,7 +51,8 @@ export interface AirDataState_I {
 // ************
 
 const initialState: AirDataState_I = {
-	status: "", // ! not used
+	loading: true,
+	status: null as unknown as string, // ! not used
 	location: {} as AirDataStateLocation_I,
 	current: {} as AirDataStateCurrent_I,
 	forecast: {} as AirDataStateForecast_I,
@@ -64,7 +66,10 @@ export const reduxAirDataSlice = createSlice({
 	name: "airData",
 	initialState,
 	reducers: {
-		setAirData: (state, action: PayloadAction<FetchAirData_I>) => {
+		setLoading: (state, action: PayloadAction<boolean>) => {
+			state.loading = action.payload
+		},
+		setData: (state, action: PayloadAction<FetchAirData_I>) => {
 			const { status, data } = action.payload
 			const { aqi, city, forecast, iaqi, idx, time, dominentpol } = data
 

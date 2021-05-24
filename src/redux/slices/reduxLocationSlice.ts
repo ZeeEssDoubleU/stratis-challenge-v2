@@ -9,6 +9,7 @@ export interface LocationState_I {
 	city: string
 	current: FormatLocation_I
 	error: string
+	loading: boolean
 }
 
 // ************
@@ -19,6 +20,7 @@ const initialState = {
 	city: "", // TODO: implement city search
 	current: {},
 	error: "", // ! not used
+	loading: true,
 } as LocationState_I
 
 // ************
@@ -31,6 +33,9 @@ export const reduxLocationSlice = createSlice({
 	reducers: {
 		setLocation: (state, action: PayloadAction<FormatLocation_I>) => {
 			state.current = action.payload
+		},
+		setLoading: (state, action: PayloadAction<boolean>) => {
+			state.loading = action.payload
 		},
 		setError: (state, action: PayloadAction<string>) => {
 			state.error = action.payload

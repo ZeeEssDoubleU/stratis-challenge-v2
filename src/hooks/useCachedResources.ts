@@ -1,33 +1,48 @@
+import React, { useEffect, useState } from "react"
 import { Ionicons } from "@expo/vector-icons"
 import * as Font from "expo-font"
 import * as SplashScreen from "expo-splash-screen"
-import React from "react"
+import { useReduxAirDataSlice, useReduxLocationSlice } from "@redux"
 
 export function useCachedResources() {
-	const [isLoadingComplete, setLoadingComplete] = React.useState(false)
+	const { airDataLoading } = useReduxAirDataSlice()
+	const { locationLoading } = useReduxLocationSlice()
+	const [resourcesLoading, setResourcesLoading] = useState(true)
+	const [isAppReady, setAppReady] = useState(false)
 
-	// Load any resources or data that we need prior to rendering the app
-	React.useEffect(() => {
+	// effect controls splash screen display
+	useEffect(() => {
+		isAppReady
+			? SplashScreen.hideAsync()
+			: SplashScreen.preventAutoHideAsync()
+	}, [isAppReady])
+
+	// effect declares when all resource are loaded
+	useEffect(() => {
+		if (!airDataLoading && !locationLoading && !resourcesLoading) {
+			setAppReady(true)
+		}
+	}, [airDataLoading, locationLoading, resourcesLoading])
+
+	// load pre render resources
+	useEffect(() => {
 		async function loadResourcesAndDataAsync() {
 			try {
-				SplashScreen.preventAutoHideAsync()
-
-				// Load fonts
+				// load fonts
 				await Font.loadAsync({
 					...Ionicons.font,
 					"space-mono": require("../../assets/fonts/SpaceMono-Regular.ttf"),
 				})
 			} catch (e) {
-				// We might want to provide this error information to an error reporting service
+				// might report to error logging
 				console.warn(e)
 			} finally {
-				setLoadingComplete(true)
-				SplashScreen.hideAsync()
+				setResourcesLoading(false)
 			}
 		}
 
 		loadResourcesAndDataAsync()
 	}, [])
 
-	return isLoadingComplete
+	return { isAppReady }
 }

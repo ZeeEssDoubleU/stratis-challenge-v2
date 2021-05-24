@@ -19,8 +19,9 @@ export interface FormatLocation_I {
 // ************
 
 export function useGetLocation(): void {
-	const { setReduxLocation, setReduxLocationError } = useReduxLocationSlice()
-	const { setReduxAirData } = useReduxAirDataSlice()
+	const { setReduxLocation, setReduxLocationLoading, setReduxLocationError } =
+		useReduxLocationSlice()
+	const { setReduxAirData, setReduxAirDataLoading } = useReduxAirDataSlice()
 
 	// TODO: consider using to preload aqi
 	// async function getLastKnownLocation() {
@@ -29,6 +30,8 @@ export function useGetLocation(): void {
 	// }
 
 	async function getCurrentLocation() {
+		// ! get gps coords
+		setReduxLocationLoading(true)
 		const {
 			coords: { latitude, longitude },
 			timestamp,
@@ -39,12 +42,15 @@ export function useGetLocation(): void {
 			longitude,
 			timestamp,
 		}
-
 		// set location in global state
 		setReduxLocation(formatLocation)
-		// fetch AQI data
+		setReduxLocationLoading(false)
+
+		// ! get air quality data
+		setReduxAirDataLoading(true)
 		const data = await fetchAQI(formatLocation)
-		setReduxAirData(data)
+		await setReduxAirData(data)
+		setReduxAirDataLoading(false)
 	}
 
 	async function requestPermission() {

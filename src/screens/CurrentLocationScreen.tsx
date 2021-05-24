@@ -3,7 +3,7 @@ import { Button, Text, View } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 import styled from "styled-components/native"
 import { Layout } from "@ui-kitten/components"
-import { useGetLocation } from "@hooks"
+import { useCachedResources, useGetLocation } from "@hooks"
 import { useReduxAirDataSlice } from "@redux"
 import { AirDataCard, AirDataHero, Loading } from "@components"
 import { isEmpty } from "lodash"
@@ -13,12 +13,14 @@ import { isEmpty } from "lodash"
 // ************
 
 export function CurrentLocationScreen() {
+	const { isAppReady } = useCachedResources()
+
 	// get current gps location
 	useGetLocation()
 	const { current, forecast } = useReduxAirDataSlice()
 
 	// show spinner if data still loading
-	if (isEmpty(current) || isEmpty(forecast)) return <Loading />
+	if (isEmpty(current) || isEmpty(forecast) || !isAppReady) return <Loading />
 
 	return (
 		<Container>
