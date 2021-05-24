@@ -1,16 +1,19 @@
-import { Layout, Text } from "@ui-kitten/components"
 import * as React from "react"
+import { AppText } from "@components"
+import { Layout } from "@ui-kitten/components"
+import { TopNavWrapper } from "../components"
+import { GoBack } from "../actions"
 
 // ************
 // modal
 // ************
 
-export function SearchModal() {
+export function SearchModal({ navigation }) {
 	return (
-		<Layout
-			style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-		>
-			<Text style={{ fontSize: 30 }}>Search here!</Text>
-		</Layout>
+		<TopNavWrapper {...{ navigation }} accessoryLeft={GoBack}>
+			<Layout>
+				<AppText>This is a search modal!</AppText>
+			</Layout>
+		</TopNavWrapper>
 	)
 }

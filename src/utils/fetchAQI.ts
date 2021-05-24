@@ -1,9 +1,7 @@
-// import axios from "axios"
-// import { AQICN_TOKEN as token } from "react-native-dotenv"
+import axios from "axios"
+import { AQICN_TOKEN as token } from "react-native-dotenv"
 
 import { FormatLocation_I } from "../hooks"
-
-import { data } from "../mock-data/fakeAirData"
 
 // ************
 // types
@@ -61,23 +59,25 @@ export interface FetchAirData_I {
 	status: string // !api call changes for some reason sometimes
 	data: AirDataLocation_I & AirDataCurrent_I & AirDataForcasts_I
 }
+export interface FetchAirTotalResponse_I {
+	config: Record<string, unknown>
+	data: FetchAirData_I
+	headers: Record<string, string>
+	request: Record<string, unknown>
+	status: number
+	statusText: undefined
+}
 
 // ************
 // hook
 // ************
 
 export async function fetchAQI({ latitude, longitude }: FormatLocation_I) {
-	// const { data: response }: FetchAirData_I = await axios({
-	// 	method: `GET`,
-	// 	url: `https://api.waqi.info/feed/geo:${latitude};${longitude}/?token=${token}`,
-	// })
-	// const { status, data } = response
-	// const formatData = { status, data }
+	const response: FetchAirTotalResponse_I = await axios({
+		method: `GET`,
+		url: `https://api.waqi.info/feed/geo:${latitude};${longitude}/?token=${token}`,
+	})
 
-	// console.log("formatData:", formatData) // ? debug
-
-	// function to sort formatData by distance, not listed as a method in AQI api
-	// console.log("data:", data) // ? debug
-
-	return data
+	const { status, data }: FetchAirData_I = response.data
+	return { status, data }
 }

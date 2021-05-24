@@ -2,12 +2,14 @@ import React from "react"
 import { View } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 import styled from "styled-components/native"
-import { Layout } from "@ui-kitten/components"
+import { Layout, TopNavigationAction } from "@ui-kitten/components"
 import { isEmpty } from "lodash"
 import { AirDataCard, AirDataHero, Loading } from "@components"
-import { TopNavWrapper } from "@navigation"
+import { GoBack, OpenModal, TopNavWrapper } from "@navigation"
 import { useCachedResources, useGetLocation } from "@hooks"
 import { useReduxAirDataSlice, useReduxLocationSlice } from "@redux"
+import { useNavigation } from "@react-navigation/core"
+import { PlusOutline } from "../components/Icons"
 
 // ************
 // screen
@@ -30,22 +32,22 @@ export function CurrentLocationScreen({ navigation }) {
 			alignment="center"
 			title="Current Location"
 			subtitle={`Lat: ${latitude}\nLong: ${longitude}`}
+			accessoryRight={() => OpenModal("Locations Modal")}
 		>
-			<Container>
-				<Current>
-					<AirDataHero airData={current} />
-				</Current>
-				<Forecast
-					horizontal
-					contentOffset={{ x: 200 - 20 - 20, y: 0 }}
-					showsVerticalScrollIndicator={false}
-					showsHorizontalScrollIndicator={false}
-				>
-					<AirDataCard {...{ current, forecast: forecast.yesterday }} />
-					<AirDataCard {...{ current, forecast: forecast.today }} />
-					<AirDataCard {...{ current, forecast: forecast.tomorrow }} />
-				</Forecast>
-			</Container>
+			{/* // TODO: look at creating an image hero showing a pic the city */}
+			<Current>
+				<AirDataHero airData={current} />
+			</Current>
+			<Forecast
+				horizontal
+				contentOffset={{ x: 200 - 20 - 20, y: 0 }}
+				showsVerticalScrollIndicator={false}
+				showsHorizontalScrollIndicator={false}
+			>
+				<AirDataCard {...{ current, forecast: forecast.yesterday }} />
+				<AirDataCard {...{ current, forecast: forecast.today }} />
+				<AirDataCard {...{ current, forecast: forecast.tomorrow }} />
+			</Forecast>
 		</TopNavWrapper>
 	)
 }

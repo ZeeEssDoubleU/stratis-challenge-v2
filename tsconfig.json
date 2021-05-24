@@ -10,6 +10,7 @@
 			"*Types": ["./src/@types/*.d.ts"],
 			"@components": ["./src/components"],
 			"@hooks": ["./src/hooks"],
+			"@icons": ["./src/components/icons"],
 			"@navigation": ["./src/navigation"],
 			"@redux": ["./src/redux"],
 			"@screens": ["./src/screens"],

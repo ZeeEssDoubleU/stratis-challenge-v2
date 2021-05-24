@@ -14,8 +14,6 @@ import { LocationsModal, SearchModal } from "../modals"
 const { Navigator, Screen } = createStackNavigator()
 
 export function MainNavigator() {
-	const navigation = useNavigation()
-
 	return (
 		<Navigator mode="modal" headerMode="none">
 			<Screen name="Current Location" component={CurrentLocationScreen} />
