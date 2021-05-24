@@ -15,13 +15,11 @@ import { filterForcastByDay } from "../helpers"
 // ************
 
 export type EmptyObj = Record<string, never>
-export type DailyMeasurementsWithDate_I =
-	| {
-			date: string
-			relativeDay: string
-			forecast: AirDataForcasts_I["forecast"]["daily"]
-	  }
-	| EmptyObj
+export type DailyMeasurementsWithDate_I = {
+	date: string
+	relativeDay: string
+	forecast: AirDataForcasts_I["forecast"]["daily"]
+} | null
 export interface AirDataStateLocation_I {
 	station: string
 	stationId: AirDataLocation_I["idx"]
@@ -42,9 +40,9 @@ export type AirDataStateForecast_I = {
 }
 export interface AirDataState_I {
 	status: string | null
-	location: AirDataStateLocation_I | EmptyObj
-	current: AirDataStateCurrent_I | EmptyObj
-	forecast: AirDataStateForecast_I | EmptyObj
+	location: AirDataStateLocation_I | null
+	current: AirDataStateCurrent_I | null
+	forecast: AirDataStateForecast_I
 }
 
 // ************
@@ -53,12 +51,12 @@ export interface AirDataState_I {
 
 const initialState: AirDataState_I = {
 	status: null,
-	location: {},
-	current: {},
+	location: null,
+	current: null,
 	forecast: {
-		today: {},
-		yesterday: {},
-		tomorrow: {},
+		today: null,
+		yesterday: null,
+		tomorrow: null,
 	},
 }
 

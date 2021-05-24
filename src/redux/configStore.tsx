@@ -4,8 +4,8 @@ import { Provider } from "react-redux"
 // import reducers / hooks
 import { reduxLocationSlice } from "./slices/reduxLocationSlice"
 import { reduxAirDataSlice } from "./slices/reduxAirDataSlice"
+import { Provider_I } from "global"
 // import types
-import { Provider_I } from "../@types"
 
 // ************
 // store
