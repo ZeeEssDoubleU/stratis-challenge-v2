@@ -14,8 +14,6 @@ import { useReduxAirDataSlice, useReduxLocationSlice } from "@redux"
 // ************
 
 export function CurrentLocationScreen({ navigation }) {
-	// get current gps location
-	useGetLocation()
 	const { isAppReady } = useCachedResources()
 
 	const {
@@ -29,8 +27,9 @@ export function CurrentLocationScreen({ navigation }) {
 	return (
 		<TopNavWrapper
 			{...{ navigation }}
+			alignment="center"
 			title="Current Location"
-			subtitle={`Lat: ${latitude}: Long: ${longitude}`}
+			subtitle={`Lat: ${latitude}\nLong: ${longitude}`}
 		>
 			<Container>
 				<Current>

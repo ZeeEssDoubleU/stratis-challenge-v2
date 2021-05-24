@@ -24,15 +24,12 @@ export interface AirDataHero_I {
 // ************
 
 export function AirDataHero({ airData }: AirDataHero_I) {
-	const { location: gpsLocation } = useReduxLocationSlice()
 	const { location: stationLocation } = useReduxAirDataSlice()
 
-	if (!stationLocation || !gpsLocation) return null
+	if (!stationLocation) return null
 
 	return (
 		<Container>
-			<AppText>{`Latitude: ${gpsLocation.latitude}`}</AppText>
-			<AppText>{`Longitude: ${gpsLocation.longitude}`}</AppText>
 			<Header
 				align="center"
 				title={stationLocation.city}

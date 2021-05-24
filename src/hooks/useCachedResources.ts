@@ -3,12 +3,18 @@ import { Ionicons } from "@expo/vector-icons"
 import * as Font from "expo-font"
 import * as SplashScreen from "expo-splash-screen"
 import { useReduxAirDataSlice, useReduxLocationSlice } from "@redux"
+import { useGetLocation } from "./useGetLocation"
 
 export function useCachedResources() {
 	const { airDataLoading } = useReduxAirDataSlice()
 	const { locationLoading } = useReduxLocationSlice()
 	const [resourcesLoading, setResourcesLoading] = useState(true)
 	const [isAppReady, setAppReady] = useState(false)
+
+	/**
+	 * get current gps location
+	 */
+	useGetLocation()
 
 	/**
 	 * effect controls splash screen display
