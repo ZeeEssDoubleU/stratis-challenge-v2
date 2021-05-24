@@ -1,5 +1,5 @@
 import { useDispatch, useSelector, TypedUseSelectorHook } from "react-redux"
-import { store } from "@redux"
+import { store } from "../configStore"
 
 // ************
 // types

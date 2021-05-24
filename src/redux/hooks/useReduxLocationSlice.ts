@@ -1,7 +1,5 @@
 import { useReduxDispatch, useReduxSelector } from "./useReduxFunctions"
-// import slice
-import { reduxLocationSlice } from "@redux"
-// import types
+import { reduxLocationSlice } from "../slices"
 import { FormatLocation_I } from "@hooks"
 
 // ************

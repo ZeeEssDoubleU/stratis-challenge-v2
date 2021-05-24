@@ -1,7 +1,5 @@
 import { useReduxDispatch, useReduxSelector } from "./useReduxFunctions"
-// slices
-import { reduxAirDataSlice } from "@redux"
-// types
+import { reduxAirDataSlice } from "../slices"
 import { FetchAirData_I } from "@utils"
 
 // ************
