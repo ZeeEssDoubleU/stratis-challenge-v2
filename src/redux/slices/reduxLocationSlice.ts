@@ -6,20 +6,20 @@ import { FormatLocation_I } from "../../hooks"
 // ************
 
 export interface LocationState_I {
-	city: string | null
-	current: FormatLocation_I | null
-	error: string | null
+	city: string
+	current: FormatLocation_I
+	error: string
 }
 
 // ************
 // init state
 // ************
 
-const initialState: LocationState_I = {
-	city: null,
-	current: null,
-	error: null,
-}
+const initialState = {
+	city: "", // TODO: implement city search
+	current: {},
+	error: "", // ! not used
+} as LocationState_I
 
 // ************
 // slice

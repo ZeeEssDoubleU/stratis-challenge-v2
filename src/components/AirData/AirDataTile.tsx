@@ -1,14 +1,17 @@
 import React, { ReactElement } from "react"
 import { ViewProps } from "react-native"
 import styled from "styled-components/native"
-import { Card } from "@ui-kitten/components"
 import { RenderProp } from "@ui-kitten/components/devsupport"
+import { AirDataStateCurrent_I } from "@redux"
+import { showCondition } from "@utils"
+import { Tile } from "../Tile"
 
 // ************
 // types
 // ************
 
 export interface AirDataTile_I {
+	aqiRating: AirDataStateCurrent_I["aqi"]
 	header?: RenderProp<ViewProps>
 	children?: ReactElement | ReactElement[]
 	footer?: RenderProp<ViewProps>
@@ -18,16 +21,20 @@ export interface AirDataTile_I {
 // component
 // ************
 
-export function AirDataTile(props: AirDataTile_I) {
-	return <Container {...props} />
+export function AirDataTile({ aqiRating, ...props }: AirDataTile_I) {
+	const { color: ratingColor } = showCondition(aqiRating)
+	console.log("aqiRating:", aqiRating) // ? debug
+	console.log("ratingColor:", ratingColor) // ? debug
+
+	return <Container {...{ ratingColor, ...props }} />
 }
 
 // ************
 // styles
 // ************
 
-const Container = styled(Card)`
-	margin: 12px;
-	align-items: center;
-	justify-content: center;
+const Container = styled(Tile)<{ ratingColor?: string }>`
+	border-top-color: ${({ ratingColor }) =>
+		ratingColor ? ratingColor : "transparent"};
+	border-top-width: 6px;
 `

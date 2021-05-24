@@ -1,4 +1,3 @@
-// import React, { ReactElement } from "react"
 import styled from "styled-components/native"
 import { Card } from "@ui-kitten/components"
 

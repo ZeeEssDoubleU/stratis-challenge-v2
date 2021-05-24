@@ -1,7 +1,8 @@
 import React, { useState } from "react"
 import styled from "styled-components"
 import { View } from "react-native"
-import { AirDataCard_I, Header, AppText, Tile } from "@components"
+import { AirDataCard_I, Header, AppText } from "@components"
+import { AirDataTile } from "./AirDataTile"
 
 // ************
 // component
@@ -18,6 +19,9 @@ export function AirData({ current, forecast }: AirDataCard_I) {
 		.filter(([param]) => param === selected)
 		.map(([param, paramForecast]) => {
 			const measurements = Object.entries(paramForecast)
+			// max used below to display aqi color
+			const max = measurements.filter(([key, value]) => key === "max")
+			const maxRating = max[0][1]
 
 			const displayMeasurements = measurements
 				.filter(([measurement]) => measurement !== "day")
@@ -34,10 +38,9 @@ export function AirData({ current, forecast }: AirDataCard_I) {
 				})
 
 			return (
-				<Tile
+				<AirDataTile
 					key={param}
-					// TODO: show correct status here
-					// status="success"
+					aqiRating={maxRating}
 					header={(props) => (
 						<Header
 							align="center"
@@ -49,7 +52,7 @@ export function AirData({ current, forecast }: AirDataCard_I) {
 				>
 					{/* // ! called above in displayData map */}
 					{displayMeasurements}
-				</Tile>
+				</AirDataTile>
 			)
 		})
 

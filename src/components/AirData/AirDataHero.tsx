@@ -6,7 +6,8 @@ import {
 	useReduxAirDataSlice,
 	useReduxLocationSlice,
 } from "../../redux"
-import { AppText, Header, Tile } from "@components"
+import { AppText, Header } from "@components"
+import { AirDataTile } from "./AirDataTile"
 
 // ************
 // types
@@ -38,9 +39,8 @@ export function AirDataHero({ airData }: AirDataHero_I) {
 				subtitle={stationLocation.station}
 			/>
 			<AppText category="s1">{`${airData?.date} @ ${airData?.time}`}</AppText>
-			<Tile
-				// TODO: show correct status here
-				// status="danger"
+			<AirDataTile
+				aqiRating={airData.aqi}
 				header={(props) => (
 					<Header
 						align="center"
@@ -56,7 +56,7 @@ export function AirDataHero({ airData }: AirDataHero_I) {
 				<AppText align="center" category="p2">
 					{airData?.dominentpol}
 				</AppText>
-			</Tile>
+			</AirDataTile>
 		</Container>
 	)
 }

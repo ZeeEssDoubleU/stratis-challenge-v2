@@ -6,6 +6,7 @@ import { Layout } from "@ui-kitten/components"
 import { useGetLocation } from "@hooks"
 import { useReduxAirDataSlice } from "@redux"
 import { AirDataCard, AirDataHero, Loading } from "@components"
+import { isEmpty } from "lodash"
 
 // ************
 // screen
@@ -17,7 +18,7 @@ export function CurrentLocationScreen() {
 	const { current, forecast } = useReduxAirDataSlice()
 
 	// show spinner if data still loading
-	if (!current || !forecast) return <Loading />
+	if (isEmpty(current) || isEmpty(forecast)) return <Loading />
 
 	return (
 		<Container>

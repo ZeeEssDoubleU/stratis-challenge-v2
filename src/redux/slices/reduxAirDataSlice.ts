@@ -49,12 +49,12 @@ export interface AirDataState_I {
 // init state
 // ************
 
-const initialState = {
-	status: "",
-	location: {},
-	current: {},
-	forecast: {},
-} as AirDataState_I
+const initialState: AirDataState_I = {
+	status: "", // ! not used
+	location: {} as AirDataStateLocation_I,
+	current: {} as AirDataStateCurrent_I,
+	forecast: {} as AirDataStateForecast_I,
+}
 
 // ************
 // slice

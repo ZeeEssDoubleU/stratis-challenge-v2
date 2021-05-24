@@ -5,10 +5,10 @@ import { SafeAreaProvider } from "react-native-safe-area-context"
 import { ApplicationProvider } from "@ui-kitten/components"
 import * as eva from "@eva-design/eva"
 
-import { useCachedResources } from "./src/hooks/useCachedResources"
-import { useColorScheme } from "./src/hooks/useColorScheme"
+import { useCachedResources, useColorScheme } from "@hooks"
 
-import { ReduxProvider } from "./src/redux"
+import { SCProvider } from "@styles"
+import { ReduxProvider } from "@redux"
 
 import { CurrentLocationScreen } from "./src/screens/CurrentLocationScreen"
 
@@ -27,12 +27,14 @@ export default function App() {
 		return (
 			<ReduxProvider>
 				{/* uses app preference to determine correct eva color scheme */}
-				<ApplicationProvider {...eva} theme={eva[colorScheme]}>
-					<SafeAreaProvider>
-						<CurrentLocationScreen />
-						<StatusBar />
-					</SafeAreaProvider>
-				</ApplicationProvider>
+				<SCProvider>
+					<ApplicationProvider {...eva} theme={eva[colorScheme]}>
+						<SafeAreaProvider>
+							<CurrentLocationScreen />
+							<StatusBar />
+						</SafeAreaProvider>
+					</ApplicationProvider>
+				</SCProvider>
 			</ReduxProvider>
 		)
 	}
