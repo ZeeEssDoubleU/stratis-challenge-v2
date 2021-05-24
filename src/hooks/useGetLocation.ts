@@ -29,41 +29,65 @@ export function useGetLocation(): void {
 	// 	setReduxLocation(location)
 	// }
 
-	async function getCurrentLocation() {
-		// ! get gps coords
-		setReduxLocationLoading(true)
-		const {
-			coords: { latitude, longitude },
-			timestamp,
-		} = await Location.getCurrentPositionAsync({})
-
-		const formatLocation = {
-			latitude,
-			longitude,
-			timestamp,
+	/**
+	 * get air quality data
+	 */
+	async function getAqiData(formatLocation) {
+		try {
+			setReduxAirDataLoading(true)
+			const data = await fetchAQI(formatLocation)
+			await setReduxAirData(data)
+			setReduxAirDataLoading(false)
+		} catch (error) {
+			console.warn(error)
 		}
-		// set location in global state
-		setReduxLocation(formatLocation)
-		setReduxLocationLoading(false)
-
-		// ! get air quality data
-		setReduxAirDataLoading(true)
-		const data = await fetchAQI(formatLocation)
-		await setReduxAirData(data)
-		setReduxAirDataLoading(false)
 	}
 
-	async function requestPermission() {
-		const { status } = await Location.requestForegroundPermissionsAsync()
+	/**
+	 * get gps coords
+	 */
+	async function getCurrentLocation() {
+		try {
+			setReduxLocationLoading(true)
+			const {
+				coords: { latitude, longitude },
+				timestamp,
+			} = await Location.getCurrentPositionAsync({})
 
-		if (status !== "granted") {
-			await setReduxLocationError("Permission to access location was denied")
-		} else {
-			await getCurrentLocation()
+			const formatLocation = {
+				latitude,
+				longitude,
+				timestamp,
+			}
+			// set location in global state
+			setReduxLocation(formatLocation)
+			setReduxLocationLoading(false)
+			getAqiData(formatLocation)
+		} catch (error) {
+			console.warn(error)
+		}
+	}
+
+	/**
+	 * get permission to use location
+	 */
+	async function requestPermissionForLocation() {
+		try {
+			const { status } = await Location.requestForegroundPermissionsAsync()
+
+			if (status === "granted") {
+				await getCurrentLocation()
+			} else {
+				await setReduxLocationError(
+					"Permission to access location was denied",
+				)
+			}
+		} catch (error) {
+			console.warn(error)
 		}
 	}
 
 	useEffect(() => {
-		requestPermission()
+		requestPermissionForLocation()
 	}, [])
 }

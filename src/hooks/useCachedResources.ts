@@ -10,38 +10,42 @@ export function useCachedResources() {
 	const [resourcesLoading, setResourcesLoading] = useState(true)
 	const [isAppReady, setAppReady] = useState(false)
 
-	// effect controls splash screen display
+	/**
+	 * effect controls splash screen display
+	 */
 	useEffect(() => {
 		isAppReady
 			? SplashScreen.hideAsync()
 			: SplashScreen.preventAutoHideAsync()
 	}, [isAppReady])
 
-	// effect declares when all resource are loaded
+	/**
+	 * effect declares when all resource are loaded
+	 */
 	useEffect(() => {
 		if (!airDataLoading && !locationLoading && !resourcesLoading) {
 			setAppReady(true)
 		}
 	}, [airDataLoading, locationLoading, resourcesLoading])
 
-	// load pre render resources
+	/**
+	 * load pre render resources
+	 */
 	useEffect(() => {
-		async function loadResourcesAndDataAsync() {
+		async function loadResources() {
 			try {
 				// load fonts
 				await Font.loadAsync({
 					...Ionicons.font,
 					"space-mono": require("../../assets/fonts/SpaceMono-Regular.ttf"),
 				})
-			} catch (e) {
-				// might report to error logging
-				console.warn(e)
-			} finally {
 				setResourcesLoading(false)
+			} catch (error) {
+				console.warn(error) // might report to error logging
 			}
 		}
 
-		loadResourcesAndDataAsync()
+		loadResources()
 	}, [])
 
 	return { isAppReady }

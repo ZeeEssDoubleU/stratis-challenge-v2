@@ -2,8 +2,9 @@ import React from "react"
 import { StatusBar } from "expo-status-bar"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 
-import { ApplicationProvider } from "@ui-kitten/components"
+import { ApplicationProvider, IconRegistry } from "@ui-kitten/components"
 import * as eva from "@eva-design/eva"
+import { EvaIconsPack } from "@ui-kitten/eva-icons"
 
 import { SCProvider } from "@styles"
 import { ReduxProvider } from "@redux"
@@ -24,6 +25,8 @@ export default function App() {
 		<ReduxProvider>
 			{/* uses app preference to determine correct eva color scheme */}
 			<SCProvider>
+				{/* needed so icons are compatible with Icon component */}
+				<IconRegistry icons={EvaIconsPack} />
 				<ApplicationProvider {...eva} theme={eva[colorScheme]}>
 					<SafeAreaProvider>
 						<Navigation />
