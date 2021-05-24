@@ -23,8 +23,6 @@ export interface AirDataTile_I {
 
 export function AirDataTile({ aqiRating, ...props }: AirDataTile_I) {
 	const { color: ratingColor } = showCondition(aqiRating)
-	console.log("aqiRating:", aqiRating) // ? debug
-	console.log("ratingColor:", ratingColor) // ? debug
 
 	return <Container {...{ ratingColor, ...props }} />
 }

@@ -20,8 +20,8 @@ export function AirData({ current, forecast }: AirDataCard_I) {
 		.map(([param, paramForecast]) => {
 			const measurements = Object.entries(paramForecast)
 			// max used below to display aqi color
-			const max = measurements.filter(([key, value]) => key === "max")
-			const maxRating = max[0][1]
+			const max = measurements.filter(([key]) => key === "max")
+			const maxRating = max[0][1] as unknown as number
 
 			const displayMeasurements = measurements
 				.filter(([measurement]) => measurement !== "day")
