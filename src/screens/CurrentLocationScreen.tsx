@@ -29,29 +29,31 @@ export function CurrentLocationScreen({
 	if (isEmpty(current) || isEmpty(forecast) || !isAppReady) return <Loading />
 
 	return (
-		<TopNavWrapper
-			{...{ navigation }}
-			alignment="center"
-			title="Current Location"
-			subtitle={`Lat: ${latitude}\nLong: ${longitude}`}
-			accessoryRight={() => OpenModal("Locations Modal")}
-		>
-			{/* // TODO: look at creating an image hero showing a pic the city */}
-			<Current>
-				<AirDataHero airData={current} />
-			</Current>
-			{/* // TODO: look into changing card layout */}
-			<Forecast
-				horizontal
-				contentOffset={{ x: 200 - 20 - 20, y: 0 }}
-				showsVerticalScrollIndicator={false}
-				showsHorizontalScrollIndicator={false}
+		<ScrollView>
+			<TopNavWrapper
+				{...{ navigation }}
+				alignment="center"
+				title="Current Location"
+				subtitle={`Lat: ${latitude}\nLong: ${longitude}`}
+				accessoryRight={() => OpenModal("Locations Modal")}
 			>
-				<AirDataCard {...{ current, forecast: forecast.yesterday }} />
-				<AirDataCard {...{ current, forecast: forecast.today }} />
-				<AirDataCard {...{ current, forecast: forecast.tomorrow }} />
-			</Forecast>
-		</TopNavWrapper>
+				{/* // TODO: look at creating an image hero showing a pic the city */}
+				<Current>
+					<AirDataHero airData={current} />
+				</Current>
+				{/* // TODO: look into changing card layout */}
+				<Forecast
+					horizontal
+					contentOffset={{ x: 200 - 20 - 20, y: 0 }}
+					showsVerticalScrollIndicator={false}
+					showsHorizontalScrollIndicator={false}
+				>
+					<AirDataCard {...{ current, forecast: forecast.yesterday }} />
+					<AirDataCard {...{ current, forecast: forecast.today }} />
+					<AirDataCard {...{ current, forecast: forecast.tomorrow }} />
+				</Forecast>
+			</TopNavWrapper>
+		</ScrollView>
 	)
 }
 

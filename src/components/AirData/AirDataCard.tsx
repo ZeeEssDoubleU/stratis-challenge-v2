@@ -1,12 +1,10 @@
-import React from 'react';
-import { ViewProps } from 'react-native';
-
-import { AirDataStateCurrent_I, FilteredForecast } from '@redux';
-import { RenderProp } from '@ui-kitten/components/devsupport';
-
-import { AppCard } from '../AppCard';
-import { Header } from '../Header';
-import { AirData } from './AirData';
+import { AirDataStateCurrent_I, FilteredForecast } from "@redux"
+import { RenderProp } from "@ui-kitten/components/devsupport"
+import React from "react"
+import { ViewProps } from "react-native"
+import { AppCard } from "../AppCard"
+import { Header } from "../Header"
+import { AirData } from "./AirData"
 
 // ************
 // types
@@ -22,8 +20,6 @@ export interface AirDataCard_I {
 // ************
 
 export function AirDataCard({ current, forecast }: AirDataCard_I) {
-	if (!forecast) return null
-
 	const DisplayHeader: RenderProp<ViewProps> = (props) => (
 		<Header
 			title={forecast.relativeDay}
