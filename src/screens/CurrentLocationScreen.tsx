@@ -44,7 +44,7 @@ export function CurrentLocationScreen({
 				{/* // TODO: look into changing card layout */}
 				<Forecast
 					horizontal
-					contentOffset={{ x: 200 - 20 - 20, y: 0 }}
+					contentOffset={{ x: 355 - 20 - 20, y: 0 }}
 					showsVerticalScrollIndicator={false}
 					showsHorizontalScrollIndicator={false}
 				>

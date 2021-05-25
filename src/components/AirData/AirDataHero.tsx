@@ -1,11 +1,10 @@
-import React from 'react';
-import { View } from 'react-native';
-import styled from 'styled-components/native';
-
-import { AirDataStateCurrent_I, useReduxAirDataSlice, useReduxLocationSlice } from '../../redux';
-import { AppText } from '../AppText';
-import { Header } from '../Header';
-import { AirDataTile } from './AirDataTile';
+import React from "react"
+import { View } from "react-native"
+import styled from "styled-components/native"
+import { AirDataStateCurrent_I, useReduxAirDataSlice } from "../../redux"
+import { AppText } from "../AppText"
+import { Header } from "../Header"
+import { AirDataTile } from "./AirDataTile"
 
 // ************
 // types
@@ -35,7 +34,7 @@ export function AirDataHero({ airData }: AirDataHero_I) {
 			/>
 			<AppText category="s1">{`${airData?.date} @ ${airData?.time}`}</AppText>
 			<AirDataTile
-				aqiRating={airData.aqi}
+				airData={airData}
 				header={(props) => (
 					<Header
 						align="center"

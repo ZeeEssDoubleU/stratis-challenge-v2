@@ -1,6 +1,6 @@
 import { Layout } from "@ui-kitten/components"
 import { isEmpty } from "lodash"
-import React, { useState } from "react"
+import React from "react"
 import { View } from "react-native"
 import styled from "styled-components"
 import { AppText } from "../AppText"
@@ -11,8 +11,6 @@ import { AirDataCard_I } from "./AirDataCard"
 // ************
 
 export function AirData({ current, forecast }: AirDataCard_I) {
-	const [selected, setSelected] = useState(current?.dominentpol || null)
-
 	if (!forecast && isEmpty(forecast)) return null
 
 	const displayKeys = ["", "avg", "max", "min"]
