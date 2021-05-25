@@ -1,8 +1,9 @@
-import React from "react"
-import { ThemeProvider } from "styled-components/native"
-import { theme } from "./theme"
 // import types
-import { Provider_I } from "globalTypes"
+import { Provider_I } from 'globalTypes';
+import React from 'react';
+import { ThemeProvider } from 'styled-components/native';
+
+import { theme } from './theme';
 
 // ************
 // module declaration

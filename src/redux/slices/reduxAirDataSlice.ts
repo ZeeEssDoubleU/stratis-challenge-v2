@@ -1,46 +1,31 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-// import type
-import {
-	AirDataCurrent_I,
-	AirDataLocation_I,
-	AirDataForcasts_I,
-	FetchAirData_I,
-	formatDate,
-	FormatDate_I,
-} from "@utils"
-// import utils
-import { filterForcastByDay } from "../helpers"
+import { formatDate, FormatDate, SetAirDataByCoords } from "@utils"
+import { FilteredForecast, filterForcastByDay } from "../helpers"
 
 // ************
 // types
 // ************
 
-export type DailyMeasurementsWithDate_I = {
-	date: string
-	relativeDay: string
-	forecast: AirDataForcasts_I["forecast"]["daily"]
-}
 export interface AirDataStateLocation_I {
 	station: string
-	stationId: AirDataLocation_I["idx"]
+	stationId: SetAirDataByCoords["idx"]
 	city: string
 	state: string
 }
 export interface AirDataStateCurrent_I {
-	time?: FormatDate_I["formatted_time"]
-	date?: FormatDate_I["formatted"]
-	aqi: AirDataCurrent_I["aqi"]
-	dominentpol: AirDataCurrent_I["dominentpol"]
-	iaqi: AirDataCurrent_I["iaqi"]
+	time?: FormatDate["formatted_time"]
+	date?: FormatDate["formatted"]
+	aqi: SetAirDataByCoords["aqi"]
+	dominentpol: SetAirDataByCoords["dominentpol"]
+	iaqi: SetAirDataByCoords["iaqi"]
 }
 export type AirDataStateForecast_I = {
-	today: DailyMeasurementsWithDate_I
-	yesterday: DailyMeasurementsWithDate_I
-	tomorrow: DailyMeasurementsWithDate_I
+	today: FilteredForecast
+	yesterday: FilteredForecast
+	tomorrow: FilteredForecast
 }
 export interface AirDataState_I {
 	loading: boolean
-	status: string
 	location: AirDataStateLocation_I
 	current: AirDataStateCurrent_I
 	forecast: AirDataStateForecast_I
@@ -52,7 +37,6 @@ export interface AirDataState_I {
 
 const initialState: AirDataState_I = {
 	loading: true,
-	status: null as unknown as string, // ! not used
 	location: {} as AirDataStateLocation_I,
 	current: {} as AirDataStateCurrent_I,
 	forecast: {} as AirDataStateForecast_I,
@@ -69,15 +53,14 @@ export const reduxAirDataSlice = createSlice({
 		setLoading: (state, action: PayloadAction<boolean>) => {
 			state.loading = action.payload
 		},
-		setData: (state, action: PayloadAction<FetchAirData_I>) => {
-			const { status, data } = action.payload
-			const { aqi, city, forecast, iaqi, idx, time, dominentpol } = data
+		setData: (state, action: PayloadAction<SetAirDataByCoords>) => {
+			const { aqi, city, forecast, iaqi, idx, time, dominentpol } =
+				action.payload
 
 			const today = filterForcastByDay(forecast, "today")
 			const yesterday = filterForcastByDay(forecast, "yesterday")
 			const tomorrow = filterForcastByDay(forecast, "tomorrow")
 
-			state.status = status
 			// this state is displayed in the air quality hero
 			state.location = {
 				station: city.name.split(",")[0].trim(),

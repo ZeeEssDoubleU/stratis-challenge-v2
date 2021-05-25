@@ -1,14 +1,11 @@
-import React from "react"
-import { View } from "react-native"
-import styled from "styled-components/native"
-import {
-	AirDataStateCurrent_I,
-	useReduxAirDataSlice,
-	useReduxLocationSlice,
-} from "../../redux"
-import { Header } from "../Header"
-import { AppText } from "../AppText"
-import { AirDataTile } from "./AirDataTile"
+import React from 'react';
+import { View } from 'react-native';
+import styled from 'styled-components/native';
+
+import { AirDataStateCurrent_I, useReduxAirDataSlice, useReduxLocationSlice } from '../../redux';
+import { AppText } from '../AppText';
+import { Header } from '../Header';
+import { AirDataTile } from './AirDataTile';
 
 // ************
 // types

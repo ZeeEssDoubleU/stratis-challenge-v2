@@ -1,17 +1,13 @@
-import React from "react"
-import { StatusBar } from "expo-status-bar"
-import { SafeAreaProvider } from "react-native-safe-area-context"
-
-import { ApplicationProvider, IconRegistry } from "@ui-kitten/components"
 import * as eva from "@eva-design/eva"
-import { EvaIconsPack } from "@ui-kitten/eva-icons"
-
-import { SCProvider } from "@styles"
-import { ReduxProvider } from "@redux"
-
 import { useColorScheme } from "@hooks"
-
-import { Navigation } from "@navigation"
+import { SCProvider } from "@styles"
+import { ApplicationProvider, IconRegistry } from "@ui-kitten/components"
+import { EvaIconsPack } from "@ui-kitten/eva-icons"
+import { StatusBar } from "expo-status-bar"
+import React from "react"
+import { SafeAreaProvider } from "react-native-safe-area-context"
+import { ReduxProvider } from "./src/redux/configStore"
+import { Navigation } from "./src/navigation/index"
 
 // ************
 // component

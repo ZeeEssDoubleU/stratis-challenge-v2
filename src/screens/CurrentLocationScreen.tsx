@@ -1,21 +1,23 @@
+import { isEmpty } from "lodash"
 import React from "react"
 import { View } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 import styled from "styled-components/native"
-import { Layout, TopNavigationAction } from "@ui-kitten/components"
-import { isEmpty } from "lodash"
 import { AirDataCard, AirDataHero, Loading } from "@components"
-import { GoBack, OpenModal, TopNavWrapper } from "@navigation"
-import { useCachedResources, useGetLocation } from "@hooks"
+import { useCachedResources } from "@hooks"
+import { OpenModal, TopNavWrapper } from "@navigation"
 import { useReduxAirDataSlice, useReduxLocationSlice } from "@redux"
-import { useNavigation } from "@react-navigation/core"
-import { PlusOutline } from "../components/Icons"
+import { NavigationProp } from "@react-navigation/core"
 
 // ************
 // screen
 // ************
 
-export function CurrentLocationScreen({ navigation }) {
+export function CurrentLocationScreen({
+	navigation,
+}: {
+	navigation: NavigationType
+}) {
 	const { isAppReady } = useCachedResources()
 
 	const {
@@ -38,6 +40,7 @@ export function CurrentLocationScreen({ navigation }) {
 			<Current>
 				<AirDataHero airData={current} />
 			</Current>
+			{/* // TODO: look into changing card layout */}
 			<Forecast
 				horizontal
 				contentOffset={{ x: 200 - 20 - 20, y: 0 }}
@@ -56,11 +59,6 @@ export function CurrentLocationScreen({ navigation }) {
 // styles
 // ************
 
-const Container = styled(Layout)`
-	flex: 1;
-	align-items: center;
-	justify-content: center;
-`
 const Current = styled(View)`
 	flex: 1;
 	width: 100%;

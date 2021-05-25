@@ -1,18 +1,24 @@
-import React from "react"
+import React, { ReactElement } from "react"
 import { SafeAreaView } from "react-native"
 import styled from "styled-components"
-import { Divider, Layout, TopNavigation } from "@ui-kitten/components"
+import {
+	Divider,
+	Layout,
+	TopNavigation,
+	TopNavigationActionProps,
+	TopNavigationElement,
+} from "@ui-kitten/components"
 
 // ************
 // component
 // ************
 
-export function TopNavWrapper({ children, ...props }) {
+export function TopNavWrapper(props: TopNavigationElement) {
 	return (
-		<Container {...props}>
+		<Container>
 			<TopNavigation {...props} />
-			<Divider {...props} />
-			<Wrapper>{children}</Wrapper>
+			<Divider />
+			<Wrapper>{props.children}</Wrapper>
 		</Container>
 	)
 }
@@ -26,6 +32,4 @@ const Container = styled(SafeAreaView)`
 `
 const Wrapper = styled(Layout)`
 	flex: 1;
-	justify-content: center;
-	align-items: center;
 `

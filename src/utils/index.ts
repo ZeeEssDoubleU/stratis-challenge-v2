@@ -1,3 +1,3 @@
 export * from "./formatDate"
-export * from "./fetchAQI"
+export * from "../hooks/useFetchAQI"
 export * from "./showCondition"

@@ -1,6 +1,7 @@
-import { useReduxDispatch, useReduxSelector } from "./useReduxFunctions"
-import { reduxLocationSlice } from "../slices"
-import { FormatLocation_I } from "@hooks"
+import { SetCurrentLocation } from '@hooks';
+
+import { reduxLocationSlice } from '../slices';
+import { useReduxDispatch, useReduxSelector } from './useReduxFunctions';
 
 // ************
 // hook
@@ -15,7 +16,7 @@ export function useReduxLocationSlice() {
 		location: useReduxSelector((state) => state.location.current),
 		locationLoading: useReduxSelector((state) => state.location.loading),
 		// actions
-		setReduxLocation: (action: FormatLocation_I) => {
+		setReduxLocation: (action: SetCurrentLocation) => {
 			dispatch(setLocation(action))
 		},
 		setReduxLocationError: (action: string) => {

@@ -1,6 +1,6 @@
-import { useReduxDispatch, useReduxSelector } from "./useReduxFunctions"
 import { reduxAirDataSlice } from "../slices"
-import { FetchAirData_I } from "@utils"
+import { useReduxDispatch, useReduxSelector } from "./useReduxFunctions"
+import { FetchAirDataByCoords } from "@utils"
 
 // ************
 // hook
@@ -17,7 +17,7 @@ export function useReduxAirDataSlice() {
 		forecast: useReduxSelector((state) => state.airData.forecast),
 		airDataLoading: useReduxSelector((state) => state.airData.loading),
 		// actions
-		setReduxAirData: (action: FetchAirData_I) => {
+		setReduxAirData: (action: FetchAirDataByCoords) => {
 			dispatch(setData(action))
 		},
 		setReduxAirDataLoading: (action: boolean) => {

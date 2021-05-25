@@ -1,10 +1,15 @@
 import * as React from "react"
-import { Icon } from "@ui-kitten/components"
+
+import { Icon, IconProps } from "@ui-kitten/components"
 
 // ************
 // icons
 // ************
 
-export const PlusOutline = (props) => <Icon {...props} name="plus-outline" />
+export const PlusOutline = (props: IconProps) => (
+	<Icon {...props} name="plus-outline" />
+)
 
-export const BackArrow = (props) => <Icon {...props} name="arrow-back" />
+export const BackArrow = (props: IconProps) => (
+	<Icon {...props} name="arrow-back" />
+)

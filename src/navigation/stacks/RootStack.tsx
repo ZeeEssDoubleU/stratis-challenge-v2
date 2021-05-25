@@ -1,6 +1,8 @@
-import * as React from "react"
-import { createStackNavigator } from "@react-navigation/stack"
-import { MainNavigator } from "./MainStack"
+import * as React from 'react';
+
+import { createStackNavigator } from '@react-navigation/stack';
+
+import { MainNavigator } from './MainStack';
 
 // ************
 // stack

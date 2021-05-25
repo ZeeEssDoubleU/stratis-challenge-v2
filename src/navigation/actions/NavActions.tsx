@@ -1,13 +1,16 @@
 import * as React from "react"
-import { TopNavigationAction } from "@ui-kitten/components"
-import { BackArrow, PlusOutline } from "../../components/Icons"
+
 import { useNavigation } from "@react-navigation/core"
+import { TopNavigationAction } from "@ui-kitten/components"
+
+import { BackArrow, PlusOutline } from "../../components/Icons"
+import { Modal } from "react-native"
 
 // ************
 // actions
 // ************
 
-export const OpenModal = (targetModal) => {
+export const OpenModal = (targetModal: string) => {
 	const navigation = useNavigation()
 
 	return (

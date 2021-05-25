@@ -1,5 +1,5 @@
-import * as React from "react"
 import { NavigationContainer } from "@react-navigation/native"
+import * as React from "react"
 import { RootNavigator } from "./stacks"
 
 // ************
@@ -16,6 +16,5 @@ export function Navigation() {
 
 export * from "./actions"
 export * from "./components"
-export * from "./config"
 export * from "./modals"
 export * from "./stacks"

@@ -1,9 +1,15 @@
-import React, { useEffect, useState } from "react"
-import { Ionicons } from "@expo/vector-icons"
-import * as Font from "expo-font"
-import * as SplashScreen from "expo-splash-screen"
-import { useReduxAirDataSlice, useReduxLocationSlice } from "@redux"
-import { useGetLocation } from "./useGetLocation"
+import * as Font from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
+import { useEffect, useState } from 'react';
+
+import { Ionicons } from '@expo/vector-icons';
+import { useReduxAirDataSlice, useReduxLocationSlice } from '@redux';
+
+import { useGetLocation } from './useGetLocation';
+
+// ************
+// hook
+// ************
 
 export function useCachedResources() {
 	const { airDataLoading } = useReduxAirDataSlice()
@@ -12,7 +18,7 @@ export function useCachedResources() {
 	const [isAppReady, setAppReady] = useState(false)
 
 	/**
-	 * get current gps location
+	 * get current gps location data
 	 */
 	useGetLocation()
 
@@ -35,7 +41,7 @@ export function useCachedResources() {
 	}, [airDataLoading, locationLoading, resourcesLoading])
 
 	/**
-	 * load pre render resources
+	 * effect loads pre-render resources
 	 */
 	useEffect(() => {
 		async function loadResources() {

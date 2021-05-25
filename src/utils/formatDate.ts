@@ -1,26 +1,21 @@
-import { isToday, isTomorrow, isYesterday, parseISO, format } from "date-fns"
+import { format, isToday, isTomorrow, isYesterday, parseISO } from "date-fns"
 
 // ************
 // types
 // ************
 
-// ! created to use in reduxAirDataSlice
-export interface FormatDate_I {
-	parsed: Date
-	formatted: string
-	formatted_time: string
-}
-export interface GetRelativeDay_I {
-	_isToday: boolean
-	_isYesterday: boolean
-	_isTomorrow: boolean
-}
+export type FormatDate = ReturnType<typeof formatDate>
+export type GetRelativeDay = ReturnType<typeof getRelativeDay>
 
 // ************
 // functions
 // ************
 
-// format date from iso string
+/**
+ *	formats an ISO date string
+ * @param date string
+ * @returns an object of various formats
+ */
 export function formatDate(date: string) {
 	const parsed = parseISO(date)
 	const formatted = format(parsed, "MMMM d")
@@ -29,7 +24,18 @@ export function formatDate(date: string) {
 	return { parsed, formatted, formatted_time }
 }
 
-// determine is day is yesterday, today or tomorrow
+export function formatParsedDate(date: Date) {
+	const formatted = format(date, "MMMM d")
+	const formatted_time = format(date, "p")
+
+	return { formatted, formatted_time }
+}
+
+/**
+ * determines if input day is yesterday, today, or tomorrow
+ * @param parsed Date
+ * @returns an object of booleans to determine input day relative to today
+ */
 export function getRelativeDay(parsed: Date) {
 	const _isToday = isToday(parsed)
 	const _isYesterday = isYesterday(parsed)

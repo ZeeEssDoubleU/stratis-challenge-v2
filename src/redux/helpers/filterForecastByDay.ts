@@ -1,10 +1,21 @@
-import { AirDataForcasts_I, formatDate, getRelativeDay } from "@utils"
+import {
+	formatDate,
+	formatParsedDate,
+	getRelativeDay,
+	SetAirDataByCoords,
+} from "@utils"
+import { startOfYesterday, startOfTomorrow, startOfToday } from "date-fns/esm"
 import { capitalize } from "lodash"
 
 // ************
 // helper
 // ************
 
+/**
+ * function returns ID that determins which method to use in getRelativeDay(parsedDate) function call
+ * @param day "yesterday" | "today" | "tomorrow"
+ * @returns "_isToday" | "_isYesterday" | "_isTomorrow"
+ */
 export function whichDay(day: "yesterday" | "today" | "tomorrow") {
 	if (day === "today") return "_isToday"
 	else if (day === "yesterday") return "_isYesterday"
@@ -16,43 +27,76 @@ export function whichDay(day: "yesterday" | "today" | "tomorrow") {
 // helper
 // ************
 
+export type FilteredForecast = ReturnType<typeof filterForcastByDay>
+
+/**
+ * function filters all forecasts together on a selected day
+ * @param forecasts forecast param from fetchAQI function return
+ * @param relativeDay "yesterday" | "today" | "tomorrow"
+ * @returns date, relativeDay, and a forecast for a selected day
+ */
 export function filterForcastByDay(
-	forecasts: AirDataForcasts_I["forecast"],
+	forecasts: SetAirDataByCoords["forecast"],
 	relativeDay: "yesterday" | "today" | "tomorrow",
 ) {
-	let filteredForecast = {} as {
-		date: string
-		relativeDay: string
-		forecast: AirDataForcasts_I["forecast"]["daily"]
-	}
 	const allForecasts = forecasts.daily
-	const allForecastsEntries = Object.entries(allForecasts)
-	// get forecasts split by params (measurements)
-	allForecastsEntries.forEach(([param, forecastsByDay]) => {
-		forecastsByDay.filter((forecast) => {
-			const { day: date } = forecast
+	type ForecastParams = keyof typeof allForecasts
+	type Estimates = {
+		avg: number
+		day: string
+		max: number
+		min: number
+	}
+	type FilteredForecast<T> = {
+		[K in T]: Estimates
+	}
 
-			// parsed to ISO string
-			const parsedDate = formatDate(date).parsed
-			// determine method used in getRelativeDay(parsedDate)
-			const selectedDay = whichDay(relativeDay)
-			// see what day matches selected method
-			const forecastMatchesSelected =
-				selectedDay && getRelativeDay(parsedDate)[selectedDay]
-			// if day passes method, add to filteredForecast object
+	/**
+	 * filteredForecast is an object that returns forecasts for a given day
+	 */
+	const filteredForecast = Object.entries(allForecasts).reduce(
+		(obj, [param, forecastsBydDay]) => {
+			forecastsBydDay.filter((forecast) => {
+				const { day: date } = forecast
 
-			if (forecastMatchesSelected) {
-				filteredForecast = {
-					date: formatDate(date).formatted,
-					relativeDay: capitalize(relativeDay),
-					forecast: {
-						...(filteredForecast.forecast as AirDataForcasts_I["forecast"]["daily"]),
-						[param]: forecast,
-					},
+				// parsed to ISO string
+				const parsedDate = formatDate(date).parsed
+
+				// determine method used in getRelativeDay(parsedDate)
+				const selectedDay = whichDay(relativeDay)
+				// see what day matches selected method
+				const forecastMatchesSelected =
+					selectedDay && getRelativeDay(parsedDate)[selectedDay]
+				// if day passes method, add to filteredForecast object
+
+				if (forecastMatchesSelected) {
+					obj[param as string] = forecast
 				}
-			}
-		})
-	})
+			})
 
-	return filteredForecast
+			return obj
+		},
+		{} as FilteredForecast<ForecastParams>,
+	)
+
+	const getDate = () => {
+		if (relativeDay === "yesterday") {
+			const date = startOfYesterday()
+			return formatParsedDate(date).formatted
+		} else if (relativeDay === "today") {
+			const date = startOfToday()
+			return formatParsedDate(date).formatted
+		} else if (relativeDay === "tomorrow") {
+			const date = startOfTomorrow()
+			return formatParsedDate(date).formatted
+		}
+	}
+
+	const filteredForecastWithDate = {
+		date: getDate(),
+		relativeDay: capitalize(relativeDay),
+		...filteredForecast,
+	}
+
+	return filteredForecastWithDate
 }

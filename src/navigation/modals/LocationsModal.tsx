@@ -1,14 +1,14 @@
-import * as React from "react"
 import { AppText } from "@components"
 import { Layout } from "@ui-kitten/components"
-import { TopNavWrapper } from "../components"
+import * as React from "react"
 import { GoBack, OpenModal } from "../actions"
+import { TopNavWrapper } from "../components"
 
 // ************
 // modal
 // ************
 
-export function LocationsModal({ navigation }) {
+export function LocationsModal({ navigation }: { navigation: NavigationType }) {
 	return (
 		<TopNavWrapper
 			{...{ navigation }}

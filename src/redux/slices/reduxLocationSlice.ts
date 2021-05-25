@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { FormatLocation_I } from "@hooks"
+import { SetCurrentLocation } from '@hooks';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 // ************
 // types
@@ -7,7 +7,7 @@ import { FormatLocation_I } from "@hooks"
 
 export interface LocationState_I {
 	city: string
-	current: FormatLocation_I
+	current: SetCurrentLocation
 	error: string
 	loading: boolean
 }
@@ -31,7 +31,7 @@ export const reduxLocationSlice = createSlice({
 	name: "location",
 	initialState,
 	reducers: {
-		setLocation: (state, action: PayloadAction<FormatLocation_I>) => {
+		setLocation: (state, action: PayloadAction<SetCurrentLocation>) => {
 			state.current = action.payload
 		},
 		setLoading: (state, action: PayloadAction<boolean>) => {

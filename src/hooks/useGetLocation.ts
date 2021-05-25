@@ -1,17 +1,36 @@
-import { useEffect } from "react"
+import { useFetchAQI } from "@utils"
 import * as Location from "expo-location"
-
-import { useReduxAirDataSlice, useReduxLocationSlice } from "../redux"
-import { fetchAQI } from "../utils"
+import { Awaited } from "globalTypes"
+import { useEffect } from "react"
+import { useReduxLocationSlice } from "../redux"
+import { useReduxAirDataSlice } from "../redux/hooks/useReduxAirDataSlice"
 
 // ************
 // types
 // ************
 
-export interface FormatLocation_I {
-	latitude: number
-	longitude: number
-	timestamp: number
+export type SetCurrentLocation = Awaited<GetCurrentLocation>
+export type GetCurrentLocation = ReturnType<typeof getCurrentLocation>
+
+// ************
+// function
+// ************
+
+/**
+ * gets current gps coordinates
+ * @returns latitude, longitude, and timestamp
+ */
+export async function getCurrentLocation() {
+	const {
+		coords: { latitude, longitude },
+		timestamp,
+	} = await Location.getCurrentPositionAsync({})
+
+	return {
+		latitude,
+		longitude,
+		timestamp,
+	}
 }
 
 // ************
@@ -21,50 +40,31 @@ export interface FormatLocation_I {
 export function useGetLocation(): void {
 	const { setReduxLocation, setReduxLocationLoading, setReduxLocationError } =
 		useReduxLocationSlice()
-	const { setReduxAirData, setReduxAirDataLoading } = useReduxAirDataSlice()
-
-	// TODO: consider using to preload aqi
-	// async function getLastKnownLocation() {
-	// 	const location = await Location.getLastKnownPositionAsync({})
-	// 	setReduxLocation(location)
-	// }
+	const { setReduxAirData } = useReduxAirDataSlice()
+	const { fetchAQIByCoords } = useFetchAQI()
 
 	/**
-	 * get air quality data
+	 * function gets current gps location
 	 */
-	async function getAqiData(formatLocation) {
-		try {
-			setReduxAirDataLoading(true)
-			const data = await fetchAQI(formatLocation)
-			await setReduxAirData(data)
-			setReduxAirDataLoading(false)
-		} catch (error) {
-			console.warn(error)
-		}
-	}
+	async function handleGetCurrentLocation() {
+		setReduxLocationLoading(true)
 
-	/**
-	 * get gps coords
-	 */
-	async function getCurrentLocation() {
 		try {
-			setReduxLocationLoading(true)
-			const {
-				coords: { latitude, longitude },
-				timestamp,
-			} = await Location.getCurrentPositionAsync({})
+			const location = await getCurrentLocation()
 
-			const formatLocation = {
-				latitude,
-				longitude,
-				timestamp,
-			}
+			const { latitude, longitude } = location
+
 			// set location in global state
-			setReduxLocation(formatLocation)
-			setReduxLocationLoading(false)
-			getAqiData(formatLocation)
+			setReduxLocation(location)
+
+			// ! fetch and set AQI data
+			const data = await fetchAQIByCoords(latitude, longitude)
+
+			setReduxAirData(data)
 		} catch (error) {
-			console.warn(error)
+			console.error(error) // ? debug
+		} finally {
+			setReduxLocationLoading(false)
 		}
 	}
 
@@ -76,14 +76,14 @@ export function useGetLocation(): void {
 			const { status } = await Location.requestForegroundPermissionsAsync()
 
 			if (status === "granted") {
-				await getCurrentLocation()
+				await handleGetCurrentLocation()
 			} else {
 				await setReduxLocationError(
 					"Permission to access location was denied",
 				)
 			}
 		} catch (error) {
-			console.warn(error)
+			console.error(error) // ? debug
 		}
 	}
 

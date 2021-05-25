@@ -1,10 +1,12 @@
-import React from "react"
-import { ViewProps } from "react-native"
-import { RenderProp } from "@ui-kitten/components/devsupport"
-import { AppCard } from "../AppCard"
-import { AirData } from "./AirData"
-import { Header } from "../Header"
-import { AirDataStateCurrent_I, DailyMeasurementsWithDate_I } from "@redux"
+import React from 'react';
+import { ViewProps } from 'react-native';
+
+import { AirDataStateCurrent_I, FilteredForecast } from '@redux';
+import { RenderProp } from '@ui-kitten/components/devsupport';
+
+import { AppCard } from '../AppCard';
+import { Header } from '../Header';
+import { AirData } from './AirData';
 
 // ************
 // types
@@ -12,7 +14,7 @@ import { AirDataStateCurrent_I, DailyMeasurementsWithDate_I } from "@redux"
 
 export interface AirDataCard_I {
 	current?: AirDataStateCurrent_I
-	forecast: DailyMeasurementsWithDate_I
+	forecast: FilteredForecast
 }
 
 // ************

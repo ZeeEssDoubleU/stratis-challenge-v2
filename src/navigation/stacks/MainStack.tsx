@@ -1,11 +1,10 @@
-import * as React from "react"
+import * as React from 'react';
 
-import { useNavigation } from "@react-navigation/native"
-import { createStackNavigator } from "@react-navigation/stack"
+import { useNavigation } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { CurrentLocationScreen } from '@screens';
 
-import { CurrentLocationScreen } from "@screens"
-
-import { LocationsModal, SearchModal } from "../modals"
+import { LocationsModal, SearchModal } from '../modals';
 
 // ************
 // stack

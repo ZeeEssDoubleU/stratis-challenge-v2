@@ -1,6 +1,7 @@
 // import React, { ReactText } from "react"
-import styled from "styled-components/native"
-import { Text } from "@ui-kitten/components"
+import styled from 'styled-components/native';
+
+import { Text } from '@ui-kitten/components';
 
 // ************
 // types

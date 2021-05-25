@@ -4,7 +4,7 @@
 		"strict": true,
 		"forceConsistentCasingInFileNames": true,
 		"pretty": true,
-		"baseUrl": "./",
+		"baseUrl": ".",
 		// ! added to create alias for all components imports.  Avoids needing relative path
 		"paths": {
 			"*Types": ["./src/@types/*.d.ts"],

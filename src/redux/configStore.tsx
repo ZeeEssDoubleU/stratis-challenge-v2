@@ -1,14 +1,15 @@
-import React from "react"
-import { configureStore } from "@reduxjs/toolkit"
-import { Provider } from "react-redux"
-import { reduxLocationSlice, reduxAirDataSlice } from "./slices"
-import { Provider_I } from "globalTypes"
+import { Provider_I } from 'globalTypes';
+import React from 'react';
+import { Provider } from 'react-redux';
+
+import { configureStore } from '@reduxjs/toolkit';
+
+import { reduxAirDataSlice, reduxLocationSlice } from './slices';
 
 // ************
 // store
 // ************
 
-// TODO: need to figure out how to preload state from query
 export const store = configureStore({
 	reducer: {
 		location: reduxLocationSlice.reducer,
