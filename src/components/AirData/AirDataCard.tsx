@@ -1,10 +1,13 @@
-import { AirDataStateCurrent_I, FilteredForecast } from "@redux"
-import { RenderProp } from "@ui-kitten/components/devsupport"
-import React from "react"
-import { ViewProps } from "react-native"
-import { AppCard } from "../AppCard"
-import { Header } from "../Header"
-import { AirData } from "./AirData"
+import React from 'react';
+import { ViewProps } from 'react-native';
+
+import { RenderProp } from '@ui-kitten/components/devsupport';
+
+import { FilteredForecast } from '../../redux/helpers';
+import { AirDataStateCurrent_I } from '../../redux/slices';
+import { AppCard } from '../AppCard';
+import { Header } from '../Header';
+import { AirData } from './AirData';
 
 // ************
 // types

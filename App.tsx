@@ -1,13 +1,23 @@
-import * as eva from "@eva-design/eva"
-import { useColorScheme } from "@hooks"
-import { SCProvider } from "@styles"
-import { ApplicationProvider, IconRegistry } from "@ui-kitten/components"
-import { EvaIconsPack } from "@ui-kitten/eva-icons"
-import { StatusBar } from "expo-status-bar"
-import React from "react"
-import { SafeAreaProvider } from "react-native-safe-area-context"
-import { ReduxProvider } from "./src/redux/configStore"
-import { Navigation } from "./src/navigation/index"
+import { StatusBar } from 'expo-status-bar';
+import React from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+
+import * as eva from '@eva-design/eva';
+import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
+import { EvaIconsPack } from '@ui-kitten/eva-icons';
+
+import { useColorScheme } from './src/hooks/useColorScheme';
+import { Navigation } from './src/navigation/stacks/RootStack';
+import { ReduxProvider } from './src/redux/configStore';
+import { SCProvider } from './src/styles/styled-components';
+
+if (__DEV__) {
+	import("./src/redux/middleware/ReactotronConfig").then(() =>
+		console.log("Reactotron Configured"),
+	)
+}
+
+Navigation
 
 // ************
 // component

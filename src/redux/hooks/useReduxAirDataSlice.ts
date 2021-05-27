@@ -1,6 +1,6 @@
-import { reduxAirDataSlice } from "../slices"
-import { useReduxDispatch, useReduxSelector } from "./useReduxFunctions"
-import { FetchAirDataByCoords } from "@utils"
+import { FetchAirDataByCoords } from '../../hooks/useFetchAQI';
+import { reduxAirDataSlice } from '../slices';
+import { useReduxDispatch, useReduxSelector } from './useReduxFunctions';
 
 // ************
 // hook

@@ -1,8 +1,21 @@
-import * as React from 'react';
+import React from 'react';
 
+import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import { MainNavigator } from './MainStack';
+
+// ************
+// navigation
+// ************
+
+export function Navigation() {
+	return (
+		<NavigationContainer>
+			<RootNavigator />
+		</NavigationContainer>
+	)
+}
 
 // ************
 // stack

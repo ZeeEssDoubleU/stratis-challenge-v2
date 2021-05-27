@@ -1,10 +1,9 @@
-import * as React from "react"
+import React from 'react';
 
-import { useNavigation } from "@react-navigation/core"
-import { TopNavigationAction } from "@ui-kitten/components"
+import { useNavigation } from '@react-navigation/core';
+import { TopNavigationAction } from '@ui-kitten/components';
 
-import { BackArrow, PlusOutline } from "../../components/Icons"
-import { Modal } from "react-native"
+import { BackArrow, PlusOutline } from '../../components/Icons';
 
 // ************
 // actions

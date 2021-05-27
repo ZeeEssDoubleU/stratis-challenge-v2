@@ -1,6 +1,6 @@
-import * as React from "react"
+import React from 'react';
 
-import { Icon, IconProps } from "@ui-kitten/components"
+import { Icon, IconProps } from '@ui-kitten/components';
 
 // ************
 // icons

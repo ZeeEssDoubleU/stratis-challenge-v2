@@ -1,11 +1,8 @@
-import {
-	formatDate,
-	formatParsedDate,
-	getRelativeDay,
-	SetAirDataByCoords,
-} from "@utils"
-import { startOfYesterday, startOfTomorrow, startOfToday } from "date-fns/esm"
-import { capitalize } from "lodash"
+import { startOfToday, startOfTomorrow, startOfYesterday } from 'date-fns/esm';
+import { capitalize } from 'lodash';
+
+import { SetAirDataByCoords } from '../../hooks/useFetchAQI';
+import { formatDate, formatParsedDate, getRelativeDay } from '../../utils';
 
 // ************
 // helper

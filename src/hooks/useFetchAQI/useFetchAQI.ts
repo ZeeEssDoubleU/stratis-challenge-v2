@@ -1,10 +1,9 @@
-import axios from "axios"
-import { Awaited } from "globalTypes"
-import { AQICN_TOKEN as token } from "react-native-dotenv"
+import axios from 'axios';
+import { AQICN_TOKEN as token } from 'react-native-dotenv';
 
-import { useReduxAirDataSlice } from "@redux"
-
-import { airDataByCity, airDatabyCoords } from "./mockData"
+import { Awaited } from '../../@types/global';
+import { useReduxAirDataSlice } from '../../redux/hooks';
+import { airDataByCity, airDatabyCoords } from './mockData';
 
 // ************
 // function

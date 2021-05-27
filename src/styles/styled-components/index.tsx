@@ -1,8 +1,8 @@
-// import types
-import { Provider_I } from 'globalTypes';
 import React from 'react';
 import { ThemeProvider } from 'styled-components/native';
 
+import { Provider_I } from '../../@types/global';
+// import types
 import { theme } from './theme';
 
 // ************
@@ -10,7 +10,7 @@ import { theme } from './theme';
 // ************
 
 // merge theme (below) to DefaultTheme
-declare module "styled-components" {
+declare module "styled-components/native" {
 	type ThemeType = typeof theme
 	export interface DefaultTheme extends ThemeType {}
 }

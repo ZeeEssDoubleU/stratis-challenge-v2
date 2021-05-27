@@ -1,16 +1,19 @@
-import { Layout } from "@ui-kitten/components"
-import { isEmpty } from "lodash"
-import React from "react"
-import { View } from "react-native"
-import styled from "styled-components"
-import { AppText } from "../AppText"
-import { AirDataCard_I } from "./AirDataCard"
+import { isEmpty } from 'lodash';
+import React from 'react';
+import { View } from 'react-native';
+import styled from 'styled-components/native';
+
+import { Layout } from '@ui-kitten/components';
+
+import { AppText } from '../AppText';
+import { AirDataCard_I } from './AirDataCard';
+import { AirDataRow } from './AirDataRow';
 
 // ************
 // component
 // ************
 
-export function AirData({ current, forecast }: AirDataCard_I) {
+export function AirData({ forecast }: AirDataCard_I) {
 	if (!forecast && isEmpty(forecast)) return null
 
 	const displayKeys = ["", "avg", "max", "min"]
@@ -26,30 +29,14 @@ export function AirData({ current, forecast }: AirDataCard_I) {
 	const displayForecasts = targetDayForecastByParam
 		.filter(([key]) => key !== "date" && key !== "relativeDay")
 		.map(([param, estimate], topIndex) => {
-			return (
-				<Row key={`row-${topIndex}`} level="3">
-					<Params key={`param-${topIndex}`} level="3">
-						<AppText category="s1">{param}</AppText>
-					</Params>
-					{Object.entries(estimate)
-						.filter(([key]) => key !== "day")
-						.sort((a, b) => a[0] - b[0])
-						.map(([key, value]) => {
-							return (
-								<Wrapper key={key}>
-									<Values key={value} level="3">
-										<AppText>{value}</AppText>
-									</Values>
-								</Wrapper>
-							)
-						})}
-				</Row>
+			return estimate === undefined ? null : (
+				<AirDataRow key={topIndex} {...{ param, estimate }} />
 			)
 		})
 
 	return (
 		<Container>
-			<Thing>{displayKeys}</Thing>
+			<KeysWrapper>{displayKeys}</KeysWrapper>
 			{displayForecasts}
 		</Container>
 	)
@@ -64,15 +51,6 @@ const Container = styled(View)`
 	align-items: center;
 	justify-content: center;
 `
-const Row = styled(Layout)`
-	flex: 1;
-	flex-direction: row;
-	margin: 4px;
-	padding: 0 4px;
-`
-const Wrapper = styled(View)`
-	flex: 1;
-`
 const Box = styled(Layout)`
 	height: 40px;
 	border-radius: 8px;
@@ -80,16 +58,10 @@ const Box = styled(Layout)`
 	justify-content: center;
 	flex: 1;
 `
-const Params = styled(Layout)`
-	align-items: flex-start;
-	justify-content: center;
-	flex: 1;
-`
 const Keys = styled(Box)`
 	flex: 1;
 `
-const Values = styled(Box)``
-const Thing = styled(View)`
+const KeysWrapper = styled(View)`
 	flex: 1;
 	flex-direction: row;
 `

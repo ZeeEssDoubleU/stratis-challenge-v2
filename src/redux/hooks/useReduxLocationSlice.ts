@@ -1,5 +1,4 @@
-import { SetCurrentLocation } from '@hooks';
-
+import { SetCurrentLocation } from '../../hooks/useGetLocation';
 import { reduxLocationSlice } from '../slices';
 import { useReduxDispatch, useReduxSelector } from './useReduxFunctions';
 

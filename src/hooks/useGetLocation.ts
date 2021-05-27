@@ -1,9 +1,9 @@
-import { useFetchAQI } from "@utils"
-import * as Location from "expo-location"
-import { Awaited } from "globalTypes"
-import { useEffect } from "react"
-import { useReduxLocationSlice } from "../redux"
-import { useReduxAirDataSlice } from "../redux/hooks/useReduxAirDataSlice"
+import * as Location from 'expo-location';
+import { useEffect } from 'react';
+
+import { Awaited } from '../@types/global';
+import { useReduxAirDataSlice, useReduxLocationSlice } from '../redux/hooks';
+import { useFetchAQI } from './useFetchAQI';
 
 // ************
 // types

@@ -3,8 +3,8 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
 
 import { Ionicons } from '@expo/vector-icons';
-import { useReduxAirDataSlice, useReduxLocationSlice } from '@redux';
 
+import { useReduxAirDataSlice, useReduxLocationSlice } from '../redux/hooks';
 import { useGetLocation } from './useGetLocation';
 
 // ************

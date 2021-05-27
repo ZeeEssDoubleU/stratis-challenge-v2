@@ -1,13 +1,17 @@
-import { isEmpty } from "lodash"
-import React from "react"
-import { View } from "react-native"
-import { ScrollView } from "react-native-gesture-handler"
-import styled from "styled-components/native"
-import { AirDataCard, AirDataHero, Loading } from "@components"
-import { useCachedResources } from "@hooks"
-import { OpenModal, TopNavWrapper } from "@navigation"
-import { useReduxAirDataSlice, useReduxLocationSlice } from "@redux"
-import { NavigationProp } from "@react-navigation/core"
+import { isEmpty } from 'lodash';
+import React from 'react';
+import { useWindowDimensions, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import styled from 'styled-components/native';
+
+import { AirDataCard, AirDataHero } from '../components/AirData';
+import { Loading } from '../components/Loading';
+import { useCachedResources } from '../hooks/useCachedResources';
+import { OpenModal } from '../navigation/actions/NavActions';
+import { TopNavWrapper } from '../navigation/components/TopNavWrapper';
+import { useReduxAirDataSlice, useReduxLocationSlice } from '../redux/hooks';
+
+AirDataCard
 
 // ************
 // screen
@@ -18,6 +22,7 @@ export function CurrentLocationScreen({
 }: {
 	navigation: NavigationType
 }) {
+	const window = useWindowDimensions()
 	const { isAppReady } = useCachedResources()
 
 	const {

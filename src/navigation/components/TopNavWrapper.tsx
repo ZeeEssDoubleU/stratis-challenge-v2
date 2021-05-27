@@ -1,12 +1,10 @@
+import React from 'react';
+import { SafeAreaView } from 'react-native';
+import styled from 'styled-components/native';
+
 import {
-	Divider,
-	Layout,
-	TopNavigation,
-	TopNavigationElement,
-} from "@ui-kitten/components"
-import React from "react"
-import { SafeAreaView } from "react-native"
-import styled from "styled-components"
+    Divider, Layout, TopNavigation, TopNavigationElement
+} from '@ui-kitten/components';
 
 // ************
 // component

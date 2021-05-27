@@ -1,6 +1,6 @@
-import styled from "styled-components/native"
+import styled from 'styled-components/native';
 
-import { Card } from "@ui-kitten/components"
+import { Card } from '@ui-kitten/components';
 
 // ************
 // styles

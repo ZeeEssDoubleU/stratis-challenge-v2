@@ -1,6 +1,8 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { formatDate, FormatDate, SetAirDataByCoords } from "@utils"
-import { FilteredForecast, filterForcastByDay } from "../helpers"
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+import { SetAirDataByCoords } from '../../hooks/useFetchAQI';
+import { formatDate, FormatDate } from '../../utils';
+import { FilteredForecast, filterForcastByDay } from '../helpers';
 
 // ************
 // types

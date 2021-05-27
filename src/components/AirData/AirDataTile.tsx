@@ -1,12 +1,12 @@
-import React, { ReactElement, useState } from "react"
-import { ViewProps } from "react-native"
-import styled from "styled-components/native"
+import React, { ReactElement } from 'react';
+import { Animated, ViewProps } from 'react-native';
+import styled from 'styled-components/native';
 
-import { AirDataStateCurrent_I } from "@redux"
-import { RenderProp } from "@ui-kitten/components/devsupport"
-import { showCondition } from "@utils"
+import { RenderProp } from '@ui-kitten/components/devsupport';
 
-import { Tile } from "../Tile"
+import { AirDataStateCurrent_I } from '../../redux/slices';
+import { showCondition } from '../../utils';
+import { Tile } from '../Tile';
 
 // ************
 // types
@@ -24,16 +24,15 @@ export interface AirDataTile_I {
 // ************
 
 export function AirDataTile({ airData, ...props }: AirDataTile_I) {
-	const [expand, setExpanded] = useState(false)
 	const { color: ratingColor } = showCondition(airData.aqi)
 
 	return (
-		<Container
-			onPress={() => {
-				setExpanded(expand)
-			}}
-			{...{ ratingColor, ...props }}
-		/>
+		<Animated.View>
+			<Container
+				onPress={() => expandDown()}
+				{...{ ratingColor, ...props }}
+			/>
+		</Animated.View>
 	)
 }
 

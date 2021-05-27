@@ -1,8 +1,10 @@
-import { AppText } from "@components"
-import { Layout } from "@ui-kitten/components"
-import * as React from "react"
-import { GoBack, OpenModal } from "../actions"
-import { TopNavWrapper } from "../components"
+import React from 'react';
+
+import { Layout } from '@ui-kitten/components';
+
+import { AppText } from '../../components/AppText';
+import { GoBack, OpenModal } from '../actions/NavActions';
+import { TopNavWrapper } from '../components/TopNavWrapper';
 
 // ************
 // modal
