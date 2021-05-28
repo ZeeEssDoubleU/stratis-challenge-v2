@@ -3,8 +3,6 @@ module.exports = function (api) {
 	return {
 		presets: ["babel-preset-expo"],
 		plugins: [
-			// TODO: reactivate when needed
-			// "react-native-reanimated/plugin",
 			// https://www.npmjs.com/package/react-native-dotenv
 			[
 				"module:react-native-dotenv",
@@ -12,6 +10,7 @@ module.exports = function (api) {
 					moduleName: "react-native-dotenv",
 				},
 			],
+			"react-native-reanimated/plugin",
 		],
 	}
 }

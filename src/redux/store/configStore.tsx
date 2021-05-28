@@ -3,9 +3,10 @@ import { Provider } from 'react-redux';
 
 import { configureStore } from '@reduxjs/toolkit';
 
-import { Provider_I } from '../@types/global';
-import { reactotron } from './middleware/ReactotronConfig';
-import { reduxAirDataSlice, reduxLocationSlice } from './slices';
+import { Provider_I } from '../../@types/global';
+import { reduxAirDataSlice } from '../airDataSlice/reduxAirDataSlice';
+import { reduxLocationSlice } from '../locationSlice/reduxLocationSlice';
+import { reactotron } from '../middleware/ReactotronConfig';
 
 // ************
 // store

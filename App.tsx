@@ -8,7 +8,7 @@ import { EvaIconsPack } from '@ui-kitten/eva-icons';
 
 import { useColorScheme } from './src/hooks/useColorScheme';
 import { Navigation } from './src/navigation/stacks/RootStack';
-import { ReduxProvider } from './src/redux/configStore';
+import { ReduxProvider } from './src/redux/store/configStore';
 import { SCProvider } from './src/styles/styled-components';
 
 if (__DEV__) {

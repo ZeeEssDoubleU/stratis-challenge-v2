@@ -1,26 +1,49 @@
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
+import reactotron from 'reactotron-react-native';
 
 import { Ionicons } from '@expo/vector-icons';
 
-import { useReduxAirDataSlice, useReduxLocationSlice } from '../redux/hooks';
-import { useGetLocation } from './useGetLocation';
+import {
+    useReduxAirDataSlice
+} from '../redux/airDataSlice/useReduxAirDataSlice';
+import {
+    locationSelector, requestLocationPermission
+} from '../redux/locationSlice/reduxLocationSlice';
+import {
+    useReduxLocationSlice
+} from '../redux/locationSlice/useReduxLocationSlice';
+import { useReduxDispatch } from '../redux/store';
+import { useFetchAQI } from './useFetchAQI/useFetchAQI';
 
 // ************
 // hook
 // ************
 
 export function useCachedResources() {
+	const dispatch = useReduxDispatch()
 	const { airDataLoading } = useReduxAirDataSlice()
 	const { locationLoading } = useReduxLocationSlice()
 	const [resourcesLoading, setResourcesLoading] = useState(true)
 	const [isAppReady, setAppReady] = useState(false)
 
 	/**
-	 * get current gps location data
+	 * request permission and get location on app load
 	 */
-	useGetLocation()
+	useEffect(() => {
+		dispatch(requestLocationPermission())
+	}, [])
+
+	/**
+	 * fetch aqi data if new location present
+	 */
+	useEffect(() => {
+		reactotron.warn("locationSelector:", locationSelector) // ? debug
+		// dispatch(fetchAQIByCoords)
+	}, [locationSelector])
+
+	useFetchAQI()
 
 	/**
 	 * effect controls splash screen display

@@ -1,6 +1,6 @@
 import { FetchAirDataByCoords } from '../../hooks/useFetchAQI';
-import { reduxAirDataSlice } from '../slices';
-import { useReduxDispatch, useReduxSelector } from './useReduxFunctions';
+import { useReduxDispatch, useReduxSelector } from '../store';
+import { fetchAQIByCoords, reduxAirDataSlice } from './reduxAirDataSlice';
 
 // ************
 // hook
@@ -17,6 +17,18 @@ export function useReduxAirDataSlice() {
 		forecast: useReduxSelector((state) => state.airData.forecast),
 		airDataLoading: useReduxSelector((state) => state.airData.loading),
 		// actions
+		fetchAQIByCoords_redux: (action: {
+			latitude: number
+			longitude: number
+		}) => {
+			dispatch(fetchAQIByCoords(action))
+		},
+		// fetchAQIByCity_redux: (action: FetchAirDataByCoords) => {
+		// 	dispatch(fetchAQIByCoords(action))
+		// },
+		setReduxAirData: (action: FetchAirDataByCoords) => {
+			dispatch(setData(action))
+		},
 		setReduxAirData: (action: FetchAirDataByCoords) => {
 			dispatch(setData(action))
 		},

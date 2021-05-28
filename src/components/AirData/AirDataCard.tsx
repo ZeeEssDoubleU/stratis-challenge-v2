@@ -3,8 +3,10 @@ import { ViewProps } from 'react-native';
 
 import { RenderProp } from '@ui-kitten/components/devsupport';
 
+import {
+    AirDataStateCurrent_I
+} from '../../redux/airDataSlice/reduxAirDataSlice';
 import { FilteredForecast } from '../../redux/helpers';
-import { AirDataStateCurrent_I } from '../../redux/slices';
 import { AppCard } from '../AppCard';
 import { Header } from '../Header';
 import { AirData } from './AirData';

@@ -1,10 +1,8 @@
 import React from 'react';
-import { View } from 'react-native';
 import styled from 'styled-components/native';
 
 import { Layout } from '@ui-kitten/components';
 
-import { reactotron } from '../../redux/middleware/ReactotronConfig';
 import { AppText } from '../AppText';
 
 // ************
@@ -32,9 +30,6 @@ export function AirDataRow({ param, estimate }: AirDataRow_I): JSX.Element {
 			)
 		})
 
-	reactotron.warn(param)
-	reactotron.warn(estimate)
-
 	return (
 		<Container level="3">
 			<Params level="3">
@@ -54,9 +49,6 @@ const Container = styled(Layout)`
 	flex-direction: row;
 	margin: 4px;
 	padding: 0 4px;
-`
-const Wrapper = styled(View)`
-	flex: 1;
 `
 const Box = styled(Layout)`
 	height: 40px;

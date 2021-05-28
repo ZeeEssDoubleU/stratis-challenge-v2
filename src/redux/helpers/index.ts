@@ -1,2 +1,2 @@
-export * from "./filterForecastByDay"
+export * from "../airDataSlice/filterForecastByDay"
 export * from "./isPromiseResolved"

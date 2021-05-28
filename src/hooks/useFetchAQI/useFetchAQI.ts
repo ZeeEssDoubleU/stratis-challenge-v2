@@ -1,58 +1,10 @@
-import axios from 'axios';
-import { AQICN_TOKEN as token } from 'react-native-dotenv';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
-import { Awaited } from '../../@types/global';
-import { useReduxAirDataSlice } from '../../redux/hooks';
-import { airDataByCity, airDatabyCoords } from './mockData';
-
-// ************
-// function
-// ************
-
-export type SetAirDataByCity = Awaited<FetchAirDataByCity>
-export type FetchAirDataByCity = ReturnType<typeof fetchAQIByCity>
-
-/**
- * function gets aqi data by city
- * @param city string
- * @returns air quality data object
- */
-export async function fetchAQIByCity(city: string) {
-	// use mock data to model type
-	const {
-		data: { data },
-	}: typeof airDataByCity = await axios({
-		method: `GET`,
-		url: `https://api.waqi.info/feed/${city}/?token=${token}`,
-	})
-
-	return data
-}
-
-// ************
-// function
-// ************
-
-export type SetAirDataByCoords = Awaited<FetchAirDataByCoords>
-export type FetchAirDataByCoords = ReturnType<typeof fetchAQIByCoords>
-
-/**
- * function gets aqi data by coordinates
- * @param latitude number
- * @param longitude number
- * @returns air quality data object
- */
-export async function fetchAQIByCoords(latitude: number, longitude: number) {
-	// use mock data to model type
-	const {
-		data: { data },
-	}: typeof airDatabyCoords = await axios({
-		method: `GET`,
-		url: `https://api.waqi.info/feed/geo:${latitude};${longitude}/?token=${token}`,
-	})
-
-	return data
-}
+import { fetchAQIByCoords } from '../../redux/airDataSlice/reduxAirDataSlice';
+import {
+    useReduxLocationSlice
+} from '../../redux/locationSlice/useReduxLocationSlice';
 
 // ************
 // hook
@@ -63,40 +15,20 @@ export async function fetchAQIByCoords(latitude: number, longitude: number) {
  * @returns fetchAQI functions
  */
 export function useFetchAQI() {
-	const { setReduxAirDataLoading } = useReduxAirDataSlice()
+	const dispatch = useDispatch()
+	const { location } = useReduxLocationSlice()
+	const { latitude, longitude, timestamp } = location
+	const city = "dallas"
 
-	// call fetch aqi function
-	async function handlefetchAQIByCity(city: string) {
-		setReduxAirDataLoading(true)
+	// effect fires if lat and long coordinates have been updated in location services
+	useEffect(() => {
+		dispatch(fetchAQIByCoords({ latitude, longitude }))
+	}, [latitude, longitude])
 
-		try {
-			const data = await fetchAQIByCity(city)
-
-			return data
-		} catch (error) {
-			console.error(error) // ? debug
-		} finally {
-			setReduxAirDataLoading(false)
-		}
-	}
-
-	// call fetch aqi function
-	async function handlefetchAQIByCoords(latitude: number, longitude: number) {
-		setReduxAirDataLoading(true)
-
-		try {
-			const data = await fetchAQIByCoords(latitude, longitude)
-
-			return data
-		} catch (error) {
-			console.error(error) // ? debug
-		} finally {
-			setReduxAirDataLoading(false)
-		}
-	}
-
-	return {
-		fetchAQIByCity: handlefetchAQIByCity,
-		fetchAQIByCoords: handlefetchAQIByCoords,
-	}
+	// TODO: implement the ability to search by city
+	// // effect fires fetch if city search has been submitted
+	// // ! not necessary as the function can be used directly
+	// useEffect(() => {
+	// 	handlefetchAQIByCity(city)
+	// }, [city])
 }

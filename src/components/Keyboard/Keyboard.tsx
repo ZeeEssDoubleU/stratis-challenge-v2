@@ -4,18 +4,7 @@ import {
     TextInput, TouchableWithoutFeedback, View
 } from 'react-native';
 
-import { Layout } from '@ui-kitten/components';
-
-import { GoBack } from '../actions/NavActions';
-import { TopNavWrapper } from '../components/TopNavWrapper';
-
-// ************
-// modal
-// ************
-
-// TODO: need to add key board.
-// app crashed earlier ended up reverting previous work
-export function KeyboardAvoidingComponent() {
+const KeyboardAvoidingComponent = () => {
 	return (
 		<KeyboardAvoidingView
 			behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -31,16 +20,6 @@ export function KeyboardAvoidingComponent() {
 				</View>
 			</TouchableWithoutFeedback>
 		</KeyboardAvoidingView>
-	)
-}
-
-export function SearchModal({ navigation }: { navigation: NavigationType }) {
-	return (
-		<TopNavWrapper {...{ navigation }} accessoryLeft={GoBack}>
-			<Layout>
-				<KeyboardAvoidingComponent />
-			</Layout>
-		</TopNavWrapper>
 	)
 }
 
@@ -68,3 +47,5 @@ const styles = StyleSheet.create({
 		marginTop: 12,
 	},
 })
+
+export default KeyboardAvoidingComponent

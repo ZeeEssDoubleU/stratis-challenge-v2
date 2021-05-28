@@ -1,17 +1,22 @@
 import { isEmpty } from 'lodash';
 import React from 'react';
-import { useWindowDimensions, View } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { useWindowDimensions } from 'react-native';
 import styled from 'styled-components/native';
 
-import { AirDataCard, AirDataHero } from '../components/AirData';
+import { Layout } from '@ui-kitten/components';
+
+import { AirDataCurrent } from '../components/AirData';
+import { AirDataForecast } from '../components/AirData/AirDataForecast';
 import { Loading } from '../components/Loading';
 import { useCachedResources } from '../hooks/useCachedResources';
 import { OpenModal } from '../navigation/actions/NavActions';
 import { TopNavWrapper } from '../navigation/components/TopNavWrapper';
-import { useReduxAirDataSlice, useReduxLocationSlice } from '../redux/hooks';
-
-AirDataCard
+import {
+    useReduxAirDataSlice
+} from '../redux/airDataSlice/useReduxAirDataSlice';
+import {
+    useReduxLocationSlice
+} from '../redux/locationSlice/useReduxLocationSlice';
 
 // ************
 // screen
@@ -34,31 +39,19 @@ export function CurrentLocationScreen({
 	if (isEmpty(current) || isEmpty(forecast) || !isAppReady) return <Loading />
 
 	return (
-		<ScrollView>
+		<Container>
 			<TopNavWrapper
 				{...{ navigation }}
 				alignment="center"
 				title="Current Location"
 				subtitle={`Lat: ${latitude}\nLong: ${longitude}`}
-				accessoryRight={() => OpenModal("Locations Modal")}
+				accessoryRight={() => OpenModal("Search Modal")}
 			>
 				{/* // TODO: look at creating an image hero showing a pic the city */}
-				<Current>
-					<AirDataHero airData={current} />
-				</Current>
-				{/* // TODO: look into changing card layout */}
-				<Forecast
-					horizontal
-					contentOffset={{ x: 355 - 20 - 20, y: 0 }}
-					showsVerticalScrollIndicator={false}
-					showsHorizontalScrollIndicator={false}
-				>
-					<AirDataCard {...{ current, forecast: forecast.yesterday }} />
-					<AirDataCard {...{ current, forecast: forecast.today }} />
-					<AirDataCard {...{ current, forecast: forecast.tomorrow }} />
-				</Forecast>
+				<AirDataCurrent airData={current} />
+				<AirDataForecast {...{ window }} airData={{ current, forecast }} />
 			</TopNavWrapper>
-		</ScrollView>
+		</Container>
 	)
 }
 
@@ -66,11 +59,6 @@ export function CurrentLocationScreen({
 // styles
 // ************
 
-const Current = styled(View)`
+export const Container = styled(Layout)`
 	flex: 1;
-	width: 100%;
-`
-const Forecast = styled(ScrollView)`
-	flex: 1;
-	width: 100%;
 `
