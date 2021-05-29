@@ -36,6 +36,7 @@ export function AirDataTileContents({
 			header={(props) => (
 				<Header
 					align="center"
+					textTransform="uppercase"
 					title={"AQI"}
 					titleCategory="s1"
 					{...props}

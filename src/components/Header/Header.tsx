@@ -17,6 +17,8 @@ export interface Header_I {
 	subtitle?: string
 	subtitlecategory?: TextProps["category"]
 	align?: TextAlign
+	// TODO: give this proper enum
+	textTransform?: string
 }
 
 // ************
@@ -29,25 +31,21 @@ export function Header({
 	subtitle,
 	subtitlecategory = "h6",
 	align = "auto",
+	textTransform = "capitalize",
 	...props
 }: Header_I) {
 	if (!title) return null
 
-	const Title = (
-		<AppText {...{ align }} category={titleCategory}>
-			{title}
-		</AppText>
-	)
-	const Subtitle = (
-		<AppText {...{ align }} category={subtitlecategory}>
-			{subtitle}
-		</AppText>
-	)
-
 	return (
 		<View {...props}>
-			{Title}
-			{subtitle && Subtitle}
+			<AppText {...{ align, textTransform }} category={titleCategory}>
+				{title}
+			</AppText>
+			{subtitle && (
+				<AppText {...{ align, textTransform }} category={subtitlecategory}>
+					{subtitle}
+				</AppText>
+			)}
 		</View>
 	)
 }
