@@ -12,8 +12,8 @@ import {
     locationSelector, requestLocationPermission
 } from '../redux/locationSlice/reduxLocationSlice';
 import {
-    useReduxLocationSlice
-} from '../redux/locationSlice/useReduxLocationSlice';
+    useLocationReducers
+} from '../redux/locationSlice/useLocationReducers';
 import { useReduxDispatch } from '../redux/store';
 import { useFetchAQI } from './useFetchAQI/useFetchAQI';
 
@@ -24,7 +24,7 @@ import { useFetchAQI } from './useFetchAQI/useFetchAQI';
 export function useCachedResources() {
 	const dispatch = useReduxDispatch()
 	const { airDataLoading } = useReduxAirDataSlice()
-	const { locationLoading } = useReduxLocationSlice()
+	const { locationLoading } = useLocationReducers()
 	const [resourcesLoading, setResourcesLoading] = useState(true)
 	const [isAppReady, setAppReady] = useState(false)
 

@@ -3,8 +3,8 @@ import { useDispatch } from 'react-redux';
 
 import { fetchAQIByCoords } from '../../redux/airDataSlice/reduxAirDataSlice';
 import {
-    useReduxLocationSlice
-} from '../../redux/locationSlice/useReduxLocationSlice';
+    useLocationReducers
+} from '../../redux/locationSlice/useLocationReducers';
 
 // ************
 // hook
@@ -16,7 +16,7 @@ import {
  */
 export function useFetchAQI() {
 	const dispatch = useDispatch()
-	const { location } = useReduxLocationSlice()
+	const { location } = useLocationReducers()
 	const { latitude, longitude, timestamp } = location
 	const city = "dallas"
 

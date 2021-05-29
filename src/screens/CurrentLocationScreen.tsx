@@ -8,15 +8,15 @@ import { Layout } from '@ui-kitten/components';
 import { AirDataCurrent } from '../components/AirData';
 import { AirDataForecast } from '../components/AirData/AirDataForecast';
 import { Loading } from '../components/Loading';
+import { TopNavWrapper } from '../components/Nav/TopNavWrapper';
 import { useCachedResources } from '../hooks/useCachedResources';
 import { OpenModal } from '../navigation/actions/NavActions';
-import { TopNavWrapper } from '../navigation/components/TopNavWrapper';
 import {
     useReduxAirDataSlice
 } from '../redux/airDataSlice/useReduxAirDataSlice';
 import {
-    useReduxLocationSlice
-} from '../redux/locationSlice/useReduxLocationSlice';
+    useLocationReducers
+} from '../redux/locationSlice/useLocationReducers';
 
 // ************
 // screen
@@ -32,7 +32,7 @@ export function CurrentLocationScreen({
 
 	const {
 		location: { latitude, longitude },
-	} = useReduxLocationSlice()
+	} = useLocationReducers()
 	const { current, forecast } = useReduxAirDataSlice()
 
 	// show spinner if data still loading

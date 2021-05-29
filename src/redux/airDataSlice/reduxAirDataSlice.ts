@@ -10,7 +10,6 @@ import {
 } from '../../hooks/useFetchAQI/mockData/airDatabyCoords';
 import { formatDate, FormatDate } from '../../utils';
 import { FilteredForecast, filterForcastByDay } from '../helpers';
-import { reactotron } from '../middleware/ReactotronConfig';
 
 // ************
 // types
@@ -40,6 +39,16 @@ export interface AirDataState_I {
 	forecast: AirDataStateForecast_I
 	loading: boolean
 	currentRequestId: number | undefined
+}
+export interface AirDataByLocationState_I {
+	allLocations: string[]
+	airDataByLocation: {
+		[location: string]: {
+			location: AirDataStateLocation_I
+			current: AirDataStateCurrent_I
+			forecast: AirDataStateForecast_I
+		}
+	}
 }
 
 // ************
@@ -84,7 +93,6 @@ export const fetchAQIByCoords = createAsyncThunk(
 	"airData/fetchAQIByCoords",
 	async (location: { latitude: number; longitude: number }, thunkAPI) => {
 		const { latitude, longitude } = location
-		reactotron.log("location:", location) // ? debug
 
 		// ! used mock data to model type
 		const {
@@ -102,12 +110,20 @@ export const fetchAQIByCoords = createAsyncThunk(
 // init state
 // ************
 
-const initialState: AirDataState_I = {
+const airData: AirDataState_I = {
 	location: {} as AirDataStateLocation_I,
 	current: {} as AirDataStateCurrent_I,
 	forecast: {} as AirDataStateForecast_I,
 	loading: false,
 	currentRequestId: undefined,
+}
+const airDataByLocation: AirDataByLocationState_I = {
+	allLocations: [],
+	airDataByLocation: {},
+}
+const initialState: AirDataState_I & AirDataByLocationState_I = {
+	...airData,
+	...airDataByLocation,
 }
 
 // ************
@@ -140,26 +156,41 @@ export const reduxAirDataSlice = createSlice({
 				const tomorrow = filterForcastByDay(forecast, "tomorrow")
 
 				// this state is displayed in the air quality hero
-				state.location = {
+				const location = {
 					station: city.name.split(",")[0].trim(),
 					stationId: idx,
 					city: city.name.split(",")[1].trim(),
 					state: city.name.split(",")[2].trim(),
 				}
-				state.current = {
+				const current = {
 					time: time?.iso && formatDate(time.iso).formatted_time,
 					date: time?.iso && formatDate(time.iso).formatted,
 					aqi,
 					dominentpol,
 					iaqi,
 				}
-				state.forecast = {
+				const dailyForecasts = {
 					// each function returns all measurement forecast given for the desired day
 					today: today,
 					yesterday: yesterday,
 					tomorrow: tomorrow,
 				}
+				const locationAirData = {
+					location,
+					current,
+					forecast: dailyForecasts,
+				}
+
+				state.location = location
+				state.current = current
+				state.forecast = dailyForecasts
 				state.loading = false
+
+				if (!state.airDataByLocation[location.city]) {
+					state.allLocations.push(location.city)
+				}
+
+				state.airDataByLocation[location.city] = locationAirData
 			}
 		},
 		[fetchAQIByCoords.rejected]: (state, action) => {

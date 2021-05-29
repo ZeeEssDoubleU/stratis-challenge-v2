@@ -23,9 +23,6 @@ export function useReduxAirDataSlice() {
 		}) => {
 			dispatch(fetchAQIByCoords(action))
 		},
-		// fetchAQIByCity_redux: (action: FetchAirDataByCoords) => {
-		// 	dispatch(fetchAQIByCoords(action))
-		// },
 		setReduxAirData: (action: FetchAirDataByCoords) => {
 			dispatch(setData(action))
 		},
