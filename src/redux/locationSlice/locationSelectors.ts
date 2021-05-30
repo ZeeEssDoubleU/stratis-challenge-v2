@@ -13,9 +13,10 @@ export const selectLocation = createSelector(
 )
 export const selectCoordinates = createSelector(selectLocation, (state) => {
 	if (state.coords) {
+		const { latitude, longitude } = state.coords
 		return {
-			latitude: state.coords.latitude,
-			longitude: state.coords.longitude,
+			latitude,
+			longitude,
 		}
 	}
 })

@@ -8,7 +8,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface LocationState_I {
 	city: string
-	current: SetCurrentLocation
+	current: Location.LocationObject
 	permission: string
 	error: string
 	loading: boolean
@@ -46,8 +46,8 @@ export const requestLocationPermission = createAsyncThunk(
  */
 export const fetchCurrentLocation = createAsyncThunk(
 	"location/fetchCurrentLocation",
-	async (location: void) => {
-		const response = await Location.getCurrentPositionAsync({})
+	async (location = {}) => {
+		const response = await Location.getCurrentPositionAsync(location)
 
 		return response
 	},
