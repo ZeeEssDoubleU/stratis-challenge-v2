@@ -9,47 +9,20 @@ import { airDataByCity } from '../../hooks/useFetchAQI/mockData/airDataByCity';
 import {
     airDatabyCoords
 } from '../../hooks/useFetchAQI/mockData/airDatabyCoords';
-import { formatDate, FormatDate } from '../../utils';
-import { FilteredForecast, filterForcastByDay } from '../helpers';
+import { getCity } from './airDataSelectors';
 
 // ************
 // types
 // ************
 
-export interface AirDataStateLocation_I {
-	station: string
-	stationId: SetAirDataByCoords["idx"]
-	city: string
-	state: string
-}
-export interface AirDataStateCurrent_I {
-	time?: FormatDate["formatted_time"]
-	date?: FormatDate["formatted"]
-	aqi: SetAirDataByCoords["aqi"]
-	dominentpol: SetAirDataByCoords["dominentpol"]
-	iaqi: SetAirDataByCoords["iaqi"]
-}
-export type AirDataStateForecast_I = {
-	today: FilteredForecast
-	yesterday: FilteredForecast
-	tomorrow: FilteredForecast
-}
 export interface AirDataState_I {
-	location: AirDataStateLocation_I
-	current: AirDataStateCurrent_I
-	forecast: AirDataStateForecast_I
-	loading: boolean
-	currentRequestId: number | undefined
-}
-export interface AirDataByLocationState_I {
+	currentLocation: string
 	allLocations: string[]
 	airDataByLocation: {
-		[location: string]: {
-			location: AirDataStateLocation_I
-			current: AirDataStateCurrent_I
-			forecast: AirDataStateForecast_I
-		}
+		[location: string]: FetchAirDataByCity | FetchAirDataByCoords
 	}
+	loading: boolean
+	currentRequestId: number | undefined
 }
 
 // ************
@@ -82,7 +55,7 @@ export const fetchAQIByCity = createAsyncThunk(
 // thunk
 // ************
 
-export type FetchAirDataByCoords = ReturnType<typeof fetchAQIByCoords>
+export type FetchAirDataByCoords = ReturnType<typeof fetchAQIByCoords_fix>
 
 /**
  * async fetches AQI data by coordinates
@@ -90,10 +63,11 @@ export type FetchAirDataByCoords = ReturnType<typeof fetchAQIByCoords>
  * @param {number} longitude
  * @returns {object} AQI data object
  */
-export const fetchAQIByCoords = createAsyncThunk(
-	"airData/fetchAQIByCoords",
+export const fetchAQIByCoords_fix = createAsyncThunk(
+	"airData_fix/fetchAQIByCoords_fix",
 	async (location: { latitude: number; longitude: number }, thunkAPI) => {
 		const { latitude, longitude } = location
+		reactotron.log("location:", location) // ? debug
 
 		// ! used mock data to model type
 		const {
@@ -111,20 +85,12 @@ export const fetchAQIByCoords = createAsyncThunk(
 // init state
 // ************
 
-const airData: AirDataState_I = {
-	location: {} as AirDataStateLocation_I,
-	current: {} as AirDataStateCurrent_I,
-	forecast: {} as AirDataStateForecast_I,
-	loading: false,
-	currentRequestId: undefined,
-}
-const airDataByLocation: AirDataByLocationState_I = {
+const initialState: AirDataState_I = {
+	currentLocation: "",
 	allLocations: [],
 	airDataByLocation: {},
-}
-const initialState: AirDataState_I & AirDataByLocationState_I = {
-	...airData,
-	...airDataByLocation,
+	loading: false,
+	currentRequestId: undefined,
 }
 
 // ************
@@ -132,77 +98,49 @@ const initialState: AirDataState_I & AirDataByLocationState_I = {
 // ************
 
 export const airDataSlice = createSlice({
-	name: "airData",
+	name: "airData_fix",
 	initialState,
 	reducers: {
 		setAirData: (
 			state,
 			action: PayloadAction<SetAirDataByCoords | SetAirDataByCity>,
 		) => {
-			reactotron.log("action.payload:", action.payload) // ? debug
-			const { aqi, city, forecast, iaqi, idx, time, dominentpol } =
-				action.payload
+			// TODO: split this out into selector
+			const { city } = action.payload
+			const formatCity = getCity(city)
 
-			const today = filterForcastByDay(forecast, "today")
-			const yesterday = filterForcastByDay(forecast, "yesterday")
-			const tomorrow = filterForcastByDay(forecast, "tomorrow")
-
-			// this state is displayed in the air quality hero
-			const location = {
-				station: city.name.split(",")[0].trim(),
-				stationId: idx,
-				city: city.name.split(",")[1].trim(),
-				state: city.name.split(",")[2].trim(),
+			if (!state.airDataByLocation[formatCity]) {
+				state.allLocations.push(formatCity)
 			}
-			const current = {
-				time: time?.iso && formatDate(time.iso).formatted_time,
-				date: time?.iso && formatDate(time.iso).formatted,
-				aqi,
-				dominentpol,
-				iaqi,
-			}
-			const dailyForecasts = {
-				// each function returns all measurement forecast given for the desired day
-				today: today,
-				yesterday: yesterday,
-				tomorrow: tomorrow,
-			}
-			const locationAirData = {
-				location,
-				current,
-				forecast: dailyForecasts,
-			}
-
-			state.location = location
-			state.current = current
-			state.forecast = dailyForecasts
-
-			if (!state.airDataByLocation[location.city]) {
-				state.allLocations.push(location.city)
-			}
-
-			state.airDataByLocation[location.city] = locationAirData
+			state.airDataByLocation[formatCity] = action.payload
 		},
 	},
 	extraReducers: {
 		/**
 		 * fetch AQI by coords
 		 */
-		[fetchAQIByCoords.pending]: (state, action) => {
+		[fetchAQIByCoords_fix.pending]: (state, action) => {
 			state.loading = true
 			state.currentRequestId = action.meta.requestId
 		},
-		[fetchAQIByCoords.fulfilled]: (
+		[fetchAQIByCoords_fix.fulfilled]: (
 			state,
 			action: PayloadAction<SetAirDataByCoords>,
 		) => {
 			const { requestId } = action.meta
 			if (state.loading === true && state.currentRequestId === requestId) {
 				state.loading = false
+
+				reactotron.log("action.payload fix:", action.payload) // ? debug
+
+				// TODO: split this out into selector
+				const { city } = action.payload
+
+				state.currentLocation = getCity(city)
 				airDataSlice.caseReducers.setAirData(state, action)
 			}
 		},
-		[fetchAQIByCoords.rejected]: (state, action) => {
+		[fetchAQIByCoords_fix.rejected]: (state, action) => {
 			const { requestId } = action.meta
 			if (state.loading === true && state.currentRequestId === requestId) {
 				state.error = action.error

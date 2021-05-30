@@ -4,7 +4,7 @@ import { useReduxSelector } from '../store';
 // hook
 // ************
 
-export function useReduxAirDataSlice() {
+export function useAirDataSelectors() {
 	return {
 		// selectors
 		location: useReduxSelector((state) => state.airData.location),

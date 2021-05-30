@@ -7,9 +7,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 // ************
 
 export interface LocationState_I {
-	city: string
 	current: Location.LocationObject
-	permission: string
 	error: string
 	loading: boolean
 	currentRequestId: number | undefined
@@ -22,34 +20,17 @@ export interface LocationState_I {
 /**
  * function gets current users location asynchronously and returns a promist with formatted responses
  */
-export const requestLocationPermission = createAsyncThunk(
-	"location/requestLocationPermission",
-	async (request: void, thunkAPI) => {
-		const { status } = await Location.requestForegroundPermissionsAsync(
-			request,
-		)
-
-		if (status === "granted") {
-			thunkAPI.dispatch(fetchCurrentLocation())
-		}
-
-		return status
-	},
-)
-
-// ************
-// thunk
-// ************
-
-/**
- * function gets current users location asynchronously and returns a promist with formatted responses
- */
 export const fetchCurrentLocation = createAsyncThunk(
 	"location/fetchCurrentLocation",
-	async (location = {}) => {
-		const response = await Location.getCurrentPositionAsync(location)
+	async (location = {}, thunkAPI) => {
+		const { status } = await Location.requestForegroundPermissionsAsync()
 
-		return response
+		if (status === "granted") {
+			const response = await Location.getCurrentPositionAsync(location)
+			return response
+		} else {
+			thunkAPI.rejectWithValue("Permission to use location not granted.")
+		}
 	},
 )
 
@@ -58,9 +39,7 @@ export const fetchCurrentLocation = createAsyncThunk(
 // ************
 
 const initialState = {
-	citiesIndex: [], // TODO: implement city search
 	current: {},
-	permission: "",
 	error: "",
 	loading: false,
 	currentRequestId: undefined,
@@ -76,32 +55,6 @@ export const locationSlice = createSlice({
 	reducers: {},
 	extraReducers: {
 		/**
-		 * location permission
-		 */
-		[requestLocationPermission.pending]: (state, action) => {
-			state.loading = true
-			state.currentRequestId = action.meta.requestId
-		},
-		[requestLocationPermission.fulfilled]: (
-			state,
-			action: PayloadAction<Location.PermissionStatus>,
-		) => {
-			const { requestId } = action.meta
-			if (state.loading === true && state.currentRequestId === requestId) {
-				state.loading = false
-				state.permission = action.payload
-			}
-		},
-		[requestLocationPermission.rejected]: (state, action) => {
-			const { requestId } = action.meta
-			if (state.loading === true && state.currentRequestId === requestId) {
-				state.permission = action.payload
-				state.loading = false
-				state.error = action.error
-			}
-		},
-
-		/**
 		 * current location
 		 */
 		[fetchCurrentLocation.pending]: (state, action) => {
@@ -115,6 +68,7 @@ export const locationSlice = createSlice({
 			const { requestId } = action.meta
 			if (state.loading === true && state.currentRequestId === requestId) {
 				state.loading = false
+
 				state.current = action.payload
 			}
 		},

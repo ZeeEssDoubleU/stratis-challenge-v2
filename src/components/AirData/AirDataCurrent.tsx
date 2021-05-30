@@ -2,9 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components/native';
 
-import {
-    useReduxAirDataSlice
-} from '../../redux/airDataSlice/airDataSelectors';
+import { useAirDataSelectors } from '../../redux/airDataSlice/airDataSelectors';
 import { AirDataStateCurrent_I } from '../../redux/airDataSlice/airDataSlice';
 import { AppText } from '../AppText';
 import { Header } from '../Header';
@@ -23,7 +21,7 @@ export interface AirDataCurrent_I {
 // ************
 
 export function AirDataCurrent({ airData }: AirDataCurrent_I) {
-	const { location: stationLocation } = useReduxAirDataSlice()
+	const { location: stationLocation } = useAirDataSelectors()
 
 	return !stationLocation ||
 		!airData ||

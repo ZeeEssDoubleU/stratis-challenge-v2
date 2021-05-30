@@ -4,11 +4,12 @@ import { useEffect, useState } from 'react';
 
 import { Ionicons } from '@expo/vector-icons';
 
-import { useReduxAirDataSlice } from '../redux/airDataSlice/airDataSelectors';
-import { useLocationSelectors } from '../redux/locationSlice';
+import { useAirDataSelectors } from '../redux/airDataSlice/airDataSelectors';
+import { useAirDataSelectors_fix } from '../redux/airDataSlice_fix';
 import {
-    requestLocationPermission
-} from '../redux/locationSlice/locationSlice';
+    fetchCurrentLocation, useLocationSelectors
+} from '../redux/locationSlice';
+import { reactotron } from '../redux/middleware';
 import { useReduxDispatch } from '../redux/store';
 import { useFetchAQI } from './useFetchAQI';
 
@@ -18,7 +19,8 @@ import { useFetchAQI } from './useFetchAQI';
 
 export function useCachedResources() {
 	const dispatch = useReduxDispatch()
-	const { airDataLoading } = useReduxAirDataSlice()
+	const { airDataLoading } = useAirDataSelectors()
+	const { currentLocationAQI } = useAirDataSelectors_fix()
 	const { locationLoading } = useLocationSelectors()
 
 	const [resourcesLoading, setResourcesLoading] = useState(true)
@@ -28,10 +30,15 @@ export function useCachedResources() {
 	 * request permission and get location on app load
 	 */
 	useEffect(() => {
-		dispatch(requestLocationPermission())
+		dispatch(fetchCurrentLocation())
 	}, [])
 
 	useFetchAQI()
+
+	// TODO: replace when fixed
+	useEffect(() => {
+		reactotron.log("currentLocationAQI:", currentLocationAQI) // ? debug
+	}, [currentLocationAQI])
 
 	/**
 	 * effect controls splash screen display
