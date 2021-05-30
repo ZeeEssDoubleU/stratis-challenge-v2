@@ -17,14 +17,13 @@ import {
 export function useFetchAQI() {
 	const dispatch = useDispatch()
 	const { coordinates } = useLocationSelectors()
-	const { latitude, longitude } = coordinates
 
 	/**
 	 * fetch aqi data if new location present
 	 */
 	useEffect(() => {
-		if (latitude && longitude) {
-			dispatch(fetchAQIByCoords({ latitude, longitude }))
+		if (coordinates) {
+			dispatch(fetchAQIByCoords(coordinates))
 		}
-	}, [latitude, longitude])
+	}, [coordinates])
 }
