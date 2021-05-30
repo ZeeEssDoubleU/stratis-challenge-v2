@@ -2,9 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components/native';
 
-import {
-    AirDataStateCurrent_I
-} from '../../redux/airDataSlice/reduxAirDataSlice';
+import { AirDataStateCurrent_I } from '../../redux/airDataSlice/airDataSlice';
 import { showCondition } from '../../utils';
 import { AppText } from '../AppText';
 import { Header } from '../Header';

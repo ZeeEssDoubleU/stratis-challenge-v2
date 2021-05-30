@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 import {
     requestLocationPermission
-} from '../redux/locationSlice/reduxLocationSlice';
+} from '../redux/locationSlice/locationSlice';
 import { useReduxDispatch } from '../redux/store';
 
 // ************

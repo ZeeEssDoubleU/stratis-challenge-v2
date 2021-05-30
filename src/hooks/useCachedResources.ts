@@ -1,21 +1,16 @@
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
-import reactotron from 'reactotron-react-native';
 
 import { Ionicons } from '@expo/vector-icons';
 
+import { useReduxAirDataSlice } from '../redux/airDataSlice/airDataSelectors';
+import { useLocationSelectors } from '../redux/locationSlice';
 import {
-    useReduxAirDataSlice
-} from '../redux/airDataSlice/useReduxAirDataSlice';
-import {
-    locationSelector, requestLocationPermission
-} from '../redux/locationSlice/reduxLocationSlice';
-import {
-    useLocationReducers
-} from '../redux/locationSlice/useLocationReducers';
+    requestLocationPermission
+} from '../redux/locationSlice/locationSlice';
 import { useReduxDispatch } from '../redux/store';
-import { useFetchAQI } from './useFetchAQI/useFetchAQI';
+import { useFetchAQI } from './useFetchAQI';
 
 // ************
 // hook
@@ -24,7 +19,8 @@ import { useFetchAQI } from './useFetchAQI/useFetchAQI';
 export function useCachedResources() {
 	const dispatch = useReduxDispatch()
 	const { airDataLoading } = useReduxAirDataSlice()
-	const { locationLoading } = useLocationReducers()
+	const { locationLoading } = useLocationSelectors()
+
 	const [resourcesLoading, setResourcesLoading] = useState(true)
 	const [isAppReady, setAppReady] = useState(false)
 
@@ -34,14 +30,6 @@ export function useCachedResources() {
 	useEffect(() => {
 		dispatch(requestLocationPermission())
 	}, [])
-
-	/**
-	 * fetch aqi data if new location present
-	 */
-	useEffect(() => {
-		reactotron.warn("locationSelector:", locationSelector) // ? debug
-		// dispatch(fetchAQIByCoords)
-	}, [locationSelector])
 
 	useFetchAQI()
 

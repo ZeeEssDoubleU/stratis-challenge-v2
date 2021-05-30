@@ -11,12 +11,8 @@ import { Loading } from '../components/Loading';
 import { TopNavWrapper } from '../components/Nav/TopNavWrapper';
 import { useCachedResources } from '../hooks/useCachedResources';
 import { OpenModal } from '../navigation/actions/NavActions';
-import {
-    useReduxAirDataSlice
-} from '../redux/airDataSlice/useReduxAirDataSlice';
-import {
-    useLocationReducers
-} from '../redux/locationSlice/useLocationReducers';
+import { useReduxAirDataSlice } from '../redux/airDataSlice/airDataSelectors';
+import { useLocationSelectors } from '../redux/locationSlice/locationSelectors';
 
 // ************
 // screen
@@ -32,7 +28,7 @@ export function CurrentLocationScreen({
 
 	const {
 		location: { latitude, longitude },
-	} = useLocationReducers()
+	} = useLocationSelectors()
 	const { current, forecast } = useReduxAirDataSlice()
 
 	// show spinner if data still loading

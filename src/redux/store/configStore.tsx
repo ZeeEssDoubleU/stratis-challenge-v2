@@ -4,8 +4,8 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 
 import { Provider_I } from '../../@types/global';
-import { reduxAirDataSlice } from '../airDataSlice/reduxAirDataSlice';
-import { reduxLocationSlice } from '../locationSlice/reduxLocationSlice';
+import { reduxAirDataSlice } from '../airDataSlice/airDataSlice';
+import { locationSlice } from '../locationSlice/locationSlice';
 import { reactotron } from '../middleware/ReactotronConfig';
 
 // ************
@@ -14,7 +14,7 @@ import { reactotron } from '../middleware/ReactotronConfig';
 
 export const store = configureStore({
 	reducer: {
-		location: reduxLocationSlice.reducer,
+		location: locationSlice.reducer,
 		airData: reduxAirDataSlice.reducer,
 	},
 	// https://github.com/infinitered/reactotron/blob/master/docs/plugin-redux.md

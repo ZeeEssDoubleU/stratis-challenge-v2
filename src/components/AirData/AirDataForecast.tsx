@@ -5,7 +5,7 @@ import styled from 'styled-components/native';
 
 import {
     AirDataStateCurrent_I, AirDataStateForecast_I
-} from '../../redux/airDataSlice/reduxAirDataSlice';
+} from '../../redux/airDataSlice/airDataSlice';
 import { AirDataCard } from './';
 
 // ************

@@ -5,9 +5,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import styled from 'styled-components/native';
 
-import {
-    AirDataStateCurrent_I
-} from '../../redux/airDataSlice/reduxAirDataSlice';
+import { AirDataStateCurrent_I } from '../../redux/airDataSlice/airDataSlice';
 import { AirDataTileContents } from './AirDataTileContents';
 
 // ************

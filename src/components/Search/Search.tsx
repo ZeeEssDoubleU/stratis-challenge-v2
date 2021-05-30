@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 import reactotron from 'reactotron-react-native';
 
-import { fetchAQIByCity } from '../../redux/airDataSlice/reduxAirDataSlice';
+import { fetchAQIByCity } from '../../redux/airDataSlice/airDataSlice';
 import { useReduxDispatch } from '../../redux/store';
 
 // ************

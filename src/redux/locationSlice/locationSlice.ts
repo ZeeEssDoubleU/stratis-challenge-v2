@@ -1,8 +1,6 @@
 import * as Location from 'expo-location';
 
-import {
-    createAsyncThunk, createSelector, createSlice, PayloadAction
-} from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 // ************
 // types
@@ -72,7 +70,7 @@ const initialState = {
 // slice
 // ************
 
-export const reduxLocationSlice = createSlice({
+export const locationSlice = createSlice({
 	name: "location",
 	initialState,
 	reducers: {},
@@ -90,16 +88,16 @@ export const reduxLocationSlice = createSlice({
 		) => {
 			const { requestId } = action.meta
 			if (state.loading === true && state.currentRequestId === requestId) {
-				state.permission = action.payload
 				state.loading = false
+				state.permission = action.payload
 			}
 		},
 		[requestLocationPermission.rejected]: (state, action) => {
 			const { requestId } = action.meta
 			if (state.loading === true && state.currentRequestId === requestId) {
 				state.permission = action.payload
-				state.error = action.error
 				state.loading = false
+				state.error = action.error
 			}
 		},
 
@@ -116,69 +114,16 @@ export const reduxLocationSlice = createSlice({
 		) => {
 			const { requestId } = action.meta
 			if (state.loading === true && state.currentRequestId === requestId) {
-				const {
-					coords: { latitude, longitude },
-					timestamp,
-				} = action.payload
-
-				state.current = { latitude, longitude, timestamp }
 				state.loading = false
+				state.current = action.payload
 			}
 		},
 		[fetchCurrentLocation.rejected]: (state) => {
 			const { requestId } = action.meta
 			if (state.loading === true && state.currentRequestId === requestId) {
-				state.error = action.error
 				state.loading = false
+				state.error = action.error
 			}
 		},
-
-		// // ************
-		// // searchable city index.  Will be used by CN aqi
-		// // ************
-		// // TODO: actually may be able to keep this completey in aqi reducer***
-
-		// [getSearchLocation.pending]: (state) => {
-		// 	if (!state.loading) {
-		// 		state.loading = true
-		// 	}
-		// },
-		// [getSearchLocation.fulfilled]: (
-		// 	state,
-		// 	action: PayloadAction<LocationObject>,
-		// ) => {
-		// 	if (state.loading === true) {
-		// 		const {
-		// 			coords: { latitude, longitude },
-		// 			timestamp,
-		// 		} = action.payload
-
-		// 		cosnt = { payload } = action
-
-		// 		// a searchable city should've return, otherwise it would have been rejected
-		// 		state.cities === { ...state.cities, payload }
-		// 		state.loading = false
-		// 	}
-		// },
-		// [getSearchLocation.rejected]: (state) => {
-		// 	if (state.loading === true) {
-		// 		state.error = action.error
-		// 		state.loading = false
-		// 	}
-		// },
 	},
 })
-
-// ************
-// selectors
-// ************
-
-export const locationState = (state: LocationState_I) => state
-export const locationSelector = createSelector(
-	locationState,
-	(state) => state.current,
-)
-export const locationLoadingSelector = createSelector(
-	locationState,
-	(state) => state.loading,
-)

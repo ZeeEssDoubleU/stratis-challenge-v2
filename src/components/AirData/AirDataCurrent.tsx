@@ -3,11 +3,9 @@ import { View } from 'react-native';
 import styled from 'styled-components/native';
 
 import {
-    AirDataStateCurrent_I
-} from '../../redux/airDataSlice/reduxAirDataSlice';
-import {
     useReduxAirDataSlice
-} from '../../redux/airDataSlice/useReduxAirDataSlice';
+} from '../../redux/airDataSlice/airDataSelectors';
+import { AirDataStateCurrent_I } from '../../redux/airDataSlice/airDataSlice';
 import { AppText } from '../AppText';
 import { Header } from '../Header';
 import { AirDataTile } from './AirDataTile';
