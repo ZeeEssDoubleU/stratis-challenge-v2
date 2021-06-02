@@ -62,11 +62,10 @@ export const selectAQIByLocation = (location: string) =>
 		return {
 			aqi,
 			dominentpol,
-			iaqi: Object.entries(iaqi).reduce((iaqiMap, [key, value]) => {
-				iaqiMap.set()
-				iaqiMap[key] = value.v
-				return iaqiMap
-			}, new Map()),
+			iaqi: Object.entries(iaqi).reduce((obj, [key, value]) => {
+				obj[key] = value.v
+				return obj
+			}, {} as { [param: string]: number }),
 		}
 	})
 /**

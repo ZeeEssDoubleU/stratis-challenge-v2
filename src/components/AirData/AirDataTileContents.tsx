@@ -8,6 +8,7 @@ import { showCondition } from '../../utils';
 import { AppText } from '../AppText';
 import { Header } from '../Header';
 import { Tile } from '../Tile/Tile';
+import { AirDataTileRow } from './AirDataTileRow';
 
 // ************
 // component
@@ -20,11 +21,11 @@ export function AirDataTileContents({ location }: { location: string }) {
 
 	const { color: ratingColor } = showCondition(aqiData.aqi)
 
-	// const alternateReadings = aqiByLocation.iaqi.map(([param, value]) => {
-	// 	return <AirDataTileRow key={param} {...{ param, value }} />
-	// })
-
-	aqiData && reactotron.log("aqiData:", aqiData) // ? debug
+	const alternateReadings =
+		aqiData &&
+		Object.entries(aqiData.iaqi).map(([param, value]) => {
+			return <AirDataTileRow key={param} {...{ param, value }} />
+		})
 
 	return aqiData ? (
 		<Container
@@ -45,7 +46,7 @@ export function AirDataTileContents({ location }: { location: string }) {
 			<AppText align="center" category="p2">
 				{aqiData?.dominentpol}
 			</AppText>
-			{/* <CollapsibleView>{alternateReadings}</CollapsibleView> */}
+			<CollapsibleView>{alternateReadings}</CollapsibleView>
 		</Container>
 	) : null
 }
