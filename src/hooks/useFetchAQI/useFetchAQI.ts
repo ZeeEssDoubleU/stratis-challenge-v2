@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { fetchAQIByCoords } from '../../redux/airDataSlice/airDataSlice';
 import { fetchAQIByCoords_fix } from '../../redux/airDataSlice_fix';
 import {
     useLocationSelectors
@@ -24,9 +23,10 @@ export function useFetchAQI() {
 	 */
 	useEffect(() => {
 		if (coordinates) {
-			dispatch(fetchAQIByCoords(coordinates))
-			// TODO: replace when fixed
 			dispatch(fetchAQIByCoords_fix(coordinates))
+			// TODO: replace when fixed
+			// dispatch(fetchAQIByCity_fix("boston"))
+			// dispatch(fetchAQIByCity_fix("shanghai"))
 		}
 	}, [coordinates])
 }

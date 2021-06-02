@@ -2,41 +2,32 @@ import React from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components/native';
 
-import { useAirDataSelectors } from '../../redux/airDataSlice/airDataSelectors';
-import { AirDataStateCurrent_I } from '../../redux/airDataSlice/airDataSlice';
+import { useAirDataSelectors_fix } from '../../redux/airDataSlice_fix';
 import { AppText } from '../AppText';
 import { Header } from '../Header';
 import { AirDataTile } from './AirDataTile';
 
 // ************
-// types
-// ************
-
-export interface AirDataCurrent_I {
-	airData: AirDataStateCurrent_I
-}
-
-// ************
 // component
 // ************
 
-export function AirDataCurrent({ airData }: AirDataCurrent_I) {
-	const { location: stationLocation } = useAirDataSelectors()
+export function AirDataCurrent() {
+	const { currentLocation, stationByLocation, timeByLocation } =
+		useAirDataSelectors_fix()
 
-	return !stationLocation ||
-		!airData ||
-		typeof Object.keys(airData) === "undefined" ? null : (
+	const location = stationByLocation(currentLocation)
+	const time = timeByLocation(currentLocation)
+
+	return !location ? null : (
 		<Container>
 			<Header
 				align="center"
-				title={stationLocation.city}
+				title={location.city}
 				titleCategory="h3"
-				subtitle={stationLocation.station}
+				subtitle={location.station}
 			/>
-			{airData?.date && airData?.time && (
-				<AppText category="s1">{`${airData.date} @ ${airData.time}`}</AppText>
-			)}
-			<AirDataTile {...{ airData }} />
+			<AppText category="s1">{`${time.date} @ ${time.time}`}</AppText>
+			<AirDataTile location={currentLocation} />
 		</Container>
 	)
 }

@@ -1,17 +1,13 @@
-import { isEmpty } from 'lodash';
 import React from 'react';
-import { useWindowDimensions } from 'react-native';
 import styled from 'styled-components/native';
 
 import { Layout } from '@ui-kitten/components';
 
 import { AirDataCurrent } from '../components/AirData';
-import { AirDataForecast } from '../components/AirData/AirDataForecast';
 import { Loading } from '../components/Loading';
 import { TopNavWrapper } from '../components/Nav/TopNavWrapper';
 import { useCachedResources } from '../hooks/useCachedResources';
 import { OpenModal } from '../navigation/actions/NavActions';
-import { useAirDataSelectors } from '../redux/airDataSlice';
 import { useLocationSelectors } from '../redux/locationSlice';
 
 // ************
@@ -23,16 +19,12 @@ export function CurrentLocationScreen({
 }: {
 	navigation: NavigationType
 }) {
-	const window = useWindowDimensions()
 	const { isAppReady } = useCachedResources()
 
-	const {
-		location: { latitude, longitude },
-	} = useLocationSelectors()
-	const { current, forecast } = useAirDataSelectors()
+	const { coordinates } = useLocationSelectors()
 
 	// show spinner if data still loading
-	if (isEmpty(current) || isEmpty(forecast) || !isAppReady) return <Loading />
+	if (!isAppReady) return <Loading />
 
 	return (
 		<Container>
@@ -40,12 +32,12 @@ export function CurrentLocationScreen({
 				{...{ navigation }}
 				alignment="center"
 				title="Current Location"
-				subtitle={`Lat: ${latitude}\nLong: ${longitude}`}
+				subtitle={`Lat: ${coordinates.latitude}\nLong: ${coordinates.longitude}`}
 				accessoryRight={() => OpenModal("Search Modal")}
 			>
 				{/* // TODO: look at creating an image hero showing a pic the city */}
-				<AirDataCurrent airData={current} />
-				<AirDataForecast {...{ window }} airData={{ current, forecast }} />
+				<AirDataCurrent />
+				{/* <AirDataForecast /> */}
 			</TopNavWrapper>
 		</Container>
 	)

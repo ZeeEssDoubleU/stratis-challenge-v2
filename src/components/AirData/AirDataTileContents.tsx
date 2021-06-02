@@ -1,35 +1,32 @@
 import React from 'react';
 import { View } from 'react-native';
+import reactotron from 'reactotron-react-native';
 import styled from 'styled-components/native';
 
-import { AirDataStateCurrent_I } from '../../redux/airDataSlice/airDataSlice';
+import { useAirDataSelectors_fix } from '../../redux/airDataSlice_fix';
 import { showCondition } from '../../utils';
 import { AppText } from '../AppText';
 import { Header } from '../Header';
 import { Tile } from '../Tile/Tile';
-import { AirDataTileRow } from './AirDataTileRow';
 
 // ************
 // component
 // ************
 
-export function AirDataTileContents({
-	airData,
-}: {
-	airData: AirDataStateCurrent_I
-}) {
-	const { color: ratingColor } = showCondition(airData?.aqi)
+export function AirDataTileContents({ location }: { location: string }) {
+	const { aqiByLocation } = useAirDataSelectors_fix()
 
-	const iaqiMap = []
-	for (const prop in airData.iaqi) {
-		iaqiMap.push([prop, airData.iaqi[prop].v])
-	}
+	const aqiData = aqiByLocation(location)
 
-	const alternateReadings = iaqiMap.map(([param, value]) => {
-		return <AirDataTileRow key={param} {...{ param, value }} />
-	})
+	const { color: ratingColor } = showCondition(aqiData.aqi)
 
-	return (
+	// const alternateReadings = aqiByLocation.iaqi.map(([param, value]) => {
+	// 	return <AirDataTileRow key={param} {...{ param, value }} />
+	// })
+
+	aqiData && reactotron.log("aqiData:", aqiData) // ? debug
+
+	return aqiData ? (
 		<Container
 			header={(props) => (
 				<Header
@@ -40,17 +37,17 @@ export function AirDataTileContents({
 					{...props}
 				/>
 			)}
-			{...{ airData, ratingColor }}
+			{...{ ratingColor }}
 		>
 			<AppText align="center" category="h1">
-				{airData?.aqi}
+				{aqiData?.aqi}
 			</AppText>
 			<AppText align="center" category="p2">
-				{airData?.dominentpol}
+				{aqiData?.dominentpol}
 			</AppText>
-			<CollapsibleView>{alternateReadings}</CollapsibleView>
+			{/* <CollapsibleView>{alternateReadings}</CollapsibleView> */}
 		</Container>
-	)
+	) : null
 }
 
 // ************

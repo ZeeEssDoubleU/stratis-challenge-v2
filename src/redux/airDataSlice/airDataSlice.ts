@@ -205,8 +205,10 @@ export const airDataSlice = createSlice({
 		[fetchAQIByCoords.rejected]: (state, action) => {
 			const { requestId } = action.meta
 			if (state.loading === true && state.currentRequestId === requestId) {
-				state.error = action.error
 				state.loading = false
+				state.error = action.payload
+					? action.payload.errorMessage
+					: action.error
 			}
 		},
 		/**
@@ -229,8 +231,10 @@ export const airDataSlice = createSlice({
 		[fetchAQIByCity.rejected]: (state, action) => {
 			const { requestId } = action.meta
 			if (state.loading === true && state.currentRequestId === requestId) {
-				state.error = action.error
 				state.loading = false
+				state.error = action.payload
+					? action.payload.errorMessage
+					: action.error
 			}
 		},
 	},

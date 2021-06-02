@@ -5,22 +5,13 @@ import Animated, {
 } from 'react-native-reanimated';
 import styled from 'styled-components/native';
 
-import { AirDataStateCurrent_I } from '../../redux/airDataSlice/airDataSlice';
 import { AirDataTileContents } from './AirDataTileContents';
-
-// ************
-// types
-// ************
-
-export interface AirDataTile_I {
-	airData: AirDataStateCurrent_I
-}
 
 // ************
 // component
 // ************
 
-export function AirDataTile({ airData }: AirDataTile_I) {
+export function AirDataTile({ location }: { location: string }) {
 	const window = useWindowDimensions()
 	const [isExpanded, setExpanded] = useState(false)
 
@@ -80,7 +71,7 @@ export function AirDataTile({ airData }: AirDataTile_I) {
 			}}
 		>
 			<Animation style={animatedStyles}>
-				<AirDataTileContents {...{ airData }} />
+				<AirDataTileContents {...{ location }} />
 			</Animation>
 		</Container>
 	)

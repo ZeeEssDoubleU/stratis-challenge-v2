@@ -52,8 +52,8 @@ export function filterForcastByDay(
 	 * filteredForecast is an object that returns forecasts for a given day
 	 */
 	const filteredForecast = Object.entries(allForecasts).reduce(
-		(obj, [param, forecastsBydDay]) => {
-			forecastsBydDay.filter((forecast) => {
+		(obj, [param, forecastsByDay]) => {
+			forecastsByDay.filter((forecast) => {
 				const { day: date } = forecast
 
 				// parsed to ISO string

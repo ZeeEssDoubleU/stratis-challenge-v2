@@ -1,6 +1,6 @@
 import * as Location from 'expo-location';
 
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 // ************
 // types
@@ -29,7 +29,7 @@ export const fetchCurrentLocation = createAsyncThunk(
 			const response = await Location.getCurrentPositionAsync(location)
 			return response
 		} else {
-			thunkAPI.rejectWithValue("Permission to use location not granted.")
+			new Error("Permission to use location not granted.")
 		}
 	},
 )
@@ -53,31 +53,30 @@ export const locationSlice = createSlice({
 	name: "location",
 	initialState,
 	reducers: {},
-	extraReducers: {
+	extraReducers: (builder) => {
 		/**
 		 * current location
 		 */
-		[fetchCurrentLocation.pending]: (state, action) => {
+		builder.addCase(fetchCurrentLocation.pending, (state, action) => {
 			state.loading = true
 			state.currentRequestId = action.meta.requestId
-		},
-		[fetchCurrentLocation.fulfilled]: (
-			state,
-			action: PayloadAction<Location.LocationObject>,
-		) => {
+		})
+		builder.addCase(fetchCurrentLocation.fulfilled, (state, action) => {
 			const { requestId } = action.meta
 			if (state.loading === true && state.currentRequestId === requestId) {
 				state.loading = false
 
 				state.current = action.payload
 			}
-		},
-		[fetchCurrentLocation.rejected]: (state) => {
+		})
+		builder.addCase(fetchCurrentLocation.rejected, (state, action) => {
 			const { requestId } = action.meta
 			if (state.loading === true && state.currentRequestId === requestId) {
 				state.loading = false
-				state.error = action.error
+				state.error = action.payload
+					? action.payload.errorMessage
+					: action.error
 			}
-		},
+		})
 	},
 })
