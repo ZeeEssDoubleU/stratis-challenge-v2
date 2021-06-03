@@ -28,6 +28,8 @@ export function Search() {
 						dispatch(fetchAQIByCity({ search: text }))
 						setText("")
 					}}
+					returnKeyType="search"
+					textContentType="addressCity"
 					accessoryRight={(props) => (
 						<StyledButton
 							accessoryLeft={SearchIcon}
