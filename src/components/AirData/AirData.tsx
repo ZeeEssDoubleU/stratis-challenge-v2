@@ -1,11 +1,11 @@
 import React from 'react';
 import { View } from 'react-native';
-import reactotron from 'reactotron-react-native';
 import styled from 'styled-components/native';
 
 import { Layout } from '@ui-kitten/components';
 
 import { useAirDataSelectors_fix } from '../../redux/airDataSlice_fix';
+import { RelativeDay } from '../../utils';
 import { AppText } from '../AppText';
 import { AirDataRow } from './AirDataRow';
 
@@ -13,29 +13,24 @@ import { AirDataRow } from './AirDataRow';
 // component
 // ************
 
-const displayKeys = ["", "avg", "max", "min"].sort((a, b) => a[0] - b[0])
+export function AirData({ selectedDay }: { selectedDay: RelativeDay }) {
+	const { selectedLocation, forecastByLocationDayArray } =
+		useAirDataSelectors_fix()
+	const forecast = forecastByLocationDayArray(selectedLocation, selectedDay)
 
-export function AirData({
-	location,
-	selectedDay,
-}: {
-	location: string
-	selectedDay: RelativeDay
-}) {
-	const { forecastByLocationDayParam } = useAirDataSelectors_fix()
-	const forecast = forecastByLocationDayParam(location, selectedDay)
+	const keysToDisplay = ["", "avg", "max", "min"].sort((a, b) => a[0] - b[0])
 
-	displayKeys.map((key) => (
+	const displayKeys = keysToDisplay.map((key) => (
 		<Keys key={`key-${key}`}>
 			<AppText>{key}</AppText>
 		</Keys>
 	))
 
-	const displayForecasts = forecast.map(([param, estimate], topIndex) => (
-		<AirDataRow key={topIndex} {...{ param, estimate }} />
-	))
+	const displayForecasts = forecast.map(([param, estimate]) => {
+		return <AirDataRow key={param} {...{ param, estimate }} />
+	})
 
-	return (
+	return !forecast ? null : (
 		<Container>
 			<KeysWrapper>{displayKeys}</KeysWrapper>
 			{displayForecasts}

@@ -31,18 +31,17 @@ export function Header({
 	subtitle,
 	subtitlecategory = "h6",
 	align = "auto",
-	textTransform = "capitalize",
 	...props
 }: Header_I) {
 	if (!title) return null
 
 	return (
 		<View {...props}>
-			<AppText {...{ align, textTransform }} category={titleCategory}>
+			<AppText {...{ align }} category={titleCategory}>
 				{title}
 			</AppText>
 			{subtitle && (
-				<AppText {...{ align, textTransform }} category={subtitlecategory}>
+				<AppText {...{ align }} category={subtitlecategory}>
 					{subtitle}
 				</AppText>
 			)}

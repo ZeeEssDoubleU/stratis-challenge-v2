@@ -1,25 +1,34 @@
-import { upperFirst, words } from 'lodash';
 import React from 'react';
 import styled from 'styled-components/native';
 
+import { useNavigation } from '@react-navigation/core';
 import { ListItem } from '@ui-kitten/components';
 
-import { useAirDataSelectors_fix } from '../../redux/airDataSlice_fix';
+import {
+    airDataSlice, useAirDataSelectors_fix
+} from '../../redux/airDataSlice_fix';
+import { useReduxDispatch } from '../../redux/store';
+import { titleCase } from '../../utils/formatText';
 
 // ************
 // component
 // ************
 
 export const SearchItem = ({ location }: { location: string }) => {
+	const navigation = useNavigation()
+	const dispatch = useReduxDispatch()
+	const { setSelectedLocation } = airDataSlice.actions
 	const { stationByLocation, aqiByLocation } = useAirDataSelectors_fix()
 	const station = stationByLocation(location)
 
-	const titleCase = (string) => words(string).map(upperFirst).join(" ")
-
 	return (
 		<StyledListItem
-			title={location.split(" ").map(upperFirst).join(" ")}
-			description={station.full.split(" ").map(upperFirst).join(" ")}
+			title={titleCase(location)}
+			description={titleCase(station.full)}
+			onPress={() => {
+				dispatch(setSelectedLocation(location))
+				navigation.goBack()
+			}}
 		/>
 	)
 }

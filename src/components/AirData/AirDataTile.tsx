@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Pressable, useWindowDimensions, View } from 'react-native';
+import { Pressable, useWindowDimensions } from 'react-native';
 import Animated, {
     runOnJS, useAnimatedStyle, useSharedValue, withSpring
 } from 'react-native-reanimated';
-import styled from 'styled-components/native';
 
 import { AirDataTileContents } from './AirDataTileContents';
 
@@ -43,7 +42,7 @@ export function AirDataTile({ location }: { location: string }) {
 
 	// ! this does not play nicely with RN support tools and debuggers.  Unfotunately figured this out late :/
 	return (
-		<Container
+		<Pressable
 			onStartShouldSetResponderCapture={(e) => true}
 			onPress={() => {
 				width.value = withSpring(
@@ -70,22 +69,9 @@ export function AirDataTile({ location }: { location: string }) {
 				)
 			}}
 		>
-			<Animation style={animatedStyles}>
+			<Animated.View style={animatedStyles}>
 				<AirDataTileContents {...{ location }} />
-			</Animation>
-		</Container>
+			</Animated.View>
+		</Pressable>
 	)
 }
-
-// ************
-// styles
-// ************
-
-export const Animation = styled(Animated.View)``
-
-const Container = styled(Pressable)`
-	z-index: 10;
-	align-items: center;
-	justify-content: center;
-	width: 100%;
-`

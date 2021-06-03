@@ -25,7 +25,7 @@ export function Search() {
 					value={text}
 					onChangeText={(text) => setText(text)}
 					onSubmitEditing={() => {
-						dispatch(fetchAQIByCity_fix(text))
+						dispatch(fetchAQIByCity_fix({ search: text }))
 						setText("")
 					}}
 					accessoryRight={(props) => (
@@ -33,7 +33,7 @@ export function Search() {
 							accessoryLeft={SearchIcon}
 							appearance="ghost"
 							onPress={() => {
-								dispatch(fetchAQIByCity_fix(text))
+								dispatch(fetchAQIByCity_fix({ search: text }))
 								setText("")
 							}}
 							{...props}

@@ -1,6 +1,5 @@
 import React from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
-import styled from 'styled-components/native';
 
 import { AirDataCurrent, AirDataForecast } from '../components/AirData';
 import { Loading } from '../components/Loading';
@@ -13,11 +12,7 @@ import { useLocationSelectors } from '../redux/locationSlice';
 // screen
 // ************
 
-export function CurrentLocationScreen({
-	navigation,
-}: {
-	navigation: NavigationType
-}) {
+export function CurrentLocationScreen() {
 	const { coordinates } = useLocationSelectors()
 	const { isAppReady } = useCachedResources()
 

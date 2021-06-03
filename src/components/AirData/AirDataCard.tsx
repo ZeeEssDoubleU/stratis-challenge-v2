@@ -1,4 +1,4 @@
-import { capitalize } from 'lodash';
+import { capitalize, isEmpty } from 'lodash';
 import React from 'react';
 
 import { useAirDataSelectors_fix } from '../../redux/airDataSlice_fix';
@@ -12,15 +12,9 @@ import { AirData } from './AirData';
 // component
 // ************
 
-export function AirDataCard({
-	location,
-	selectedDay,
-}: {
-	location: string
-	selectedDay: RelativeDay
-}) {
-	const { forecastByLocationDay } = useAirDataSelectors_fix()
-	const forecast = forecastByLocationDay(location, selectedDay)
+export function AirDataCard({ selectedDay }: { selectedDay: RelativeDay }) {
+	const { selectedLocation, forecastByLocationDay } = useAirDataSelectors_fix()
+	const forecast = forecastByLocationDay(selectedLocation, selectedDay)
 
 	return (
 		<AppCard
@@ -33,10 +27,10 @@ export function AirDataCard({
 				/>
 			)}
 		>
-			{forecast ? (
-				<AirData {...{ location, selectedDay }} />
-			) : (
+			{!forecast || isEmpty(forecast) ? (
 				<AppText>No forecast found for this date and location.</AppText>
+			) : (
+				<AirData {...{ selectedDay }} />
 			)}
 		</AppCard>
 	)

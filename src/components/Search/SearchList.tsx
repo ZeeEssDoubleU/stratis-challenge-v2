@@ -4,6 +4,7 @@ import styled from 'styled-components/native';
 import { Divider, Layout, List } from '@ui-kitten/components';
 
 import { useAirDataSelectors_fix } from '../../redux/airDataSlice_fix';
+import { useReduxDispatch } from '../../redux/store';
 import { Header } from '../Header';
 import { SearchItem } from './SearchItem';
 
@@ -12,13 +13,14 @@ import { SearchItem } from './SearchItem';
 // ************
 
 export const SearchList = () => {
-	const { allLocations } = useAirDataSelectors_fix()
+	const dispatch = useReduxDispatch()
+	const { successfulSearches } = useAirDataSelectors_fix()
 
 	return (
 		<Container>
 			<StyledHeader titleCategory="s1" title={`Successful Searches`} />
 			<List
-				data={allLocations}
+				data={successfulSearches}
 				ItemSeparatorComponent={Divider}
 				renderItem={({ item: location, index }) => (
 					<SearchItem {...{ location }} />

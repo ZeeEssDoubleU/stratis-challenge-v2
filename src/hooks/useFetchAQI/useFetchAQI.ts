@@ -23,10 +23,12 @@ export function useFetchAQI() {
 	 */
 	useEffect(() => {
 		if (coordinates) {
-			dispatch(fetchAQIByCoords_fix(coordinates))
-			// TODO: replace when fixed
-			// dispatch(fetchAQIByCity_fix("boston"))
-			// dispatch(fetchAQIByCity_fix("shanghai"))
+			dispatch(
+				fetchAQIByCoords_fix({
+					search: "current location",
+					...coordinates,
+				}),
+			)
 		}
 	}, [coordinates])
 }

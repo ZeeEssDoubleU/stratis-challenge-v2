@@ -7,6 +7,7 @@ import { airDataByCity } from '../../hooks/useFetchAQI/mockData/airDataByCity';
 import {
     airDatabyCoords
 } from '../../hooks/useFetchAQI/mockData/airDatabyCoords';
+import { reactotron } from '../middleware';
 import { getCity } from './airDataSelectors';
 
 // ************
@@ -15,8 +16,9 @@ import { getCity } from './airDataSelectors';
 
 export type AirData_fix = AirDataByCity_fix | AirDataByCoords_fix
 export interface AirDataState_I_fix {
-	currentLocation: string
-	allLocations: string[]
+	selectedLocation: string
+	successfulSearches: { search: string; result: string }[]
+	searchMap: { [search: string]: string }
 	airDataByLocation: {
 		[location: string]: AirData_fix
 	}
@@ -31,6 +33,10 @@ export interface AirDataState_I_fix {
 export type AirDataByCity_fix = typeof airDataByCity["data"]["data"]
 export type FetchAirDataByCity_fix = typeof fetchAQIByCity_fix
 
+interface FetchAQIDataByCity_I_fix {
+	search: string
+}
+
 /**
  * async fetches AQI data by city
  * @param {string} city
@@ -39,12 +45,12 @@ export type FetchAirDataByCity_fix = typeof fetchAQIByCity_fix
 // TODO: replace when fixed
 export const fetchAQIByCity_fix = createAsyncThunk(
 	"airData/fetchAQIByCity_fix",
-	async (city: string, thunkAPI) => {
+	async ({ search }: FetchAQIDataByCity_I_fix, thunkAPI) => {
 		const {
 			data: { data },
 		} = await axios({
 			method: `GET`,
-			url: `https://api.waqi.info/feed/${city}/?token=${token}`,
+			url: `https://api.waqi.info/feed/${search}/?token=${token}`,
 		})
 
 		return data as AirDataByCity_fix
@@ -58,6 +64,12 @@ export const fetchAQIByCity_fix = createAsyncThunk(
 export type AirDataByCoords_fix = typeof airDatabyCoords["data"]["data"]
 export type FetchAirDataByCoords_fix = typeof fetchAQIByCoords_fix
 
+interface FetchAQIDataByCoords_I_fix {
+	search: "current location"
+	latitude: number
+	longitude: number
+}
+
 /**
  * async fetches AQI data by coordinates
  * @param {number} latitude
@@ -67,9 +79,11 @@ export type FetchAirDataByCoords_fix = typeof fetchAQIByCoords_fix
 // TODO: replace when fixed
 export const fetchAQIByCoords_fix = createAsyncThunk(
 	"airData_fix/fetchAQIByCoords_fix",
-	async (location: { latitude: number; longitude: number }, thunkAPI) => {
-		const { latitude, longitude } = location
-
+	async ({
+		search = "current location",
+		latitude,
+		longitude,
+	}: FetchAQIDataByCoords_I_fix) => {
 		// ! used mock data to model type
 		const {
 			data: { data },
@@ -87,15 +101,16 @@ export const fetchAQIByCoords_fix = createAsyncThunk(
 // ************
 
 const initialState: AirDataState_I_fix = {
-	currentLocation: "",
-	allLocations: [],
+	selectedLocation: "",
+	successfulSearches: [],
+	searchMap: {},
 	airDataByLocation: {},
 	loading: false,
 	currentRequestId: undefined,
 }
 
 // ************
-// local selectors
+// helpers
 // ************
 
 /**
@@ -120,12 +135,18 @@ export const airDataSlice = createSlice({
 	initialState,
 	reducers: {
 		setAirData: (state, action: PayloadAction<AirData_fix>) => {
-			const formatCity = selectCity(action.payload)
+			const input = action.meta.arg.search.toLowerCase()
+			const station = action.payload.city.name.toLowerCase()
 
-			if (!state.airDataByLocation[formatCity]) {
-				state.allLocations.push(formatCity)
+			if (!state.searchMap[input]) {
+				state.successfulSearches.push(input)
 			}
-			state.airDataByLocation[formatCity] = action.payload
+			state.searchMap[input] = station
+			state.airDataByLocation[station] = action.payload
+		},
+		setSelectedLocation: (state, action: PayloadAction<string>) => {
+			reactotron.log("action:", action) // ? debug
+			state.selectedLocation = action.payload
 		},
 	},
 	extraReducers: (builder) => {
@@ -141,7 +162,7 @@ export const airDataSlice = createSlice({
 			if (state.loading === true && state.currentRequestId === requestId) {
 				state.loading = false
 
-				state.currentLocation = selectCity(action.payload)
+				state.selectedLocation = action.meta.arg.search.toLowerCase()
 				airDataSlice.caseReducers.setAirData(state, action)
 			}
 		})
@@ -165,6 +186,8 @@ export const airDataSlice = createSlice({
 			const { requestId } = action.meta
 			if (state.loading === true && state.currentRequestId === requestId) {
 				state.loading = false
+
+				state.selectedLocation = action.meta.arg.search.toLowerCase()
 				airDataSlice.caseReducers.setAirData(state, action)
 			}
 		})

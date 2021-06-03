@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import styled from 'styled-components/native';
 
 import { useAirDataSelectors_fix } from '../../redux/airDataSlice_fix';
+import { titleCase } from '../../utils/formatText';
 import { AppText } from '../AppText';
 import { Header } from '../Header';
 import { AirDataTile } from './AirDataTile';
@@ -12,22 +13,22 @@ import { AirDataTile } from './AirDataTile';
 // ************
 
 export function AirDataCurrent() {
-	const { currentLocation, stationByLocation, timeByLocation } =
+	const { selectedLocation, stationByLocation, timeByLocation } =
 		useAirDataSelectors_fix()
 
-	const location = stationByLocation(currentLocation)
-	const time = timeByLocation(currentLocation)
+	const location = stationByLocation(selectedLocation)
+	const time = timeByLocation(selectedLocation)
 
 	return !location ? null : (
 		<Container>
 			<Header
 				align="center"
-				title={location.city}
+				title={titleCase(selectedLocation)}
 				titleCategory="h3"
-				subtitle={location.station}
+				subtitle={titleCase(location.full)}
 			/>
 			<AppText category="s1">{`${time.date} @ ${time.time}`}</AppText>
-			<AirDataTile location={currentLocation} />
+			<AirDataTile location={selectedLocation} />
 		</Container>
 	)
 }
@@ -39,9 +40,6 @@ export function AirDataCurrent() {
 const Container = styled(View)`
 	z-index: 10;
 	top: 20px;
-	width: 100%;
-	height: 100%;
 	align-items: center;
 	justify-content: center;
-	border: none;
 `
