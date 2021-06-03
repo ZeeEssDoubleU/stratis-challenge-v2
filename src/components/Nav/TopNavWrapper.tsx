@@ -1,22 +1,21 @@
 import React from 'react';
-import { SafeAreaView, useWindowDimensions } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { SafeAreaView } from 'react-native';
 import styled from 'styled-components/native';
 
-import { TopNavigation, TopNavigationElement } from '@ui-kitten/components';
+import { Divider, Layout, TopNavigation } from '@ui-kitten/components';
 
 // ************
 // component
 // ************
 
-export function TopNavWrapper(props: TopNavigationElement) {
-	const window = useWindowDimensions()
-
+export function TopNavWrapper(props) {
 	return (
-		<Container {...{ window }}>
-			<TopNavigation {...{ window, ...props }} />
-			{/* <Divider /> */}
-			<FlexWrapper>{props.children}</FlexWrapper>
+		<Container>
+			<SafeArea>
+				<TopNavigation {...props} />
+				<Divider />
+				{props.children}
+			</SafeArea>
 		</Container>
 	)
 }
@@ -25,11 +24,9 @@ export function TopNavWrapper(props: TopNavigationElement) {
 // styles
 // ************
 
-const Container = styled(SafeAreaView)`
+const Container = styled(Layout)`
 	flex: 1;
-	height: 100%;
 `
-const FlexWrapper = styled(ScrollView)`
+const SafeArea = styled(SafeAreaView)`
 	flex: 1;
-	height: 100%;
 `

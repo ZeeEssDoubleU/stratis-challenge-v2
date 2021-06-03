@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import {
-    Button, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text,
-    TextInput, TouchableWithoutFeedback, View
-} from 'react-native';
-import reactotron from 'reactotron-react-native';
+import { Keyboard, Pressable, View } from 'react-native';
+import styled from 'styled-components';
 
-import { fetchAQIByCity } from '../../redux/airDataSlice/airDataSlice';
+import { Button, Input } from '@ui-kitten/components';
+
+import { fetchAQIByCity_fix } from '../../redux/airDataSlice_fix';
 import { useReduxDispatch } from '../../redux/store';
+import { SearchIcon } from '../Icons';
+import { SearchList } from './SearchList';
 
 // ************
 // component
@@ -17,30 +18,31 @@ export function Search() {
 	const dispatch = useReduxDispatch()
 
 	return (
-		<KeyboardAvoidingView
-			behavior={Platform.OS === "ios" ? "padding" : "height"}
-			style={styles.container}
-		>
-			<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-				<View style={styles.inner}>
-					<Text style={styles.header}>Search by city</Text>
-					<TextInput
-						placeholder="Search by city name (ie Dallas)"
-						onChangeText={(text) => setText(text)}
-						style={styles.textInput}
-					/>
-					<View style={styles.btnContainer}>
-						<Button
-							title="Submit"
+		<Container onPress={Keyboard.dismiss}>
+			<Wrapper>
+				<StyledInput
+					placeholder="Search by city name (ie Dallas)"
+					value={text}
+					onChangeText={(text) => setText(text)}
+					onSubmitEditing={() => {
+						dispatch(fetchAQIByCity_fix(text))
+						setText("")
+					}}
+					accessoryRight={(props) => (
+						<StyledButton
+							accessoryLeft={SearchIcon}
+							appearance="ghost"
 							onPress={() => {
-								reactotron.log("text:", text) // ? debug
-								dispatch(fetchAQIByCity(text))
+								dispatch(fetchAQIByCity_fix(text))
+								setText("")
 							}}
+							{...props}
 						/>
-					</View>
-				</View>
-			</TouchableWithoutFeedback>
-		</KeyboardAvoidingView>
+					)}
+				/>
+			</Wrapper>
+			<SearchList />
+		</Container>
 	)
 }
 
@@ -49,27 +51,17 @@ export function Search() {
 // styles
 // ************
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-	},
-	inner: {
-		padding: 24,
-		flex: 1,
-		justifyContent: "space-around",
-	},
-	header: {
-		fontSize: 36,
-		marginBottom: 48,
-	},
-	textInput: {
-		height: 40,
-		borderColor: "#000000",
-		borderBottomWidth: 1,
-		marginBottom: 36,
-	},
-	btnContainer: {
-		backgroundColor: "white",
-		marginTop: 12,
-	},
-})
+const Container = styled(Pressable)`
+	flex: 1;
+`
+const Wrapper = styled(View)`
+	flex-direction: row;
+	padding: 16px;
+`
+const StyledInput = styled(Input)`
+	flex: 1;
+	padding: 0;
+`
+const StyledButton = styled(Button)`
+	margin: 0;
+`

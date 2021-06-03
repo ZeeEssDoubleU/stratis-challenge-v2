@@ -1,6 +1,5 @@
 import React from 'react';
 import { View } from 'react-native';
-import reactotron from 'reactotron-react-native';
 import styled from 'styled-components/native';
 
 import { useAirDataSelectors_fix } from '../../redux/airDataSlice_fix';
@@ -16,7 +15,6 @@ import { AirDataTileRow } from './AirDataTileRow';
 
 export function AirDataTileContents({ location }: { location: string }) {
 	const { aqiByLocation } = useAirDataSelectors_fix()
-
 	const aqiData = aqiByLocation(location)
 
 	const { color: ratingColor } = showCondition(aqiData.aqi)

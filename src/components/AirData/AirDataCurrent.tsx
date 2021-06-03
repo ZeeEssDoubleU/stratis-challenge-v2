@@ -37,7 +37,6 @@ export function AirDataCurrent() {
 // ************
 
 const Container = styled(View)`
-	/* position: absolute; */
 	z-index: 10;
 	top: 20px;
 	width: 100%;
@@ -45,5 +44,4 @@ const Container = styled(View)`
 	align-items: center;
 	justify-content: center;
 	border: none;
-	/* background: lightblue; */
 `

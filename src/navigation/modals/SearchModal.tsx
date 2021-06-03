@@ -1,6 +1,5 @@
 import React from 'react';
-
-import { Layout } from '@ui-kitten/components';
+import styled from 'styled-components/native';
 
 import { TopNavWrapper } from '../../components/Nav';
 import { Search } from '../../components/Search';
@@ -12,10 +11,12 @@ import { GoBack } from '../actions/NavActions';
 
 export function SearchModal({ navigation }: { navigation: NavigationType }) {
 	return (
-		<TopNavWrapper {...{ navigation }} accessoryLeft={GoBack}>
-			<Layout>
-				<Search />
-			</Layout>
+		<TopNavWrapper
+			alignment="center"
+			title="Search Locations"
+			accessoryLeft={GoBack}
+		>
+			<Search />
 		</TopNavWrapper>
 	)
 }

@@ -1,30 +1,19 @@
 import React from 'react';
-import { ScaledSize } from 'react-native';
+import { ScaledSize, useWindowDimensions } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import styled from 'styled-components/native';
 
-import {
-    AirDataStateCurrent_I, AirDataStateForecast_I
-} from '../../redux/airDataSlice/airDataSlice';
+import { useAirDataSelectors_fix } from '../../redux/airDataSlice_fix';
 import { AirDataCard } from './';
-
-// ************
-// types
-// ************
-
-interface AirDataForecast_I {
-	window: ScaledSize
-	airData: { current: AirDataStateCurrent_I; forecast: AirDataStateForecast_I }
-}
 
 // ************
 // component
 // ************
 
-export function AirDataForecast({
-	window,
-	airData: { current, forecast },
-}: AirDataForecast_I) {
+export function AirDataForecast() {
+	const window = useWindowDimensions()
+	const { currentLocation } = useAirDataSelectors_fix()
+
 	return (
 		<Container
 			horizontal
@@ -33,9 +22,9 @@ export function AirDataForecast({
 			showsHorizontalScrollIndicator={false}
 			{...{ window }}
 		>
-			<AirDataCard {...{ current, forecast: forecast.yesterday }} />
-			<AirDataCard {...{ current, forecast: forecast.today }} />
-			<AirDataCard {...{ current, forecast: forecast.tomorrow }} />
+			<AirDataCard location={currentLocation} selectedDay="yesterday" />
+			<AirDataCard location={currentLocation} selectedDay="today" />
+			<AirDataCard location={currentLocation} selectedDay="tomorrow" />
 		</Container>
 	)
 }

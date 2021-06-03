@@ -1,38 +1,39 @@
-import { isEmpty } from 'lodash';
 import React from 'react';
 import { View } from 'react-native';
+import reactotron from 'reactotron-react-native';
 import styled from 'styled-components/native';
 
 import { Layout } from '@ui-kitten/components';
 
+import { useAirDataSelectors_fix } from '../../redux/airDataSlice_fix';
 import { AppText } from '../AppText';
-import { AirDataCard_I } from './AirDataCard';
 import { AirDataRow } from './AirDataRow';
 
 // ************
 // component
 // ************
 
-export function AirData({ forecast }: AirDataCard_I) {
-	if (!forecast && isEmpty(forecast)) return null
+const displayKeys = ["", "avg", "max", "min"].sort((a, b) => a[0] - b[0])
 
-	const displayKeys = ["", "avg", "max", "min"]
-		.sort((a, b) => a[0] - b[0])
-		.map((key) => (
-			<Keys key={`key-${key}`}>
-				<AppText>{key}</AppText>
-			</Keys>
-		))
+export function AirData({
+	location,
+	selectedDay,
+}: {
+	location: string
+	selectedDay: RelativeDay
+}) {
+	const { forecastByLocationDayParam } = useAirDataSelectors_fix()
+	const forecast = forecastByLocationDayParam(location, selectedDay)
 
-	const targetDayForecastByParam = Object.entries(forecast)
-	// [o3, pm10, pm25, uvi]
-	const displayForecasts = targetDayForecastByParam
-		.filter(([key]) => key !== "date" && key !== "relativeDay")
-		.map(([param, estimate], topIndex) => {
-			return estimate === undefined ? null : (
-				<AirDataRow key={topIndex} {...{ param, estimate }} />
-			)
-		})
+	displayKeys.map((key) => (
+		<Keys key={`key-${key}`}>
+			<AppText>{key}</AppText>
+		</Keys>
+	))
+
+	const displayForecasts = forecast.map(([param, estimate], topIndex) => (
+		<AirDataRow key={topIndex} {...{ param, estimate }} />
+	))
 
 	return (
 		<Container>

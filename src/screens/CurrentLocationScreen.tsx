@@ -1,11 +1,10 @@
 import React from 'react';
+import { ScrollView } from 'react-native-gesture-handler';
 import styled from 'styled-components/native';
 
-import { Layout } from '@ui-kitten/components';
-
-import { AirDataCurrent } from '../components/AirData';
+import { AirDataCurrent, AirDataForecast } from '../components/AirData';
 import { Loading } from '../components/Loading';
-import { TopNavWrapper } from '../components/Nav/TopNavWrapper';
+import { TopNavWrapper } from '../components/Nav';
 import { useCachedResources } from '../hooks/useCachedResources';
 import { OpenModal } from '../navigation/actions/NavActions';
 import { useLocationSelectors } from '../redux/locationSlice';
@@ -19,34 +18,23 @@ export function CurrentLocationScreen({
 }: {
 	navigation: NavigationType
 }) {
+	const { coordinates } = useLocationSelectors()
 	const { isAppReady } = useCachedResources()
 
-	const { coordinates } = useLocationSelectors()
-
-	// show spinner if data still loading
-	if (!isAppReady) return <Loading />
-
-	return (
-		<Container>
-			<TopNavWrapper
-				{...{ navigation }}
-				alignment="center"
-				title="Current Location"
-				subtitle={`Lat: ${coordinates.latitude}\nLong: ${coordinates.longitude}`}
-				accessoryRight={() => OpenModal("Search Modal")}
-			>
-				{/* // TODO: look at creating an image hero showing a pic the city */}
+	return !isAppReady || !coordinates ? (
+		<Loading />
+	) : (
+		<TopNavWrapper
+			alignment="center"
+			title="Current Location"
+			subtitle={`Lat: ${coordinates.latitude}\nLong: ${coordinates.longitude}`}
+			accessoryRight={() => OpenModal("Search Modal")}
+		>
+			{/* // TODO: look at creating an image hero showing a pic the city */}
+			<ScrollView>
 				<AirDataCurrent />
-				{/* <AirDataForecast /> */}
-			</TopNavWrapper>
-		</Container>
+				<AirDataForecast />
+			</ScrollView>
+		</TopNavWrapper>
 	)
 }
-
-// ************
-// styles
-// ************
-
-export const Container = styled(Layout)`
-	flex: 1;
-`

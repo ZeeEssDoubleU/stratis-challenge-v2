@@ -4,7 +4,6 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 
 import { Provider_I } from '../../@types/global';
-import { airDataSlice } from '../airDataSlice/airDataSlice';
 import {
     airDataSlice as airDataSlice_fix
 } from '../airDataSlice_fix/airDataSlice';
@@ -18,7 +17,6 @@ import { reactotron } from '../middleware/ReactotronConfig';
 export const store = configureStore({
 	reducer: {
 		location: locationSlice.reducer,
-		airData: airDataSlice.reducer,
 		// TODO: remove and replace airData when fixed
 		airData_fix: airDataSlice_fix.reducer,
 	},

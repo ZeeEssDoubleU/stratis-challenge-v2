@@ -3,7 +3,7 @@ import React from 'react';
 import { useNavigation } from '@react-navigation/core';
 import { TopNavigationAction } from '@ui-kitten/components';
 
-import { BackArrow, PlusOutline } from '../../components/Icons';
+import { BackIcon, PlusIcon } from '../../components/Icons';
 
 // ************
 // actions
@@ -14,7 +14,7 @@ export const OpenModal = (targetModal: string) => {
 
 	return (
 		<TopNavigationAction
-			icon={PlusOutline}
+			icon={PlusIcon}
 			onPress={() => navigation.navigate(targetModal)}
 		/>
 	)
@@ -25,7 +25,7 @@ export const GoBack = () => {
 
 	return (
 		<TopNavigationAction
-			icon={BackArrow}
+			icon={BackIcon}
 			onPress={() => navigation.goBack()}
 		/>
 	)

@@ -7,7 +7,7 @@ import { RootState_Type, useReduxSelector } from '../store';
 // ************
 
 export const locationState = (state: RootState_Type) => state.location
-export const selectLoading = createSelector(
+export const selectLocationLoading = createSelector(
 	locationState,
 	(location) => location.loading,
 )
@@ -32,7 +32,7 @@ export const selectCoordinates = createSelector(selectCurrent, (current) => {
 export function useLocationSelectors() {
 	return {
 		// selectors
-		locationLoading: useReduxSelector(selectLoading),
+		locationLoading: useReduxSelector(selectLocationLoading),
 		location: useReduxSelector(selectCurrent),
 		coordinates: useReduxSelector(selectCoordinates),
 	}

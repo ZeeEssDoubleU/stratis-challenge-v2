@@ -1,15 +1,13 @@
 import axios from 'axios';
 import { AQICN_TOKEN as token } from 'react-native-dotenv';
-import reactotron from 'reactotron-react-native';
 
-import {
-    createAsyncThunk, createSelector, createSlice, PayloadAction
-} from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { airDataByCity } from '../../hooks/useFetchAQI/mockData/airDataByCity';
 import {
     airDatabyCoords
 } from '../../hooks/useFetchAQI/mockData/airDatabyCoords';
+import { getCity } from './airDataSelectors';
 
 // ************
 // types
@@ -105,14 +103,13 @@ const initialState: AirDataState_I_fix = {
  * @param {object} airData - airData action payload from fetchAQIByCity_fix.fulfilled or fetchAQIByCoords_fix.fulfilled reducers
  * @returns {string} city name
  */
-export const selectCity = createSelector(
-	(state: AirData_fix) => state,
-	(airData) => {
-		const cityArr = airData.city.name.split(",")
+export const selectCity = (airData: AirData_fix) => {
+	const cityArr = airData.city.name.split(",")
 
-		return cityArr[cityArr.length - 2].toLowerCase()
-	},
-)
+	const formatCity = getCity(cityArr).toLowerCase()
+
+	return formatCity
+}
 
 // ************
 // slice
@@ -168,7 +165,6 @@ export const airDataSlice = createSlice({
 			const { requestId } = action.meta
 			if (state.loading === true && state.currentRequestId === requestId) {
 				state.loading = false
-
 				airDataSlice.caseReducers.setAirData(state, action)
 			}
 		})

@@ -1,40 +1,43 @@
+import { capitalize } from 'lodash';
 import React from 'react';
-import { ViewProps } from 'react-native';
 
-import { RenderProp } from '@ui-kitten/components/devsupport';
-
-import { AirDataStateCurrent_I } from '../../redux/airDataSlice/airDataSlice';
-import { FilteredForecast } from '../../redux/helpers';
+import { useAirDataSelectors_fix } from '../../redux/airDataSlice_fix';
+import { getFormattedDate, RelativeDay } from '../../utils';
 import { AppCard } from '../AppCard';
+import { AppText } from '../AppText';
 import { Header } from '../Header';
 import { AirData } from './AirData';
-
-// ************
-// types
-// ************
-
-export interface AirDataCard_I {
-	current?: AirDataStateCurrent_I
-	forecast: FilteredForecast
-}
 
 // ************
 // component
 // ************
 
-export function AirDataCard({ current, forecast }: AirDataCard_I) {
-	const DisplayHeader: RenderProp<ViewProps> = (props) => (
-		<Header
-			title={forecast.relativeDay}
-			titleCategory="h4"
-			subtitle={forecast.date}
-			{...props}
-		/>
-	)
+export function AirDataCard({
+	location,
+	selectedDay,
+}: {
+	location: string
+	selectedDay: RelativeDay
+}) {
+	const { forecastByLocationDay } = useAirDataSelectors_fix()
+	const forecast = forecastByLocationDay(location, selectedDay)
 
 	return (
-		<AppCard header={DisplayHeader}>
-			<AirData {...{ current, forecast }} />
+		<AppCard
+			header={(props) => (
+				<Header
+					title={getFormattedDate(selectedDay)}
+					titleCategory="h4"
+					subtitle={capitalize(selectedDay)}
+					{...props}
+				/>
+			)}
+		>
+			{forecast ? (
+				<AirData {...{ location, selectedDay }} />
+			) : (
+				<AppText>No forecast found for this date and location.</AppText>
+			)}
 		</AppCard>
 	)
 }

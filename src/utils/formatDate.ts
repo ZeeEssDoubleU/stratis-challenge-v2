@@ -9,7 +9,7 @@ import {
 
 export type RelativeDay = "yesterday" | "today" | "tomorrow"
 export type FormatDate = ReturnType<typeof formatDate>
-export type FormatParsedDate = ReturnType<typeof formateParsedDate>
+export type FormatParsedDate = ReturnType<typeof formatParsedDate>
 export type GetRelativeDay = ReturnType<typeof getRelativeDay>
 export type IsDay = ReturnType<typeof isDay>
 export type GetFormattedDate = ReturnType<typeof getFormattedDate>
@@ -36,23 +36,6 @@ export function formatParsedDate(date: Date) {
 	const formatted_time = format(date, "p")
 
 	return { formatted, formatted_time }
-}
-
-/**
- * determines if input day is yesterday, today, or tomorrow
- * @param parsed Date
- * @returns an object of booleans to determine input day relative to today
- */
-export function getRelativeDay(parsed: Date) {
-	const _isToday = isToday(parsed)
-	const _isYesterday = isYesterday(parsed)
-	const _isTomorrow = isTomorrow(parsed)
-
-	return {
-		_isToday,
-		_isYesterday,
-		_isTomorrow,
-	}
 }
 
 /**

@@ -1,30 +1,46 @@
-import { capitalize } from 'lodash';
 import { createSelector } from 'reselect';
 
-import { formatDate, getFormattedDate, isDay, RelativeDay } from '../../utils';
+import { formatDate, isDay, RelativeDay } from '../../utils';
 import { RootState_Type, useReduxSelector } from '../store';
+
+// ************
+// helpers
+// ************
+
+/**
+ * returns formatted city name
+ * @param {array} cityArr - city array derived from city string separated by comma
+ * @returns {string} city name
+ */
+export function getCity(cityArr) {
+	return cityArr.length === 0
+		? null
+		: cityArr.length > 1
+		? cityArr[cityArr.length - 2].trim()
+		: cityArr[cityArr.length - 1].trim()
+}
 
 // ************
 // selectors
 // ************
 
-export const airDataState = (state: RootState_Type) => state.airData_fix
-export const selectLoading = createSelector(
-	airDataState,
-	(airData) => airData.loading,
-)
-export const selectCurrentLocation = createSelector(
-	airDataState,
-	(airData) => airData.currentLocation,
-)
+export const selectAirDataState = (state: RootState_Type) => state.airData_fix
+export const selectAirDataLoading = (state: RootState_Type) =>
+	state.airData_fix.loading
+export const selectCurrentLocation = (state: RootState_Type) =>
+	state.airData_fix.currentLocation
+export const selectAllLocations = (state: RootState_Type) =>
+	state.airData_fix.allLocations
+
 /**
  * select all AQI data
  */
 export const selectAirDataByLocation = (location: string) =>
 	createSelector(
-		airDataState,
-		(airData) => airData.airDataByLocation[location],
+		selectAirDataState,
+		(airDataState) => airDataState.airDataByLocation[location],
 	)
+
 /**
  * select current AQI data
  */
@@ -36,27 +52,29 @@ export const selectStationByLocation = (location: string) =>
 		const cityArr = cityObj.name.split(",")
 
 		return {
+			full: cityObj.name,
 			station:
 				cityArr.length > 2 ? cityArr[cityArr.length - 3].trim() : null,
 			stationId: idx,
-			city:
-				cityArr.length > 1
-					? cityArr[cityArr.length - 2].trim()
-					: cityArr[cityArr.length - 1].trim(),
+			city: getCity(cityArr),
 			state: cityArr.length > 1 ? cityArr[cityArr.length - 1].trim() : null,
 		}
 	})
 export const selectTimeByLocation = (location: string) =>
 	createSelector(selectAirDataByLocation(location), (airData) => {
+		if (!airData) return null
+
 		const { time } = airData
 
 		return {
-			time: time?.iso && formatDate(time.iso).formatted_time,
-			date: time?.iso && formatDate(time.iso).formatted,
+			time: formatDate(time.iso).formatted_time,
+			date: formatDate(time.iso).formatted,
 		}
 	})
 export const selectAQIByLocation = (location: string) =>
 	createSelector(selectAirDataByLocation(location), (airData) => {
+		if (!airData) return null
+
 		const { aqi, dominentpol, iaqi } = airData
 
 		return {
@@ -68,6 +86,7 @@ export const selectAQIByLocation = (location: string) =>
 			}, {} as { [param: string]: number }),
 		}
 	})
+
 /**
  * select AQI forecasts
  */
@@ -76,6 +95,8 @@ export const selectForecastByLocationDay = (
 	selectedDay: RelativeDay,
 ) =>
 	createSelector(selectAirDataByLocation(location), (airData) => {
+		if (!airData) return null
+
 		const allForecasts = airData?.forecast.daily
 
 		type Values<T> = T[keyof T]
@@ -106,14 +127,52 @@ export const selectForecastByLocationDay = (
 				return obj as ForecastsByParam
 			}, {})
 
-		if (filteredForecast) {
-			filteredForecast["date"] = getFormattedDate(selectedDay)
-			filteredForecast["relativeDay"] = capitalize(selectedDay)
+		return filteredForecast as ForecastsByParam
+	})
+
+/**
+ * select AQI forecasts by param on selected location and day
+ */
+export const selectForecastByLocationDayParam = (
+	location: string,
+	selectedDay: RelativeDay,
+) =>
+	createSelector(
+		selectForecastByLocationDay(location, selectedDay),
+		(forecast) => {
+			// if (!forecast) return null
+
+			const targetDayForecastByParam = Object.entries(forecast).filter(
+				([param, estimate]) => {
+					estimate !== undefined
+				},
+			)
+			// [o3, pm10, pm25, uvi]
+			return targetDayForecastByParam
+		},
+	)
+
+/**
+ * select keys to display in air data
+ * ! not used
+ */
+export const selectForecastKeys = (location: string) =>
+	createSelector(selectAirDataByLocation(location), (airData) => {
+		if (!airData) return null
+
+		const allForecasts = airData?.forecast.daily
+
+		let displayKeys = {}
+		for (prop in allForecasts) {
+			displayKeys = Object.keys(allForecasts[prop][0])
+				.filter((key) => key !== "day")
+				.push("")
+				.sort((a, b) => a[0] - b[0])
+
+			break
 		}
-		return filteredForecast as {
-			date: string
-			relativeDay: string
-		} & ForecastsByParam
+
+		return displayKeys
 	})
 
 // ************
@@ -123,8 +182,9 @@ export const selectForecastByLocationDay = (
 export function useAirDataSelectors_fix() {
 	return {
 		// selectors
-		airDataLoading: useReduxSelector(selectLoading),
+		airDataLoading: useReduxSelector(selectAirDataLoading),
 		currentLocation: useReduxSelector(selectCurrentLocation),
+		allLocations: useReduxSelector(selectAllLocations),
 		airDataByLocation: (location) =>
 			useReduxSelector(selectAirDataByLocation(location)),
 		// current AQI
@@ -135,11 +195,11 @@ export function useAirDataSelectors_fix() {
 		aqiByLocation: (location) =>
 			useReduxSelector(selectAQIByLocation(location)),
 		// forecasted AQI
-		yesterdayForecast: (location) =>
-			useReduxSelector(selectForecastByLocationDay(location, "yesterday")),
-		todayForecast: (location) =>
-			useReduxSelector(selectForecastByLocationDay(location, "today")),
-		tomorrowForecast: (location) =>
-			useReduxSelector(selectForecastByLocationDay(location, "tomorrow")),
+		forecastByLocationDay: (location, selectedDay) =>
+			useReduxSelector(selectForecastByLocationDay(location, selectedDay)),
+		forecastByLocationDayParam: (location, selectedDay) =>
+			useReduxSelector(
+				selectForecastByLocationDayParam(location, selectedDay),
+			),
 	}
 }

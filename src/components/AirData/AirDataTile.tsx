@@ -84,13 +84,8 @@ export function AirDataTile({ location }: { location: string }) {
 export const Animation = styled(Animated.View)``
 
 const Container = styled(Pressable)`
-	/* position: absolute; */
 	z-index: 10;
-	/* flex: 1; */
 	align-items: center;
 	justify-content: center;
-	/* height: 100%; */
 	width: 100%;
-	/* background: lightslategray; */
-	/* overflow: hidden; */
 `
