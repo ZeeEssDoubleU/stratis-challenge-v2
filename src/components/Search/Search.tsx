@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { Button, Input } from '@ui-kitten/components';
 
-import { fetchAQIByCity_fix } from '../../redux/airDataSlice_fix';
+import { fetchAQIByCity } from '../../redux/airDataSlice';
 import { useReduxDispatch } from '../../redux/store';
 import { SearchIcon } from '../Icons';
 import { SearchList } from './SearchList';
@@ -25,7 +25,7 @@ export function Search() {
 					value={text}
 					onChangeText={(text) => setText(text)}
 					onSubmitEditing={() => {
-						dispatch(fetchAQIByCity_fix({ search: text }))
+						dispatch(fetchAQIByCity({ search: text }))
 						setText("")
 					}}
 					accessoryRight={(props) => (
@@ -33,7 +33,7 @@ export function Search() {
 							accessoryLeft={SearchIcon}
 							appearance="ghost"
 							onPress={() => {
-								dispatch(fetchAQIByCity_fix({ search: text }))
+								dispatch(fetchAQIByCity({ search: text }))
 								setText("")
 							}}
 							{...props}
@@ -46,7 +46,6 @@ export function Search() {
 	)
 }
 
-// TODO: pulled straight from RN.  Need to redo
 // ************
 // styles
 // ************

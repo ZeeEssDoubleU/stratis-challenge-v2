@@ -10,7 +10,6 @@ import {
 export type RelativeDay = "yesterday" | "today" | "tomorrow"
 export type FormatDate = ReturnType<typeof formatDate>
 export type FormatParsedDate = ReturnType<typeof formatParsedDate>
-export type GetRelativeDay = ReturnType<typeof getRelativeDay>
 export type IsDay = ReturnType<typeof isDay>
 export type GetFormattedDate = ReturnType<typeof getFormattedDate>
 

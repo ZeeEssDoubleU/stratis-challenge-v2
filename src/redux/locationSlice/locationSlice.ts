@@ -22,7 +22,7 @@ export interface LocationState_I {
  */
 export const fetchCurrentLocation = createAsyncThunk(
 	"location/fetchCurrentLocation",
-	async (location = {}, thunkAPI) => {
+	async (location = {}) => {
 		const { status } = await Location.requestForegroundPermissionsAsync()
 
 		if (status === "granted") {

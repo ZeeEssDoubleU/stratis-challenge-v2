@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 
 import { Divider, Layout, List } from '@ui-kitten/components';
 
-import { useAirDataSelectors_fix } from '../../redux/airDataSlice_fix';
+import { useAirDataSelectors } from '../../redux/airDataSlice';
 import { useReduxDispatch } from '../../redux/store';
 import { Header } from '../Header';
 import { SearchItem } from './SearchItem';
@@ -14,7 +14,7 @@ import { SearchItem } from './SearchItem';
 
 export const SearchList = () => {
 	const dispatch = useReduxDispatch()
-	const { successfulSearches } = useAirDataSelectors_fix()
+	const { successfulSearches } = useAirDataSelectors()
 
 	return (
 		<Container>

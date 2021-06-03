@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components/native';
 
-import { useAirDataSelectors_fix } from '../../redux/airDataSlice_fix';
+import { useAirDataSelectors } from '../../redux/airDataSlice';
 import { showCondition } from '../../utils';
 import { AppText } from '../AppText';
 import { Header } from '../Header';
@@ -14,7 +14,7 @@ import { AirDataTileRow } from './AirDataTileRow';
 // ************
 
 export function AirDataTileContents({ location }: { location: string }) {
-	const { aqiByLocation } = useAirDataSelectors_fix()
+	const { aqiByLocation } = useAirDataSelectors()
 	const aqiData = aqiByLocation(location)
 
 	const { color: ratingColor } = showCondition(aqiData.aqi)
@@ -30,7 +30,6 @@ export function AirDataTileContents({ location }: { location: string }) {
 			header={(props) => (
 				<Header
 					align="center"
-					textTransform="uppercase"
 					title={"AQI"}
 					titleCategory="s1"
 					{...props}
@@ -53,7 +52,7 @@ export function AirDataTileContents({ location }: { location: string }) {
 // styles
 // ************
 
-const Container = styled(Tile)<{ ratingColor?: string; expand: boolean }>`
+const Container = styled(Tile)<{ ratingColor?: string }>`
 	border-top-color: ${({ ratingColor }) =>
 		ratingColor ? ratingColor : "transparent"};
 	border-top-width: 6px;

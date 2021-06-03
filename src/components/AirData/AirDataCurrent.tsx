@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components/native';
 
-import { useAirDataSelectors_fix } from '../../redux/airDataSlice_fix';
+import { useAirDataSelectors } from '../../redux/airDataSlice';
 import { titleCase } from '../../utils/formatText';
 import { AppText } from '../AppText';
 import { Header } from '../Header';
@@ -14,7 +14,7 @@ import { AirDataTile } from './AirDataTile';
 
 export function AirDataCurrent() {
 	const { selectedLocation, stationByLocation, timeByLocation } =
-		useAirDataSelectors_fix()
+		useAirDataSelectors()
 
 	const location = stationByLocation(selectedLocation)
 	const time = timeByLocation(selectedLocation)

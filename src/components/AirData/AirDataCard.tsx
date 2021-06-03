@@ -1,7 +1,7 @@
 import { capitalize, isEmpty } from 'lodash';
 import React from 'react';
 
-import { useAirDataSelectors_fix } from '../../redux/airDataSlice_fix';
+import { useAirDataSelectors } from '../../redux/airDataSlice';
 import { getFormattedDate, RelativeDay } from '../../utils';
 import { AppCard } from '../AppCard';
 import { AppText } from '../AppText';
@@ -13,7 +13,7 @@ import { AirData } from './AirData';
 // ************
 
 export function AirDataCard({ selectedDay }: { selectedDay: RelativeDay }) {
-	const { selectedLocation, forecastByLocationDay } = useAirDataSelectors_fix()
+	const { selectedLocation, forecastByLocationDay } = useAirDataSelectors()
 	const forecast = forecastByLocationDay(selectedLocation, selectedDay)
 
 	return (

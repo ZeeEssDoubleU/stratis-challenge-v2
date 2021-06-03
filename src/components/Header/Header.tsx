@@ -9,16 +9,12 @@ import { AppText, TextAlign } from '../AppText';
 // types
 // ************
 
-// TODO: fix align properties
-
 export interface Header_I {
 	title: string
 	titleCategory?: TextProps["category"]
 	subtitle?: string
 	subtitlecategory?: TextProps["category"]
 	align?: TextAlign
-	// TODO: give this proper enum
-	textTransform?: string
 }
 
 // ************

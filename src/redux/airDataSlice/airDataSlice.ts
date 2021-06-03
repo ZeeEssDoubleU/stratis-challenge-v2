@@ -7,33 +7,33 @@ import { airDataByCity } from '../../hooks/useFetchAQI/mockData/airDataByCity';
 import {
     airDatabyCoords
 } from '../../hooks/useFetchAQI/mockData/airDatabyCoords';
-import { reactotron } from '../middleware';
 import { getCity } from './airDataSelectors';
 
 // ************
 // types
 // ************
 
-export type AirData_fix = AirDataByCity_fix | AirDataByCoords_fix
-export interface AirDataState_I_fix {
+export type AirData = AirDataByCity | AirDataByCoords
+export interface AirDataState_I {
 	selectedLocation: string
 	successfulSearches: { search: string; result: string }[]
 	searchMap: { [search: string]: string }
 	airDataByLocation: {
-		[location: string]: AirData_fix
+		[location: string]: AirData
 	}
 	loading: boolean
 	currentRequestId?: number
+	error: Error | string | null
 }
 
 // ************
 // thunk
 // ************
 
-export type AirDataByCity_fix = typeof airDataByCity["data"]["data"]
-export type FetchAirDataByCity_fix = typeof fetchAQIByCity_fix
+export type AirDataByCity = typeof airDataByCity["data"]["data"]
+export type FetchAirDataByCity = typeof fetchAQIByCity
 
-interface FetchAQIDataByCity_I_fix {
+interface FetchAQIDataByCity_I {
 	search: string
 }
 
@@ -42,10 +42,9 @@ interface FetchAQIDataByCity_I_fix {
  * @param {string} city
  * @returns {object} AQI data object
  */
-// TODO: replace when fixed
-export const fetchAQIByCity_fix = createAsyncThunk(
-	"airData/fetchAQIByCity_fix",
-	async ({ search }: FetchAQIDataByCity_I_fix, thunkAPI) => {
+export const fetchAQIByCity = createAsyncThunk(
+	"airData/fetchAQIByCity",
+	async ({ search }: FetchAQIDataByCity_I, thunkAPI) => {
 		const {
 			data: { data },
 		} = await axios({
@@ -53,7 +52,7 @@ export const fetchAQIByCity_fix = createAsyncThunk(
 			url: `https://api.waqi.info/feed/${search}/?token=${token}`,
 		})
 
-		return data as AirDataByCity_fix
+		return data as AirDataByCity
 	},
 )
 
@@ -61,10 +60,10 @@ export const fetchAQIByCity_fix = createAsyncThunk(
 // thunk
 // ************
 
-export type AirDataByCoords_fix = typeof airDatabyCoords["data"]["data"]
-export type FetchAirDataByCoords_fix = typeof fetchAQIByCoords_fix
+export type AirDataByCoords = typeof airDatabyCoords["data"]["data"]
+export type FetchAirDataByCoords = typeof fetchAQIByCoords
 
-interface FetchAQIDataByCoords_I_fix {
+interface FetchAQIDataByCoords_I {
 	search: "current location"
 	latitude: number
 	longitude: number
@@ -76,14 +75,13 @@ interface FetchAQIDataByCoords_I_fix {
  * @param {number} longitude
  * @returns {object} AQI data object
  */
-// TODO: replace when fixed
-export const fetchAQIByCoords_fix = createAsyncThunk(
-	"airData_fix/fetchAQIByCoords_fix",
+export const fetchAQIByCoords = createAsyncThunk(
+	"airData/fetchAQIByCoords",
 	async ({
 		search = "current location",
 		latitude,
 		longitude,
-	}: FetchAQIDataByCoords_I_fix) => {
+	}: FetchAQIDataByCoords_I) => {
 		// ! used mock data to model type
 		const {
 			data: { data },
@@ -92,7 +90,7 @@ export const fetchAQIByCoords_fix = createAsyncThunk(
 			url: `https://api.waqi.info/feed/geo:${latitude};${longitude}/?token=${token}`,
 		})
 
-		return data as AirDataByCoords_fix
+		return data as AirDataByCoords
 	},
 )
 
@@ -100,13 +98,14 @@ export const fetchAQIByCoords_fix = createAsyncThunk(
 // init state
 // ************
 
-const initialState: AirDataState_I_fix = {
+const initialState: AirDataState_I = {
 	selectedLocation: "",
 	successfulSearches: [],
 	searchMap: {},
 	airDataByLocation: {},
 	loading: false,
 	currentRequestId: undefined,
+	error: null,
 }
 
 // ************
@@ -115,10 +114,10 @@ const initialState: AirDataState_I_fix = {
 
 /**
  * returns formatted city name
- * @param {object} airData - airData action payload from fetchAQIByCity_fix.fulfilled or fetchAQIByCoords_fix.fulfilled reducers
+ * @param {object} airData - airData action payload from fetchAQIByCity.fulfilled or fetchAQIByCoords.fulfilled reducers
  * @returns {string} city name
  */
-export const selectCity = (airData: AirData_fix) => {
+export const selectCity = (airData: AirData) => {
 	const cityArr = airData.city.name.split(",")
 
 	const formatCity = getCity(cityArr).toLowerCase()
@@ -131,10 +130,10 @@ export const selectCity = (airData: AirData_fix) => {
 // ************
 
 export const airDataSlice = createSlice({
-	name: "airData_fix",
+	name: "airData",
 	initialState,
 	reducers: {
-		setAirData: (state, action: PayloadAction<AirData_fix>) => {
+		setAirData: (state, action: PayloadAction<AirData>) => {
 			const input = action.meta.arg.search.toLowerCase()
 			const station = action.payload.city.name.toLowerCase()
 
@@ -145,7 +144,6 @@ export const airDataSlice = createSlice({
 			state.airDataByLocation[station] = action.payload
 		},
 		setSelectedLocation: (state, action: PayloadAction<string>) => {
-			reactotron.log("action:", action) // ? debug
 			state.selectedLocation = action.payload
 		},
 	},
@@ -153,11 +151,11 @@ export const airDataSlice = createSlice({
 		/**
 		 * fetch AQI by coords
 		 */
-		builder.addCase(fetchAQIByCoords_fix.pending, (state, action) => {
+		builder.addCase(fetchAQIByCoords.pending, (state, action) => {
 			state.loading = true
 			state.currentRequestId = action.meta.requestId
 		})
-		builder.addCase(fetchAQIByCoords_fix.fulfilled, (state, action) => {
+		builder.addCase(fetchAQIByCoords.fulfilled, (state, action) => {
 			const { requestId } = action.meta
 			if (state.loading === true && state.currentRequestId === requestId) {
 				state.loading = false
@@ -166,7 +164,7 @@ export const airDataSlice = createSlice({
 				airDataSlice.caseReducers.setAirData(state, action)
 			}
 		})
-		builder.addCase(fetchAQIByCoords_fix.rejected, (state, action) => {
+		builder.addCase(fetchAQIByCoords.rejected, (state, action) => {
 			const { requestId } = action.meta
 			if (state.loading === true && state.currentRequestId === requestId) {
 				state.loading = false
@@ -178,11 +176,11 @@ export const airDataSlice = createSlice({
 		/**
 		 * fetch AQI by city
 		 */
-		builder.addCase(fetchAQIByCity_fix.pending, (state, action) => {
+		builder.addCase(fetchAQIByCity.pending, (state, action) => {
 			state.loading = true
 			state.currentRequestId = action.meta.requestId
 		})
-		builder.addCase(fetchAQIByCity_fix.fulfilled, (state, action) => {
+		builder.addCase(fetchAQIByCity.fulfilled, (state, action) => {
 			const { requestId } = action.meta
 			if (state.loading === true && state.currentRequestId === requestId) {
 				state.loading = false
@@ -191,7 +189,7 @@ export const airDataSlice = createSlice({
 				airDataSlice.caseReducers.setAirData(state, action)
 			}
 		})
-		builder.addCase(fetchAQIByCity_fix.rejected, (state, action) => {
+		builder.addCase(fetchAQIByCity.rejected, (state, action) => {
 			const { requestId } = action.meta
 			if (state.loading === true && state.currentRequestId === requestId) {
 				state.loading = false

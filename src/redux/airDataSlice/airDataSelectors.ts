@@ -12,7 +12,7 @@ import { RootState_Type, useReduxSelector } from '../store';
  * @param {array} cityArr - city array derived from city string separated by comma
  * @returns {string} city name
  */
-export function getCity(cityArr) {
+export function getCity(cityArr: string[]) {
 	return cityArr.length === 0
 		? null
 		: cityArr.length > 1
@@ -24,13 +24,13 @@ export function getCity(cityArr) {
 // selectors
 // ************
 
-export const selectAirDataState = (state: RootState_Type) => state.airData_fix
+export const selectAirDataState = (state: RootState_Type) => state.airData
 export const selectAirDataLoading = (state: RootState_Type) =>
-	state.airData_fix.loading
+	state.airData.loading
 export const selectSelectedLocation = (state: RootState_Type) =>
-	state.airData_fix.selectedLocation
+	state.airData.selectedLocation
 export const selectSuccessfulSearches = (state: RootState_Type) =>
-	state.airData_fix.successfulSearches
+	state.airData.successfulSearches
 
 /**
  * select correct location mapped to search param
@@ -186,26 +186,27 @@ export const selectForecastKeys = (search: string) =>
 // hook
 // ************
 
-export function useAirDataSelectors_fix() {
+export function useAirDataSelectors() {
 	return {
 		// selectors
 		airDataLoading: useReduxSelector(selectAirDataLoading),
 		selectedLocation: useReduxSelector(selectSelectedLocation),
 		successfulSearches: useReduxSelector(selectSuccessfulSearches),
-		airDataByLocation: (search) =>
+		airDataByLocation: (search: string) =>
 			useReduxSelector(selectAirDataByLocation(search)),
 		// current AQI
-		searchLocation: (search) =>
+		searchLocation: (search: string) =>
 			useReduxSelector(selectSearchLocation(search)),
-		stationByLocation: (search) =>
+		stationByLocation: (search: string) =>
 			useReduxSelector(selectStationByLocation(search)),
-		timeByLocation: (search) =>
+		timeByLocation: (search: string) =>
 			useReduxSelector(selectTimeByLocation(search)),
-		aqiByLocation: (search) => useReduxSelector(selectAQIByLocation(search)),
+		aqiByLocation: (search: string) =>
+			useReduxSelector(selectAQIByLocation(search)),
 		// forecasted AQI
-		forecastByLocationDay: (search, selectedDay) =>
+		forecastByLocationDay: (search: string, selectedDay: string) =>
 			useReduxSelector(selectForecastByLocationDay(search, selectedDay)),
-		forecastByLocationDayArray: (search, selectedDay) =>
+		forecastByLocationDayArray: (search: string, selectedDay: string) =>
 			useReduxSelector(
 				selectForecastByLocationDayArray(search, selectedDay),
 			),

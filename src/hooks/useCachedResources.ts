@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { Ionicons } from '@expo/vector-icons';
 
-import { useAirDataSelectors_fix } from '../redux/airDataSlice_fix';
+import { useAirDataSelectors } from '../redux/airDataSlice';
 import {
     fetchCurrentLocation, useLocationSelectors
 } from '../redux/locationSlice';
@@ -17,7 +17,7 @@ import { useFetchAQI } from './useFetchAQI';
 
 export function useCachedResources() {
 	const dispatch = useReduxDispatch()
-	const { airDataLoading } = useAirDataSelectors_fix()
+	const { airDataLoading } = useAirDataSelectors()
 	const { locationLoading } = useLocationSelectors()
 
 	const [resourcesLoading, setResourcesLoading] = useState(true)
@@ -30,6 +30,9 @@ export function useCachedResources() {
 		dispatch(fetchCurrentLocation())
 	}, [])
 
+	/**
+	 * fetch air data hook
+	 */
 	useFetchAQI()
 
 	/**

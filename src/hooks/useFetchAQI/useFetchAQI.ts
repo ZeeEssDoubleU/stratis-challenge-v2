@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { fetchAQIByCoords_fix } from '../../redux/airDataSlice_fix';
+import { fetchAQIByCoords } from '../../redux/airDataSlice';
 import {
     useLocationSelectors
 } from '../../redux/locationSlice/locationSelectors';
@@ -24,7 +24,7 @@ export function useFetchAQI() {
 	useEffect(() => {
 		if (coordinates) {
 			dispatch(
-				fetchAQIByCoords_fix({
+				fetchAQIByCoords({
 					search: "current location",
 					...coordinates,
 				}),

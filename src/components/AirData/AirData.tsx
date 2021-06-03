@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 
 import { Layout } from '@ui-kitten/components';
 
-import { useAirDataSelectors_fix } from '../../redux/airDataSlice_fix';
+import { useAirDataSelectors } from '../../redux/airDataSlice';
 import { RelativeDay } from '../../utils';
 import { AppText } from '../AppText';
 import { AirDataRow } from './AirDataRow';
@@ -15,10 +15,12 @@ import { AirDataRow } from './AirDataRow';
 
 export function AirData({ selectedDay }: { selectedDay: RelativeDay }) {
 	const { selectedLocation, forecastByLocationDayArray } =
-		useAirDataSelectors_fix()
+		useAirDataSelectors()
 	const forecast = forecastByLocationDayArray(selectedLocation, selectedDay)
 
-	const keysToDisplay = ["", "avg", "max", "min"].sort((a, b) => a[0] - b[0])
+	const keysToDisplay = ["", "avg", "max", "min"].sort(
+		(a, b) => Number(a[0]) - Number(b[0]),
+	)
 
 	const displayKeys = keysToDisplay.map((key) => (
 		<Keys key={`key-${key}`}>
